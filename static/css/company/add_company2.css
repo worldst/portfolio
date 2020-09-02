@@ -1,0 +1,134 @@
+#demo {
+  color: black;
+}
+
+.demo-01 {
+  background-color: darkred;
+  border-color: darkred;
+  color: #3fb5c8;
+  font-size: 14px;
+}
+
+.demo-02 {
+  position: relative;
+}
+
+.demo-02 {
+  font-size: 111px;
+}
+
+h1 {
+  font-size: 2em;
+}
+
+h2 {
+  font-size: 1.5em;
+}
+
+h3 {
+  font-size: 1.2em;
+}
+
+.twitter, .facebook, .youtube, .rss {
+  font: 0/0 a;
+  color: transparent;
+  text-shadow: none;
+}
+
+.twitter {
+  background: url("../images/icons/twitter, facebook, youtube, rss.png") no-repeat;
+}
+
+.facebook {
+  background: url("../images/icons/twitter, facebook, youtube, rss.png") no-repeat;
+}
+
+.youtube {
+  background: url("../images/icons/twitter, facebook, youtube, rss.png") no-repeat;
+}
+
+.rss {
+  background: url("../images/icons/twitter, facebook, youtube, rss.png") no-repeat;
+}
+
+@media screen and (max-width: 1200px) {
+  .code {
+    margin: 0;
+  }
+  .model {
+    padding: 0;
+  }
+}
+
+.qp, p {
+  opacity: 0;
+}
+
+p {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 0;
+  margin: 10px 3px;
+}
+
+span {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 0;
+}
+
+.exam_1 {
+  font-size: 13px;
+}
+
+.exam_2 {
+  font-size: 13px;
+}
+
+.exam_3 {
+  font-size: 13px;
+}
+
+.exam2_1 {
+  font-size: 13px;
+}
+
+.exam2_2 {
+  font-size: 13px;
+}
+
+.exam2_3 {
+  font-size: 13px;
+}
+
+h1 {
+  font-size: 2em;
+}
+
+h2 {
+  font-size: 1.5em;
+}
+
+h3 {
+  font-size: 1.2em;
+}
+
+b {
+  width: 10px;
+  height: 10px;
+  background: green;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  background-clip: padding-box;
+  -webkit-background-clip: padding-box;
+  -moz-background-clip: padding-box;
+}
+
+.contents {
+  transform: scale(1.1);
+  -webkit-transform: scale(1.1);
+  -o-transform: scale(1.1);
+  -ms-transform: scale(1.1);
+}

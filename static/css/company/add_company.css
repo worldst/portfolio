@@ -1,0 +1,20 @@
+.form-group-box {
+    width:100%;
+    overflow: hidden;
+    display:flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom:15px;
+}
+.form-group-box .form-group {
+    width:43%;
+    margin:0;
+}
+form > .form-group:first-of-type .field-label::before,
+form > .form-group:nth-of-type(2) .field-label::before {
+    content:'*';
+    display:inline-block;
+    vertical-align: middle;
+    color:red;
+    margin-right:3px;
+}

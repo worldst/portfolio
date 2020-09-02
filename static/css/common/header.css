@@ -1,0 +1,27 @@
+.header {
+  padding: 10px;
+  background: white;
+  width: 100%;
+  height: 80px;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.header__title {
+  font-size: 20px;
+}
+
+.header .menu {
+  position: absolute;
+  right: 30px;
+  bottom: 20px;
+}
+
+.header .menu__items {
+  overflow: hidden;
+}
+
+.header .menu__item {
+  float: left;
+  cursor: pointer;
+}

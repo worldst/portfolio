@@ -1,0 +1,28 @@
+@import '_variables';
+
+@mixin content-box {
+    background: $color-white;
+    box-shadow: 0 0 30px 0 rgba(111, 120, 134, 0.23);
+    padding:20px;
+    margin-bottom:20px;
+    border-radius: .25em;
+}
+
+@mixin display-flex($horizon, $vertical) {
+    display:flex;
+    justify-content: $horizon;
+    align-items: $vertical;
+}
+
+@mixin button-box {
+    cursor: pointer;
+    background:#5f5f5f;
+    color:white;
+    padding:0 25px;
+    height:34px;
+    line-height:34px;
+    font-size:14px;
+    border-radius: 3px;
+
+    @content;
+}

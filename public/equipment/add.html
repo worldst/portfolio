@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script type="text/javascript" src="../../static/js/common/jquery-latest.js"></script>
+    <script>
+        $(function () { $("head").load('../common/head.html'); });
+    </script>
+</head>
+
+<body style="display:none;">
+    <input type="hidden" name="menu_1" value="1">
+    <input type="hidden" name="menu_2" value="2">
+    <input type="hidden" name="menu_3" value="1">
+
+    <div class="container">
+        <div class="header"></div>
+
+        <div class="wrap">
+            <div class="nav"></div>
+            <div class="contents">
+                <p class="contents__title"><i class="far fa-edit"></i>신규 설비 등록</p>
+
+                <div class="content">
+                    <p class="content__title">납기일 기준 검색</p>
+                    <div class="date-search">
+                        <div class="date-wrap">
+                            <div class="date-group">
+                                <span>시작 날짜</span>
+                                <input type="text" class="input-date" id="date-start">
+                                <i class="far fa-calendar-alt"></i>
+                            </div>
+                            <div class="slash">~</div>
+                            <div class="date-group">
+                                <span>끝 날짜</span>
+                                <input type="text" class="input-date" id="date-start">
+                                <i class="far fa-calendar-alt"></i>
+                            </div>
+                            <button id="table-search-bar" class="search-bar">조회</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div> <!-- // contents -->
+        </div> <!-- // wrap -->
+    </div> <!-- // container -->
+
+</body>
+
+</html>

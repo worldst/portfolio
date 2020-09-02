@@ -1,0 +1,199 @@
+// 텍스트, 배경 색상 대조를 조정해주는 사용자 정의 함수
+@function text-contrast($bgcolor, $val: 70%) {
+    $value: null;
+    // 전달인자 유효성 검사
+    @if type-of($bgcolor) != color {
+      @warn "전달받은 $bgcolor 인자 값이 올바르지 않습니다.";
+      @debug "$bgcolor의 값이 #{$bgcolor} 입니다.";
+    }
+
+  
+    // 전달받은 배경색 인자의 명도 값이 50%보다 클 경우,
+    @if lightness($bgcolor) > 50% {
+      $value: darken($bgcolor, $val); }
+  
+      // 전달받은 배경색 인자의 명도 값이 50%보다 작을 경우,
+    @else {
+      $value: lighten($bgcolor, $val); }
+  
+    // 결과 값 반환
+    @return $value;
+  }
+  
+  #demo {
+    color: text-contrast(#fffa2f);
+  
+  }
+  
+
+  // 전역 변수
+$color: #3fb5c8;
+
+@mixin colors($color: darkred) {
+  // 믹스인 내부에서 $color 값은 지역 변수인 '전달인자'를 가리킵니다.
+  background-color: $color; // darkred
+  border-color: $color; // darkred
+  
+  // @content 값은 믹스인을 호출하는 곳인 @include 믹스인명() {} 에서 {} 블록 영역을 가리킵니다.
+  // 즉, @content 지시문을 사용하여  믹스인을 호출하는 곳의 {} 인 코드 블럭영역(콘텐츠블럭)을  이곳 영역에 전달할 수 있습니다.
+  @content;
+}
+
+.demo-01 {
+  // $color는 전역 변수인 #3fb5c8이 대입됩니다.
+  @include colors {
+    color: $color;
+    font-size: 14px;
+  }
+}
+
+@mixin colors2($color) {
+    background:$color;
+    margin:10px;
+}
+%water {
+    position: relative;
+}
+.demo-02 {
+    @extend %water;
+    font-size:111px;
+}
+
+@each $item in (h1: 2em, h2: 1.5em, h3: 1.2em) {
+    #{nth($item, 1)} {
+      font-size: nth($item, 2);
+    }
+  }
+  @mixin ir { font: 0/0 a; color: transparent; text-shadow: none; } 
+
+  %ir { font: 0/0 a; color: transparent; text-shadow: none; } 
+  // SASS 리스트(Lists) 데이터 타입 선언 
+  // 소셜 아이콘 이름을 담은 리스트를 담을 변수 $icons 
+  $icons: (twitter, facebook, youtube, rss); 
+  // SASS @each 문을 사용해 $icons 내부를 순환하여 
+  // 클래스 선언 (문자 보간법 및 플레이스홀더 선택자 활용) 
+  @each $icon in $icons { 
+      .#{$icon} { 
+        
+          @extend %ir; 
+          background: url("../images/icons/#{$icons}.png") no-repeat;
+         } 
+
+        }
+
+
+@mixin mq($max-width) {
+    @media screen and (max-width:$max-width) {
+        @content
+    }
+}
+
+
+@include mq(1200px) {
+    .code {
+        margin:0;
+    }
+    .model {
+        padding:0;
+    }
+}
+
+@mixin qr {
+    display:flex;
+    padding:0;
+
+    @content
+}
+
+.qp {
+  opacity: 0;
+}
+p {
+    @extend .qp;
+    @include qr;
+    margin:10px 3px;
+}
+span {
+    @include qr;
+}
+
+@for $i from 1 through 3 {
+  .exam_#{$i} {
+    font-size:13px;
+  }
+
+}
+
+$j : 1;
+
+@while $j < 4 {
+  .exam2_#{$j} {
+    font-size:13px;
+  }
+  $j : $j + 1;
+}
+
+$items : (h1: 2em, h2: 1.5em, h3: 1.2em);
+
+@each $item in $items {
+  #{nth($item, 1)} {
+    font-size: nth($item, 2);
+  }
+}
+
+@mixin border-radius ($radius: 4px) {
+  -webkit-border-radius: $radius;
+  border-radius: $radius;
+  -moz-border-radius: $radius;
+}
+
+@mixin background-origin ($origin: padding-box) {
+  background-origin: $origin;
+  -webkit-background-origin: $origin;
+  -moz-background-origin: $origin;
+}
+
+@mixin background-clip ($content: padding-box) {
+  background-clip: $content;
+  -webkit-background-clip: $content;
+  -moz-background-clip: $content;
+}
+
+// 사용자 정의 믹스인: 원 도형 만들기
+@mixin circle ($diameter: 10px, $bgcolor: black) {
+  width: $diameter;
+  height: $diameter;
+  background: $bgcolor;
+  @include border-radius($diameter/2);
+  @include background-clip;
+}
+
+@mixin triangle ($base, $direction, $bgcolor) {
+  width: 0;
+  height: 0;
+  $half-base: $base/2;
+  border: {
+    left: $half-base solid transparent;
+    right: $half-base solid transparent;
+    bottom: $half-base solid $bgcolor;
+  }
+}
+b {
+  @include circle($bgcolor:green);
+}
+@mixin prefix($property:h1, $value, $prefixes:()) {
+  #{$property}: $value;
+  @each $prefix in $prefixes {
+    #{'-' + $prefix + '-' + $property}: $value;
+  }
+}
+.contents{@include prefix($value:scale(1.1), $prefixes:webkit o ms);}
+
+
+
+
+
+
+
+
+  
