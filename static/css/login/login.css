@@ -95,10 +95,14 @@
 }
 
 .login .group-box .error {
-  display: none;
-  margin-top: 4px;
-  color: red;
-  font-size: 14px;
+  margin-top: 5px;
+  padding-left: 4px;
+  color: #fb4387;
+  font-size: 13px;
+}
+
+.login .group-box .error i {
+  margin-right: 1px;
 }
 
 .login__btn {
