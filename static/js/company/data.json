@@ -1,5 +1,5 @@
-$(function() {
-    const data = [
+{
+    "company": [
         {
             "id": 1,
             "title": "정진기계",
@@ -91,25 +91,4 @@ $(function() {
             "memo": ""
         }
     ]
-
-    $.each(data, function (key, value) {
-
-        $(".total-info .total span").text(data.length);
-
-        let html = '';
-
-        html += `<tr>`;
-        html += `  <td><input type='checkbox' value='${value.id}'></td>`;
-        html += `  <td class="txt_left"><a href="view.html?id=${value.id}">${value.title}</a></td>`;
-        html += `  <td class="txt_left">${value.address}</td>`;
-        html += `  <td>${value.tel || '-'}</td>`;
-        html += `  <td>${value.uptae || '-'}</td>`;
-        html += `  <td class="txt_left">${value.jong || '-'}</td>`;
-        html += `  <td class="txt_left">${value.email || '-'}</td>`;
-        html += `  <td class="txt_left">${value.memo || '-'}</td>`;
-        html += `</tr>`;
-
-        $(".table tbody").append(html);
-    });
-
-});
+}
