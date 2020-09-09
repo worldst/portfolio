@@ -2,22 +2,311 @@
 <html>
 
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
     <script type="text/javascript" src="../../static/js/common/jquery-latest.js"></script>
+    
+    <!-- <link rel="stylesheet" type="text/css" href="../../../static/css/common/bootstrap.min.css"> -->
+    <link rel="stylesheet" type="text/css" href="../../static/css/common/all.min.css">
+    <link rel="stylesheet" type="text/css" href="../../static/css/common/bootstrap-theme.min.css">
+    <script type="text/javascript" src="../../static/js/common/bootstrap.min.js"></script>
+    
+    <script type="text/javascript" src="../../static/js/common/moment.min.js"></script>
+    <script type="text/javascript" src="../../static/js/common/moment-with-locales.js"></script>
+    <script type="text/javascript" src="../../static/js/common/bootstrap-datetimepicker.min.js"></script>
+    
+    <script type="text/javascript" src="../../static/js/common/jquery.tablesorter.combined.min.js"></script>
+    <script type="text/javascript" src="../../static/js/common/jquery.tablesorter.min.js"></script>
+    <script type="text/javascript" src="../../static/js/common/jquery.tablesorter.widgets.min.js"></script>
+    
+    <link rel="stylesheet" type="text/css" href="../../static/css/common/theme.default.css">
+    <link rel="stylesheet" type="text/css" href="../../static/css/common/tableexport.css">
+    
+    <script type="text/javascript" src="../../static/js/common/xlsx.core.js"></script>
+    <script type="text/javascript" src="../../static/js/common/Blob.js"></script>
+    <script type="text/javascript" src="../../static/js/common/FileSaver.js"></script>
+    <script type="text/javascript" src="../../static/js/common/tableexport.js"></script>
+    <script type="text/javascript" src="../../static/js/common/Chart.js"></script>
+    <script type="text/javascript" src="../../static/js/common/chartjs-plugin-datalabels.js"></script>
+    <script type="text/javascript" src="../../static/js/common/jszip.min.js"></script>
+    <script type="text/javascript" src="../../static/js/common/jszip-utils.min.js"></script>
+    
+    <link rel="stylesheet" type="text/css" href="../../static/css/common/common.css">
+    <script type="text/javascript" src="../../static/js/common/common.js"></script>
+    <script type="text/javascript" src="../../static/js/common/pdfobject.min.js"></script>
+    
+    <script type="text/javascript" src="../../static/js/common/exceljs.min.js"></script>
+    <script type="text/javascript" src="../../static/js/common/table2excel.core.js"></script>
+    
+    <link rel="stylesheet" type="text/css" href="../../static/css/common/choices.min.css">
+    <script type="text/javascript" src="../../static/js/common/choices.min.js"></script>
+    
+    <link rel="stylesheet" type="text/css" href="../../static/css/common/window-date-picker.min.css">
+    <script type="text/javascript" src="../../static/js/common/window-date-picker.min.js"></script>
+    
     <script>
-        $(function () { $("head").load('../common/head.html'); });
+        $(function () {
+            /*
+            $(".header").load('../common/header.html');
+            $(".nav").load('../common/nav.html');
+            */
+        });
     </script>
 </head>
 
+<script type="text/javascript" src="../../static/js/company/list.js"></script>
 <body style="display:none;">
     <input type="hidden" name="menu_1" value="1">
     <input type="hidden" name="menu_2" value="1">
     <input type="hidden" name="menu_3" value="2">
 
     <div class="container">
-        <div class="header"></div>
+        <div class="header">
+            <div class="header__title">동광사우</div>
+            <div class="nav-toggle">
+                <i class="fas fa-indent"></i>
+                <i class="fas fa-outdent"></i>
+            </div>
+            <div class="info">
+                <div class="user-info">
+                    <p>작업 공정 <span>레이저</span></p>
+                    <p>계정 유형 <span>최고 관리자</span></p>
+                    <p>사용자 이름 <span>디케이 이노베이션</span></p>
+                </div>
+                <div class="menu">
+                    <ul class="menu__items">
+                        <li class="item item--mypage">MY PAGE</li>
+                        <li class="item item--logout">LOGOUT</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <script>
+                $(function () {
+                    /* 메뉴 축소, 확대 토글 버튼 */
+                    $(".nav-toggle").click(function () {
+                        $(".container").toggleClass('toggled');
+                    });
+                });
+            </script>
+        </div>
 
         <div class="wrap">
-            <div class="nav"></div>
+            <div class="nav">
+                <ul class="nav__category">
+                    <li class="menu">
+                        <p>기준정보관리</p>
+                        <ul class="depth-2">
+                            <li class="depth-2-item"><span>거래처 정보</span>
+                                <ul class="depth-3">
+                                    <li class="depth-3-item"><a href="../company/add.html"><i class="far fa-edit"></i>신규 업체 등록</a></li>
+                                    <li class="depth-3-item"><a href="../company/list.html"><i class="far fa-list-alt"></i>업체 목록</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="depth-2-item"><span>기계관리 대장</span>
+                                <ul class="depth-3">
+                                    <li class="depth-3-item"><a href="../equipment/add.html"><i class="far fa-edit"></i>신규 설비 등록</a>
+                                    </li>
+                                    <li class="depth-3-item"><a href="../equipment/list.html"><i class="far fa-list-alt"></i>설비 목록</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="depth-2-item"><span>직원관리 대장</span>
+                                <ul class="depth-3">
+                                    <li class="depth-3-item"><a href="../company/add_company.html"><i class="far fa-edit"></i>신규 직원
+                                            등록</a></li>
+                                    <li class="depth-3-item"><a href="../company/add_company.html"><i class="far fa-list-alt"></i>직원
+                                            목록</a></li>
+                                </ul>
+                            </li>
+                            <li class="depth-2-item"><span>인증정보 대장</span>
+                                <ul class="depth-3">
+                                    <li class="depth-3-item"><a href="../company/add_company.html"><i class="far fa-edit"></i>신규 인증서
+                                            등록</a></li>
+                                    <li class="depth-3-item"><a href="../company/add_company.html"><i class="far fa-list-alt"></i>인증서
+                                            목록</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="menu">
+                        <p>영업관리</p>
+                        <ul class="depth-2">
+                            <li class="depth-2-item"><span>수주 정보</span>
+                                <ul class="depth-3">
+                                    <li class="depth-3-item"><a href="../company/add_company.html"><i class="far fa-edit"></i>신규 주문
+                                            등록</a></li>
+                                    <li class="depth-3-item"><a href="../company/add_company.html"><i class="far fa-list-alt"></i>주문
+                                            목록</a></li>
+                                    <li class="depth-3-item"><a href="../company/add_company.html"><i class="far fa-list-alt"></i>금액 미입력
+                                            주문 목록</a></li>
+                                    <li class="depth-3-item"><a href="../company/add_company.html"><i class="far fa-list-alt"></i>완료 주문
+                                            목록</a></li>
+                                    <li class="depth-3-item"><a href="../company/add_company.html"><i class="far fa-list-alt"></i>취소 주문
+                                            목록</a></li>
+                                </ul>
+                            </li>
+                            <li class="depth-2-item"><span>매출 정보</span>
+                                <ul class="depth-3">
+                                    <li class="depth-3-item"><a href="../company/add_company.html"><i class="fas fa-chart-pie"></i>기간별
+                                            매출정보</a></li>
+                                    <li class="depth-3-item"><a href="../company/add_company.html"><i class="fas fa-chart-pie"></i>업체별
+                                            매출정보</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="menu">
+                        <p>생산관리</p>
+                        <ul class="depth-2">
+                            <li class="depth-2-item"><span>검수 관리</span>
+                                <ul class="depth-3">
+                                    <li class="depth-3-item"><a href="../company/add_company.html"><i class="far fa-list-alt"></i>미검수
+                                            목록</a></li>
+                                    <li class="depth-3-item"><a href="../company/add_company.html"><i class="far fa-list-alt"></i>검수 완료
+                                            목록</a></li>
+                                </ul>
+                            </li>
+                            <li class="depth-2-item"><span>생산 계획</span>
+                                <ul class="depth-3">
+                                    <li class="depth-3-item"><a href="../company/add_company.html"><i class="far fa-list-alt"></i>기간별
+                                            생산계획</a></li>
+                                </ul>
+                            </li>
+                            <li class="depth-2-item"><span>생산 실적</span>
+                                <ul class="depth-3">
+                                    <li class="depth-3-item"><a href="../company/add_company.html"><i class="fas fa-chart-pie"></i>기간별
+                                            공정통계</a></li>
+                                    <li class="depth-3-item"><a href="../company/add_company.html"><i class="far fa-clipboard"></i>작업
+                                            현황판</a></li>
+                                    <li class="depth-3-item"><a href="../company/add_company.html"><i class="far fa-list-alt"></i>작업
+                                            일보</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="menu">
+                        <p>자재관리</p>
+                        <ul class="depth-2">
+                            <li class="depth-2-item"><span>케이블</span>
+                                <ul class="depth-3">
+                                    <li class="depth-3-item"><a href="../company/add_company.html"><i class="far fa-edit"></i>자재 발주
+                                            등록</a></li>
+                                    <li class="depth-3-item"><a href="../company/add_company.html"><i class="far fa-list-alt"></i>자재 발주
+                                            목록</a></li>
+                                    <li class="depth-3-item"><a href="../company/add_company.html"><i class="far fa-list-alt"></i>입고 완료
+                                            목록</a></li>
+                                </ul>
+                            </li>
+                            <li class="depth-2-item"><span>포장</span>
+                                <ul class="depth-3">
+                                    <li class="depth-3-item"><a href="../company/add_company.html"><i class="far fa-edit"></i>자재 발주
+                                            등록</a></li>
+                                    <li class="depth-3-item"><a href="../company/add_company.html"><i class="far fa-list-alt"></i>자재 발주
+                                            목록</a></li>
+                                    <li class="depth-3-item"><a href="../company/add_company.html"><i class="far fa-list-alt"></i>입고 완료
+                                            목록</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="menu">
+                        <p>품질관리</p>
+                        <ul class="depth-2">
+                            <li class="depth-2-item"><span>공정 품질</span>
+                                <ul class="depth-3">
+                                    <li class="depth-3-item"><a href="../company/add_company.html"><i class="far fa-edit"></i>불량 등록</a>
+                                    </li>
+                                    <li class="depth-3-item"><a href="../company/add_company.html"><i class="far fa-list-alt"></i>불량
+                                            목록</a></li>
+                                </ul>
+                            </li>
+                            <li class="depth-2-item"><span>클레임 관리</span>
+                                <ul class="depth-3">
+                                    <li class="depth-3-item"><a href="../company/add_company.html"><i class="far fa-edit"></i>클레임 등록</a>
+                                    </li>
+                                    <li class="depth-3-item"><a href="../company/add_company.html"><i class="far fa-list-alt"></i>클레임
+                                            목록</a></li>
+                                    <li class="depth-3-item"><a href="../company/add_company.html"><i class="far fa-list-alt"></i>업체별 품질
+                                            정보</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="menu">
+                        <p>출하관리</p>
+                        <ul class="depth-2">
+                            <li class="depth-2-item"><a href="#"><i class="far fa-list-alt"></i>출하 대기 목록</a></li>
+                            <li class="depth-2-item"><a href="#"><i class="far fa-list-alt"></i>출하 완료 목록</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu">
+                        <p>시스템관리</p>
+                        <ul class="depth-2">
+                            <li class="depth-2-item"><span>사용자 설정</span>
+                                <ul class="depth-3">
+                                    <li class="depth-3-item"><a href="../company/add_company.html"><i class="far fa-edit"></i>사용자 등록</a>
+                                    </li>
+                                    <li class="depth-3-item"><a href="../company/add_company.html"><i class="far fa-list-alt"></i>사용자
+                                            목록</a></li>
+                                    <li class="depth-3-item"><a href="../company/add_company.html"><i class="far fa-edit"></i>작업자 등록</a>
+                                    </li>
+                                    <li class="depth-3-item"><a href="../company/add_company.html"><i class="far fa-list-alt"></i>작업자
+                                            목록</a></li>
+                                </ul>
+                            </li>
+                            <li class="depth-2-item"><span>사용 이력</span>
+                                <ul class="depth-3">
+                                    <li class="depth-3-item"><a href="../company/add_company.html"><i class="fas fa-chart-pie"></i>일자별
+                                            로그인 통계</a></li>
+                                    <li class="depth-3-item"><a href="../company/add_company.html"><i class="fas fa-chart-pie"></i>시스템
+                                            접속시간 조회</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                
+                <script>
+                    $(function () {
+                        /* 2차 카테고리 클릭 시 3차 카테고리 노출 */
+                        $(".depth-2-item span").on('click', function () {
+                            $(this).next('.depth-3').slideToggle(200, function () {
+                                if ($(this).css("display") == 'block') {
+                                    $(this).prev().addClass('changed');
+                                } else {
+                                    $(this).prev().removeClass('changed');
+                                }
+                            });
+                        });
+
+                        /* 로드 시 해당 페이지에 대한 카테고리 설정 */
+                        const menu_1 = $("input[name='menu_1']").val() - 1;
+                        const menu_2 = $("input[name='menu_2']").val() - 1;
+                        const menu_3 = $("input[name='menu_3']").val() - 1;
+
+                        // 카테고리가 3차 까지 있을 경우
+                        if (menu_1 != undefined && menu_2 != undefined && menu_3 != undefined) {
+                            $(".nav__category").eq(menu_1).find('.depth-2-item')
+                                .eq(menu_2).find('.depth-3').css("display", "block")
+                                .children('.depth-3-item')
+                                .eq(menu_3).children('a').css("color", "#13cc7f");
+                        }
+
+                        /* 로드 시 노출 카테고리에 대해 화살표 방향 설정 */
+                        $(".depth-3").each(function () {
+                            if ($(this).css("display") == 'block') {
+                                $(this).prev().addClass('changed');
+                            } else {
+                                $(this).prev().removeClass('changed');
+                            }
+                        });
+
+                    });
+                </script>
+            </div>
             <div class="contents">
                 <p class="contents__title"><i class="far fa-list-alt"></i>업체 목록</p>
 
@@ -41,168 +330,84 @@
                     </div>
                 </div>
 
-                <div class="content">
-                    <div class="list">
-                        <div class="table-search">
-                            <div class="total-info">
-                                <p class="total">총 <span>9</span> 개의 데이터가 등록되어있습니다. </p>
-                            </div>
-                            <div class="search-group">
-                                <select name="search-kinds">
-                                    <option value="1">통합검색</option>
-                                    <option value="2">업체명</option>
-                                    <option value="3">주소</option>
-                                    <option value="4">업태</option>
-                                    <option value="5">종목</option>
-                                </select>
-                                <input type="text" class="search-data" placeholder="검색할 데이터를 입력해주세요.">
-                                <button id="table-search-bar" class="search-bar">찾기</button>
-                            </div>
+                <div class="content list">
+                    <div class="table-search">
+                        <div class="total-info">
+                            <p class="total">총 <span>0</span> 개의 데이터가 등록되어있습니다. </p>
                         </div>
-                        <table class="table">
-                            <colgroup>
-                                <col width="5%"> <!-- check --> 
-                                <col width="15%"> <!-- 업체명 --> 
-                                <col width="18%"> <!-- 주소 -->
-                                <col width="10%"> <!-- 담당자 연락처 -->
-                                <col width="11%"> <!-- 업태 -->
-                                <col width="11%"> <!-- 종목 -->
-                                <col width="15%"> <!-- 이메일 -->
-                                <col width="15%"> <!-- 메모 -->
-                            </colgroup>
-                            <thead>
-                                <tr>
-                                    <th><input type="checkbox" class="all_chk"></th>
-                                    <th>업체명</th>
-                                    <th>주소</th>
-                                    <th>담당자 연락처</th>
-                                    <th>업태</th>
-                                    <th>종목</th>
-                                    <th>이메일</th>
-                                    <th>메모</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><input type="checkbox" class="chk"></td>
-                                    <td class="txt_left"><a href="#">정진기계</a></td>
-                                    <td class="txt_left">충북 영동군 양강면 학산영동로 846</td>
-                                    <td>010-1111-2222</td>
-                                    <td>-</td>
-                                    <td>-</td>
-                                    <td class="txt_left">aabbcc@naver.com</td>
-                                    <td>-</td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox" class="chk"></td>
-                                    <td class="txt_left"><a href="#">(주)삼원호스</a></td>
-                                    <td class="txt_left">경기도 고양시 일산서구 덕산로243번길 58-30 덕이동 가동</td>
-                                    <td>031-924-9942</td>
-                                    <td>제조업</td>
-                                    <td class="txt_left">유압호스, 배관자재 제조</td>
-                                    <td class="txt_left">swhose1105@nate.com</td>
-                                    <td>-</td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox" class="chk"></td>
-                                    <td class="txt_left"><a href="#">하이레이저</a></td>
-                                    <td class="txt_left">광주</td>
-                                    <td>010-1111-2222</td>
-                                    <td>-</td>
-                                    <td>-</td>
-                                    <td class="txt_left">aabbcc@naver.com</td>
-                                    <td>-</td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox" class="chk"></td>
-                                    <td class="txt_left"><a href="#">CEM</a></td>
-                                    <td class="txt_left">경기도 성남시 분당구 야탑동</td>
-                                    <td>010-1111-2222</td>
-                                    <td>-</td>
-                                    <td>-</td>
-                                    <td class="txt_left">aabbcc@naver.com</td>
-                                    <td>-</td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox" class="chk"></td>
-                                    <td class="txt_left"><a href="#">드라이어코리아</a></td>
-                                    <td class="txt_left">용인 처인구 모현</td>
-                                    <td>010-1111-2222</td>
-                                    <td>-</td>
-                                    <td>-</td>
-                                    <td class="txt_left">aabbcc@naver.com</td>
-                                    <td>-</td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox" class="chk"></td>
-                                    <td class="txt_left"><a href="#">(주)영진기계</a></td>
-                                    <td class="txt_left">충청남도 당진군 석문면 동정리 1222-1</td>
-                                    <td>02-898-2426</td>
-                                    <td>제조업</td>
-                                    <td class="txt_left">산업자동화관련</td>
-                                    <td class="txt_left">dosynet@hatmail.net</td>
-                                    <td>-</td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox" class="chk"></td>
-                                    <td class="txt_left"><a href="#">아이엠메탈</a></td>
-                                    <td class="txt_left">남양주</td>
-                                    <td>010-1111-2222</td>
-                                    <td>-</td>
-                                    <td>-</td>
-                                    <td class="txt_left">aabbcc@naver.com</td>
-                                    <td>-</td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox" class="chk"></td>
-                                    <td class="txt_left"><a href="#">피엔에스테크놀로지</a></td>
-                                    <td class="txt_left">충북 영동군 양강면 학산영동로 846</td>
-                                    <td>010-1111-2222</td>
-                                    <td>-</td>
-                                    <td>-</td>
-                                    <td class="txt_left">aabbcc@naver.com</td>
-                                    <td>-</td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox" class="chk"></td>
-                                    <td class="txt_left"><a href="#">주식회사 한빛테크놀로지</a></td>
-                                    <td class="txt_left">충청북도 청주시 청원구 오창읍 괴정2길 67</td>
-                                    <td>010-1111-2222</td>
-                                    <td>제조업</td>
-                                    <td class="txt_left">반도체장비 제조 및 부품가공업</td>
-                                    <td class="txt_left">hanwoojang@hanmail.net</td>
-                                    <td>-</td>
-                                </tr>
-                  
-                                <!--
-                                <tr>
-                                    <td colspan="8">현재 등록된 데이터가 없습니다.</td>
-                                </tr>
-                                -->
-                            </tbody>
-                        </table>
-                        <div class="pagination">
-                            <ul class="page">
-                                <li class="prev"><i class="fas fa-chevron-left"></i></li>
-                                <li class="on">1</li>
-                                <li>2</li>
-                                <li>3</li>
-                                <li>4</li>
-                                <li>5</li>
-                                <li class="next"><i class="fas fa-chevron-right"></i></li>
-                            </ul>
-                        </div>
-                        <div class="button-box">
-                            <button class="button button--delete">선택 삭제</button>
-                            <button class="button button--export">Export to xlsx</button>
+                        <div class="search-group">
+                            <select name="search-kinds">
+                                <option value="1">통합검색</option>
+                                <option value="2">업체명</option>
+                                <option value="3">주소</option>
+                                <option value="4">업태</option>
+                                <option value="5">종목</option>
+                            </select>
+                            <input type="text" class="search-data" placeholder="검색할 데이터를 입력해주세요.">
+                            <button id="table-search-bar" class="search-bar">찾기</button>
                         </div>
                     </div>
-                </div> <!-- // content -->
+                    <table class="table">
+                        <colgroup>
+                            <col width="5%"> <!-- check --> 
+                            <col width="15%"> <!-- 업체명 --> 
+                            <col width="18%"> <!-- 주소 -->
+                            <col width="10%"> <!-- 담당자 연락처 -->
+                            <col width="11%"> <!-- 업태 -->
+                            <col width="11%"> <!-- 종목 -->
+                            <col width="15%"> <!-- 이메일 -->
+                            <col width="15%"> <!-- 메모 -->
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" class="all_chk"></th>
+                                <th>업체명</th>
+                                <th>주소</th>
+                                <th>대표 번호</th>
+                                <th>업태</th>
+                                <th>종목</th>
+                                <th>이메일</th>
+                                <th>메모</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!--
+                            <tr>
+                                <td colspan="8">현재 등록된 데이터가 없습니다.</td>
+                            </tr>
+                            -->
+                        </tbody>
+                    </table>
+                    <div class="pagination">
+                        <ul class="page">
+                            <li class="prev"><i class="fas fa-chevron-left"></i></li>
+                            <li class="on">1</li>
+                            <li>2</li>
+                            <li>3</li>
+                            <li>4</li>
+                            <li>5</li>
+                            <li class="next"><i class="fas fa-chevron-right"></i></li>
+                        </ul>
+                    </div>
+                    <div class="button-box">
+                        <button class="button button--delete">선택 삭제</button>
+                        <button class="button button--export">Export to xlsx</button>
+                    </div>
 
+                    <!-- 데이터 로딩 대기 화면 -->
+                    <div class="load-screen">
+                        <div class="load">
+                            <img src="../../static/img/spinner.gif" alt="데이터 로딩중" class="load__img">
+                        </div>
+                    </div>
+
+                </div>
             </div> <!-- // contents -->
         </div> <!-- // wrap -->
     </div> <!-- // container -->
     
+    
+
     <!-- 정보 삭제 모달창 -->
     <div id="delModal" class="deleteModal">
         <div class="delete-modal-content">

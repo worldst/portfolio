@@ -2,13 +2,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     
+    <link rel="stylesheet" type="text/css" href="../static/css/common/all.min.css">
     <link rel="stylesheet" type="text/css" href="../static/css/common/common.css">
     <link rel="stylesheet" type="text/css" href="../static/css/login/login.css">
 </head>
 <div class="login-bg">
     <div class="login">
         <div class="login__box">
-            <p class="login__title">동명전기 MES</p>
+            <p class="login__title">동광사우</p>
             <p class="login__img">
                 <img src="../static/img/login-logo.png" alt="로그인로고" class="img-user">
             </p>
@@ -19,7 +20,7 @@
                         <input type="text" id="id_username" class="input-control" placeholder="아이디를 입력하세요." name="username" maxlength="30"/>
                         <img src="../static/img/user.png" alt="사용자아이콘" class="input-icon">
                     </div>
-                    <p class="error">* 에러메시지 출력</p>
+                    <p class="error"><i class="fas fa-exclamation-circle"></i> 에러메시지 출력</p>
                 </div>
                 <div class="group-box">
                     <label for="id_password">Password</label>
@@ -27,7 +28,7 @@
                         <input type="password" id="id_password" class="input-control input-control--password" placeholder="비밀번호를 입력하세요." name="password" maxlength="30"/>
                         <img src="../static/img/password.png" alt="비밀번호아이콘" class="input-icon">
                     </div>
-                    <p class="error">* 에러메시지 출력</p>
+                    <p class="error"><i class="fas fa-exclamation-circle"></i> 에러메시지 출력</p>
                 </div>
                 <a href="company/list.html" class="login__btn login__btn--submit">LOGIN</a>
                 <!--<input type="submit" class="login__btn login__btn--submit" value="LOGIN">-->
