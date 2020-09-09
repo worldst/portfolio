@@ -477,6 +477,7 @@ select::-ms-expand {
   margin-bottom: 20px;
   border-radius: .25em;
   width: 100%;
+  position: relative;
 }
 
 .content__title {
@@ -484,6 +485,10 @@ select::-ms-expand {
   border-bottom: 1px solid #ececec;
   padding-bottom: 12px;
   margin-bottom: 12px;
+}
+
+.content:last-child {
+  margin-bottom: 0;
 }
 
 /* List - Date-Search */
@@ -741,21 +746,20 @@ select::-ms-expand {
   background: #47c5d2;
 }
 
-/* Add - Common-Layout */
-.write-form__inner {
+/* Edit - Common-Layout */
+.edit-form__inner {
   width: 900px;
 }
 
-.write-form .warn {
+.edit-form .warn {
   font-size: 14px;
   color: red;
   margin-bottom: 20px;
   padding-bottom: 10px;
   padding-left: 3px;
-  border-bottom: 1px solid #ececec;
 }
 
-.write-form .data-form {
+.edit-form .data-form {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -769,19 +773,19 @@ select::-ms-expand {
   margin-bottom: 25px;
 }
 
-.write-form .data-form:last-child {
+.edit-form .data-form:last-child {
   margin-bottom: 0;
 }
 
-.write-form .data-form--full {
+.edit-form .data-form--full {
   width: 100% !important;
 }
 
-.write-form .data-form .form-group {
+.edit-form .data-form .form-group {
   width: 48%;
 }
 
-.write-form .data-form .form-group__title {
+.edit-form .data-form .form-group__title {
   width: 100%;
   color: #929292;
   font-size: 14px;
@@ -789,34 +793,36 @@ select::-ms-expand {
   margin-bottom: 5px;
 }
 
-.write-form .data-form .form-group__title .required-item {
+.edit-form .data-form .form-group__title .required-item {
   color: red;
 }
 
-.write-form .data-form .form-group__input .data-input, .write-form .data-form .form-group__input .data-select {
+.edit-form .data-form .form-group__input .data-input, .edit-form .data-form .form-group__input .data-select {
   width: 100%;
   height: 36px;
 }
 
-.write-form .data-form .form-group__error {
+.edit-form .data-form .form-group__error {
+  display: none;
   font-size: 13px;
   color: #4498ff;
   margin-top: 5px;
   padding-left: 4px;
 }
 
-.write-form .data-form .form-group__error i {
+.edit-form .data-form .form-group__error i {
   margin-right: 1px;
 }
 
-.write-form .form-button {
+.edit-form .form-button {
   margin-top: 20px;
   padding-top: 20px;
   border-top: 1px solid #ececec;
   text-align: right;
 }
 
-.write-form .form-button .button {
+.edit-form .form-button .button {
+  display: inline-block;
   padding: 10px 40px;
   font-size: 14px;
   margin-left: 10px;
@@ -825,12 +831,45 @@ select::-ms-expand {
   cursor: pointer;
 }
 
-.write-form .form-button .button--write {
-  background: #2db37b;
+.edit-form .form-button .button:hover {
+  opacity: 0.8;
 }
 
-.write-form .form-button .button--cancel {
-  background: #6f6f6f;
+.edit-form .form-button .button--write {
+  background: #21b7e4;
+}
+
+.edit-form .form-button .button--cancel {
+  background: #a5a5a5;
+}
+
+/* Before load data */
+.load-screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.load-screen .load {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.display-block {
+  display: block;
 }
 
 /* Modal */
