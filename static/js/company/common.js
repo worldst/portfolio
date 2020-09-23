@@ -1,19 +1,16 @@
 $(document).ready(function(){
     $('#id_registration_number').attr('maxlength',10);
-    $('#id_rep_number').attr('maxlength',11);
-    $('#id_fax_number').attr('maxlength',11);
     
-
-    $("#id_rep_number").keyup(function(){
-        var obj = $("#id_rep_number").val();
+    $("input[name='tel']").keyup(function(){
+        var obj = $(this).val();
         obj = PatternInspection(obj);
-        $("#id_rep_number").val(obj);
+        $(this).val(obj);
         if(obj.length==11) {
             var formatText = obj.slice(0, 3) + '-' + obj.slice(3, 7) + '-' + obj.slice(7);
-            $('#id_rep_number').val(formatText);
+            $(this).val(formatText);
         }
-
     });
+
     $("#id_fax_number").keyup(function(){
         var obj = $("#id_fax_number").val();
         obj =  PatternInspection(obj);
@@ -23,6 +20,7 @@ $(document).ready(function(){
             $('#id_fax_number').val(formatText);
         }
     });
+
 	$("#id_registration_number").keyup(function(){
         var tpl = $("#id_registration_number").parent();
         var obj = $("#id_registration_number").val();

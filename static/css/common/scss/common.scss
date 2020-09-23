@@ -206,7 +206,7 @@ select::-ms-expand {
                     color: #f5ffbd;
                     display: inline-block;
                     padding: 5px 15px;
-                    background: rgba(130, 130, 130, 0.29);;
+                    background: rgba(130, 130, 130, 0.29);
                     margin-left: 5px;
                 }
             }
@@ -515,6 +515,10 @@ select::-ms-expand {
     border-collapse: collapse;
     table-layout: fixed;
 
+    tr.no-data {
+        display:none;
+    }
+
     th, td {
         font-size:14px;
         border-bottom:1px solid #ececec;
@@ -608,18 +612,28 @@ select::-ms-expand {
     margin-top:20px;
     text-align:center;
 
+    %page-num {
+        display:inline-block;
+        font-size:14px;
+        cursor:pointer;
+        margin:0 3px;
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+    }
+
+    .prev, .next {
+        @extend %page-num;
+
+        display:none;
+    }
+
     .page {
         display:inline-block;
         font-size:0;
 
         li {
-            display:inline-block;
-            font-size:14px;
-            cursor:pointer;
-            margin:0 3px;
-            width: 30px;
-            height: 30px;
-            line-height: 30px;
+            @extend %page-num;
 
             &.on {
                 border-radius: 3px;
@@ -693,7 +707,7 @@ select::-ms-expand {
 
             &__title {
                 width:100%;
-                color:$color-gray;
+                color:#545454;
                 font-size:14px;
                 padding-left:2px;
                 margin-bottom:5px;
@@ -782,6 +796,67 @@ select::-ms-expand {
 
 
 /* Modal */
-.deleteModal {
+.delete-modal {
+    @include display-flex(center, center);
+
     display:none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+
+    &__inner {
+        width:360px;
+        text-align: center;
+        background:white;
+
+        .imgBox {
+            margin:40px 0 20px 0;
+
+            i {
+                font-size:64px;
+                color:#504b50;
+            }
+        }
+
+        .deleteCont {
+            font-size:16px;
+            color:#848484;
+
+            .delSubMessage {
+                margin-top:7px;
+                font-size:13px;
+                color:#73b8ff;
+            }
+        }
+
+        .modalBtnWrap {
+            margin-top:40px;
+            overflow: hidden;
+
+            .modalBtn {
+                float:left;
+                width:50%;
+                height:44px;
+                line-height: 44px;
+                color:white;
+                cursor:pointer;
+                font-size:14px;
+
+                &--yes {
+                    background:#05ca9c;
+                }
+
+                &--no {
+                    background:#818592;
+                }
+
+                &:hover {
+                    opacity: 0.7;
+                }
+            }
+        }
+    }
 }

@@ -33,7 +33,7 @@
     <script type="text/javascript" src="../../static/js/common/jszip-utils.min.js"></script>
 
     <link rel="stylesheet" type="text/css" href="../../static/css/common/common.css">
-    <script type="text/javascript" src="../../static/js/common/common.js"></script>
+    <script type="text/javascript" src="../../static/js/base.js"></script>
     <script type="text/javascript" src="../../static/js/common/pdfobject.min.js"></script>
 
     <script type="text/javascript" src="../../static/js/common/exceljs.min.js"></script>
@@ -55,6 +55,7 @@
     </script>
 </head>
 
+<script type="text/javascript" src="../../static/js/company/common.js"></script>
 <script type="text/javascript" src="../../static/js/company/add.js"></script>
 <body style="display:none;">
     <input type="hidden" name="menu_1" value="1">
@@ -100,7 +101,7 @@
                         <ul class="depth-2">
                             <li class="depth-2-item"><span>거래처 정보</span>
                                 <ul class="depth-3">
-                                    <li class="depth-3-item"><a href="../company/add.html"><i class="far fa-edit"></i>신규
+                                    <li class="depth-3-item"><a href="../company/create.html"><i class="far fa-edit"></i>신규
                                             업체 등록</a></li>
                                     <li class="depth-3-item"><a href="../company/list.html"><i
                                                 class="far fa-list-alt"></i>업체 목록</a>
@@ -109,7 +110,7 @@
                             </li>
                             <li class="depth-2-item"><span>기계관리 대장</span>
                                 <ul class="depth-3">
-                                    <li class="depth-3-item"><a href="../equipment/add.html"><i
+                                    <li class="depth-3-item"><a href="../equipment/create.html"><i
                                                 class="far fa-edit"></i>신규 설비 등록</a>
                                     </li>
                                     <li class="depth-3-item"><a href="../equipment/list.html"><i
@@ -424,13 +425,13 @@
                                 <div class="form-group">
                                     <p class="form-group__title">대표 번호</p>
                                     <div class="form-group__input">
-                                        <input type="text" name="tel" class="data-input">
+                                        <input type="text" name="tel" class="data-input" maxlength='11'>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <p class="form-group__title">팩스 번호</p>
                                     <div class="form-group__input">
-                                        <input type="text" class="data-input">
+                                        <input type="text" name="fax" class="data-input">
                                     </div>
                                 </div>
                             </div>

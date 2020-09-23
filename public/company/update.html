@@ -33,7 +33,7 @@
     <script type="text/javascript" src="../../static/js/common/jszip-utils.min.js"></script>
 
     <link rel="stylesheet" type="text/css" href="../../static/css/common/common.css">
-    <script type="text/javascript" src="../../static/js/common/common.js"></script>
+    <script type="text/javascript" src="../../static/js/base.js"></script>
     <script type="text/javascript" src="../../static/js/common/pdfobject.min.js"></script>
 
     <script type="text/javascript" src="../../static/js/common/exceljs.min.js"></script>
@@ -54,6 +54,9 @@
         });
     </script>
 </head>
+
+<script type="text/javascript" src="../../static/js/company/common.js"></script>
+<script type="text/javascript" src="../../static/js/company/add.js"></script>
 
 <body style="display:none;">
     <input type="hidden" name="menu_1" value="1">
@@ -350,126 +353,123 @@
                 <div class="content edit-form">
                     <div class="edit-form__inner">
                         <p class="warn">* 표시된 정보는 필수 사항 입니다.</p>
+                        <form>
+                            <div class="data-form">
+                                <div class="form-group">
+                                    <p class="form-group__title">업체명 <span class="required-item">*</span></p>
+                                    <div class="form-group__input">
+                                        <input type="text" name="title" class="data-input">
+                                        <p class="form-group__error"><i class="fas fa-exclamation-circle"></i> 필수 항목입니다.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <p class="form-group__title">업체 주소 <span class="required-item">*</span></p>
+                                    <div class="form-group__input">
+                                        <input type="text" name="address" class="data-input">
+                                        <p class="form-group__error"><i class="fas fa-exclamation-circle"></i> 필수 항목입니다.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
 
-                        <div class="data-form">
-                            <div class="form-group">
-                                <p class="form-group__title">업체명 <span class="required-item">*</span></p>
-                                <div class="form-group__input">
-                                    <input type="text" class="data-input" required>
-                                    <p class="form-group__error"><i class="fas fa-exclamation-circle"></i> 필수 항목입니다.</p>
+                            <div class="data-form">
+                                <div class="form-group">
+                                    <p class="form-group__title">업태</p>
+                                    <div class="form-group__input">
+                                        <input type="text" name="uptae" class="data-input">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <p class="form-group__title">종목</p>
+                                    <div class="form-group__input">
+                                        <input type="text" name="jong" class="data-input">
+                                    </div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <p class="form-group__title">업체 주소 <span class="required-item">*</span></p>
-                                <div class="form-group__input">
-                                    <input type="text" class="data-input" required>
-                                    <p class="form-group__error"><i class="fas fa-exclamation-circle"></i> 필수 항목입니다.</p>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="data-form">
-                            <div class="form-group">
-                                <p class="form-group__title">업태</p>
-                                <div class="form-group__input">
-                                    <input type="text" class="data-input" required>
+                            <div class="data-form">
+                                <div class="form-group">
+                                    <p class="form-group__title">업체 등급</p>
+                                    <div class="form-group__input">
+                                        <select name="grade" class="data-select">
+                                            <option value="">- 선택 -</option>
+                                            <option value="A 등급">A 등급</option>
+                                            <option value="B 등급">B 등급</option>
+                                            <option value="C 등급">C 등급</option>
+                                            <option value="D 등급">D 등급</option>
+                                        </select>
+                                        <p class="form-group__error"><i class="fas fa-exclamation-circle"></i> 필수 항목입니다.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <p class="form-group__title">업체 구분</p>
+                                    <div class="form-group__input">
+                                        <select name="kinds" class="data-select">
+                                            <option value="">- 선택 -</option>
+                                            <option value="발주처">발주처</option>
+                                            <option value="수주처">수주처</option>
+                                        </select>
+                                        <p class="form-group__error"><i class="fas fa-exclamation-circle"></i> 필수 항목입니다.
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <p class="form-group__title">종목</p>
-                                <div class="form-group__input">
-                                    <input type="text" class="data-input" required>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="data-form">
-                            <div class="form-group">
-                                <p class="form-group__title">업체 등급</p>
-                                <div class="form-group__input">
-                                    <select type="text" class="data-select">
-                                        <option value="">선택</option>
-                                        <option value="1">Sample</option>
-                                        <option value="2">Sample</option>
-                                        <option value="3">Sample</option>
-                                        <option value="4">Sample</option>
-                                    </select>
+                            <div class="data-form">
+                                <div class="form-group data-form--full">
+                                    <p class="form-group__title">이메일 주소(세금계산서)</p>
+                                    <div class="form-group__input">
+                                        <input type="email" name="email" class="data-input">
+                                    </div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <p class="form-group__title">업체 구분</p>
-                                <div class="form-group__input">
-                                    <select type="text" class="data-select">
-                                        <option value="">선택</option>
-                                        <option value="1">Sample</option>
-                                        <option value="2">Sample</option>
-                                        <option value="3">Sample</option>
-                                        <option value="4">Sample</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="data-form">
-                            <div class="form-group data-form--full">
-                                <p class="form-group__title">이메일 주소(세금계산서)</p>
-                                <div class="form-group__input">
-                                    <input type="email" class="data-input">
+                            <div class="data-form">
+                                <div class="form-group">
+                                    <p class="form-group__title">대표 번호</p>
+                                    <div class="form-group__input">
+                                        <input type="text" name="tel" class="data-input" maxlength='11'>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <p class="form-group__title">팩스 번호</p>
+                                    <div class="form-group__input">
+                                        <input type="text" name="fax" class="data-input">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="data-form">
-                            <div class="form-group">
-                                <p class="form-group__title">대표 번호</p>
-                                <div class="form-group__input">
+                            <div class="data-form">
+                                <div class="form-group data-form--full">
+                                    <p class="form-group__title">사업자 등록번호</p>
                                     <div class="form-group__input">
                                         <input type="text" class="data-input">
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <p class="form-group__title">팩스 번호</p>
-                                <div class="form-group__input">
+
+                            <div class="data-form">
+                                <div class="form-group data-form--full">
+                                    <p class="form-group__title">메모</p>
                                     <div class="form-group__input">
-                                        <input type="text" class="data-input">
+                                        <textarea class="data-textarea" name="memo"></textarea>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="data-form">
-                            <div class="form-group data-form--full">
-                                <p class="form-group__title">사업자 등록번호</p>
-                                <div class="form-group__input">
-                                    <div class="form-group__input">
-                                        <input type="text" class="data-input">
-                                    </div>
-                                </div>
+                            <div class="form-button">
+                                <span class="button button--write" onclick="formSubmit();">등록</span>
+                                <span class="button button--cancel"
+                                    onclick="javascript:location.href='list.html'">취소</span>
                             </div>
-                        </div>
-
-                        <div class="data-form">
-                            <div class="form-group data-form--full">
-                                <p class="form-group__title">메모</p>
-                                <div class="form-group__input">
-                                    <div class="form-group__input">
-                                        <textarea class="data-textarea"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-button">
-                            <button class="button button--write">등록</button>
-                            <button class="button button--cancel">취소</button>
-                        </div>
+                        </form>
                     </div> <!-- // edit-inner -->
                 </div>
             </div> <!-- // contents -->
         </div> <!-- // wrap -->
     </div> <!-- // container -->
-
 </body>
 
 </html>

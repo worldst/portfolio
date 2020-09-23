@@ -12,7 +12,7 @@ function formSubmit() {
     }
     
     $.ajax({
-        url: 'http://127.0.0.1:3001/company',
+        url: 'https://my-json-server.typicode.com/worldst/json-server/company',
         type: 'POST',
         dataType: 'json',
         data: formData,

@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    
+
     <script type="text/javascript" src="../../static/js/common/jquery-latest.js"></script>
     
     <!-- <link rel="stylesheet" type="text/css" href="../../../static/css/common/bootstrap.min.css"> -->
@@ -33,7 +33,7 @@
     <script type="text/javascript" src="../../static/js/common/jszip-utils.min.js"></script>
     
     <link rel="stylesheet" type="text/css" href="../../static/css/common/common.css">
-    <script type="text/javascript" src="../../static/js/common/common.js"></script>
+    <script type="text/javascript" src="../../static/js/base.js"></script>
     <script type="text/javascript" src="../../static/js/common/pdfobject.min.js"></script>
     
     <script type="text/javascript" src="../../static/js/common/exceljs.min.js"></script>
@@ -56,6 +56,7 @@
 </head>
 
 <script type="text/javascript" src="../../static/js/company/list.js"></script>
+<script type="text/javascript" src="../../static/js/common/pagination.js"></script>
 <body style="display:none;">
     <input type="hidden" name="menu_1" value="1">
     <input type="hidden" name="menu_2" value="1">
@@ -100,14 +101,14 @@
                         <ul class="depth-2">
                             <li class="depth-2-item"><span>거래처 정보</span>
                                 <ul class="depth-3">
-                                    <li class="depth-3-item"><a href="../company/add.html"><i class="far fa-edit"></i>신규 업체 등록</a></li>
+                                    <li class="depth-3-item"><a href="../company/create.html"><i class="far fa-edit"></i>신규 업체 등록</a></li>
                                     <li class="depth-3-item"><a href="../company/list.html"><i class="far fa-list-alt"></i>업체 목록</a>
                                     </li>
                                 </ul>
                             </li>
                             <li class="depth-2-item"><span>기계관리 대장</span>
                                 <ul class="depth-3">
-                                    <li class="depth-3-item"><a href="../equipment/add.html"><i class="far fa-edit"></i>신규 설비 등록</a>
+                                    <li class="depth-3-item"><a href="../equipment/create.html"><i class="far fa-edit"></i>신규 설비 등록</a>
                                     </li>
                                     <li class="depth-3-item"><a href="../equipment/list.html"><i class="far fa-list-alt"></i>설비 목록</a>
                                     </li>
@@ -325,7 +326,7 @@
                                 <input type="text" class="input-date" id="date-start">
                                 <i class="far fa-calendar-alt"></i>
                             </div>
-                            <button id="table-search-bar" class="search-bar">조회</button>
+                            <button id="date-search-bar" class="search-bar">조회</button>
                         </div>
                     </div>
                 </div>
@@ -337,14 +338,15 @@
                         </div>
                         <div class="search-group">
                             <select name="search-kinds">
-                                <option value="1">통합검색</option>
-                                <option value="2">업체명</option>
-                                <option value="3">주소</option>
-                                <option value="4">업태</option>
-                                <option value="5">종목</option>
+                                <option value="q">통합검색</option>
+                                <option value="title">업체명</option>
+                                <option value="address">주소</option>
+                                <option value="uptae">업태</option>
+                                <option value="jong">종목</option>
                             </select>
                             <input type="text" class="search-data" placeholder="검색할 데이터를 입력해주세요.">
-                            <button id="table-search-bar" class="search-bar">찾기</button>
+                            <button id="table-search-bar" class="search-bar" onclick="getResultData(1,'search');">찾기</button>
+                            <input type="hidden" name="search_key" value="">
                         </div>
                     </div>
                     <table class="table">
@@ -371,26 +373,20 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!--
-                            <tr>
+                            <tr class="no-data">
                                 <td colspan="8">현재 등록된 데이터가 없습니다.</td>
                             </tr>
-                            -->
                         </tbody>
                     </table>
+
                     <div class="pagination">
-                        <ul class="page">
-                            <li class="prev"><i class="fas fa-chevron-left"></i></li>
-                            <li class="on">1</li>
-                            <li>2</li>
-                            <li>3</li>
-                            <li>4</li>
-                            <li>5</li>
-                            <li class="next"><i class="fas fa-chevron-right"></i></li>
-                        </ul>
+                        <span class="prev"><i class="fas fa-chevron-left"></i></span>
+                        <ul class="page"></ul>
+                        <span class="next"><i class="fas fa-chevron-right"></i></span>
                     </div>
+
                     <div class="button-box">
-                        <button class="button button--delete">선택 삭제</button>
+                        <button class="button button--delete" onclick="delModalOpen();">선택 삭제</button>
                         <button class="button button--export">Export to xlsx</button>
                     </div>
 
@@ -409,18 +405,18 @@
     
 
     <!-- 정보 삭제 모달창 -->
-    <div id="delModal" class="deleteModal">
-        <div class="delete-modal-content">
+    <div id="delModal" class="delete-modal">
+        <div class="delete-modal__inner">
             <div class="imgBox">
-                <img src="../../static/img/pin.png" alt="핀">
+                <i class="far fa-trash-alt"></i>
             </div>
             <div class="deleteCont">
-                <p class="delMessage">정말 삭제하시겠습니까?</p>
+                <p class="delMessage">정말 삭제하시겠습니까 ?</p>
                 <p class="delSubMessage">한 번 삭제된 데이터는 복원이 불가능합니다.</p>
             </div>
             <div class="modalBtnWrap">
-                <span class="modalBtn yes" onclick="infoDel('company');" >예</span>
-                <span class="modalBtn no" onclick="closeDelModal();">아니오</span>
+                <span class="modalBtn modalBtn--yes" onclick="infoDel('company');" >예</span>
+                <span class="modalBtn modalBtn--no" onclick="closeDelModal();">아니오</span>
             </div>
         </div>
     </div>
