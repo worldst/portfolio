@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/rwd.css">
+  <link rel="stylesheet" href="css/circle.css">
+  <link rel="stylesheet" href="css/modal.css">
+  <script src="http://code.jquery.com/jquery-latest.js"></script>
+  <!-- amcharts -->
+  <script src="js/core.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/dataviz.js"></script>
+  <script src="js/animated.js"></script>
+  <!-- amcharts -->
+  <!-- chartist -->
+  <link rel="stylesheet" href="css/chartist.min.css">
+  <link rel="stylesheet" href="css/chartist-plugin-legend.css">
+  <script src="js/chartist.min.js"></script>
+  <script src="js/chartist-plugin-legend.js"></script>
+  <!-- chartist -->
+  <script src="js/common.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/circle.js"></script>
+  <script src="js/modal.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/waypoints/2.0.3/waypoints.min.js"></script>
+  <script src="js/jquery.counterup.min.js"></script>
+</head>
+
+<body onload="showTimer();">
+  <!-- Modal Type 1 -->
+  <div class="modal-wrap modal-a">
+    <div class="modal-box">
+      <p class="modal-title">발주서</p>
+      <div class="modal-body">
+        <div class="modal-inner">
+
+        </div>
+      </div>
+      <div class="modal-btn-wrap">
+        <div class="modal-btn submit">등록</div>
+        <div class="modal-btn cancel" onclick="closeModal();">취소</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Circle Type 1 / css 필요 -->
+  <div class="circle-wrap circle-a">
+    <div class="circle-box">
+      <div class="circle">주문완료</div>
+      <p class="countDown"></p>
+    </div>
+  </div>
+  <!-- Circle Type 2 / css, js 필요-->
+  <div class="circle-wrap circle-b">
+    <div class="circle-box">
+      <div id="app"></div>
+    </div>
+  </div>
+  <!-- Circle Type 3 / css 필요 -->
+  <div class="circle-wrap circle-c">
+    <div class="circle-box">
+      <div class="nb-spinner-title">출하완료
+        <div class="nb-spinner"></div>
+      </div>
+      <p class="countDown"></p>
+    </div>
+  </div>
+
+  <!-- 상단 제목 / 현재 위치 경로 -->
+  <div class="d-wrap shadow">
+    <div class="page-title-wrap shadow">
+      <h4 class="page-title">DashBoard</h4>
+      <div class="pos_cate">
+        <a href="#">HOME</a>
+        <span class="arrow"><img src="img/arrow_right.png" alt="우측화살표"></span>
+        <a href="#">DashBoard</a>
+        <span class="arrow"><img src="img/arrow_right.png" alt="우측화살표"></span>
+        <a href="#">DashBoard</a>
+      </div>
+    </div>
+  
+    <!-- 기간 설정 -->
+    <div class="d-row">
+      <h2 class="sub-title">Period Setting</h2>
+      <div class="date-select-box">
+        <div class="date shadow act">5일</div>
+        <div class="date shadow">7일</div>
+        <div class="date shadow">14일</div>
+        <div class="date shadow">21일</div>
+        <div class="date shadow">28일</div>
+        <div class="date shadow" onclick="openCircle();">주문완료</div>
+        <div class="date shadow" onclick="openCircle2();">작업완료</div>
+        <div class="date shadow" onclick="openCircle3();">출하완료</div>
+      </div>
+    </div>
+
+    <!-- 상단 정보 -->
+    <div class="d-row top-info-wrap">
+      <div class="flex-between">
+        <div class="d-box w-rate-3">
+          <div class="d-box-inner shadow">
+            <p class="info-title">현재 시간</p>
+            <p class="info">
+              <span id="currentHour">1</span>시
+              <span id="currentMin">8</span>분
+              <span id="currentSec">9</span>초
+            </p>
+          </div>
+        </div>
+        <div class="d-box w-rate-3">
+          <div class="d-box-inner shadow">
+            <p class="info-title">조립 작업 수량</p>
+            <p class="info"><span id="assemblyNum">45</span> 개</p>
+          </div>
+        </div>
+        <div class="d-box w-rate-3">
+          <div class="d-box-inner shadow">
+            <p class="info-title">용접 작업 수량</p>
+            <p class="info"><span id="weldingNum">30</span> 개</p>
+          </div>
+        </div>
+        <div class="d-box w-rate-3">
+          <div class="d-box-inner shadow">
+            <p class="info-title">현재 작업 인원</p>
+            <p class="info"><span id="workerNum">24</span> 명</p>
+          </div>
+        </div>
+        <div class="d-box w-rate-3">
+          <div class="d-box-inner shadow">
+            <p class="info-title">현재 작업 인원</p>
+            <p class="info"><span id="workerNum">24</span> 명</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 알림현황판, 세이프티 발주점검 -->
+    <div class="d-row">
+      <h2 class="sub-title">Info</h2>
+      <div class="flex-between info-1">
+        <div class="d-box-wrap board shadow">
+          <p class="box-title boardTitle">알림현황판</p>
+          <div class="d-box-inner">
+            <div class="chart-box">
+              <div class="ct-chart"></div>
+              <!-- div id="chartdiv"></div> -->
+            </div>
+          </div>
+        </div>
+        <div class="d-box-wrap safety shadow">
+          <p class="box-title safetyTitle">세이프티 발주점검</p>
+          <div class="d-box-inner">
+            <table class="inner-table safetyTable">
+              <colgroup>
+                <col width="40%">
+                <col width="20%">
+                <col width="40%">
+              </colgroup>
+              <tr>
+                <th>주문수량</th>
+                <th>타입</th>
+                <th>처리수량</th>
+              </tr>
+              <tr>
+                <td>
+                  <div class="tdGraphBackground">
+                    <p class="tdGraph order"></p> <!-- 주문수량 비율 -->
+                    <span class="graphNum orderNum" id="orderNum_1">125</span> <!-- 주문수량 -->
+                  </div>
+                </td>
+                <td>320DK</td>
+                <td>
+                  <div class="tdGraphBackground">
+                    <p class="tdGraph colorChange progress"></p> <!-- 처리수량 비율 -->
+                    <span class="graphNum progressNum" id="progressNum_1">70</span> <!-- 처리수량 -->
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="tdGraphBackground">
+                    <p class="tdGraph order"></p> <!-- 주문수량 비율 -->
+                    <span class="graphNum orderNum" id="orderNum_2">200</span> <!-- 주문수량 -->
+                  </div>
+                </td>
+                <td>240DK</td>
+                <td>
+                  <div class="tdGraphBackground">
+                    <p class="tdGraph colorChange progress"></p> <!-- 처리수량 비율 -->
+                    <span class="graphNum progressNum" id="progressNum_2">20</span> <!-- 처리수량 -->
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="tdGraphBackground">
+                    <p class="tdGraph order"></p> <!-- 주문수량 비율 -->
+                    <span class="graphNum orderNum" id="orderNum_3">70</span> <!-- 주문수량 -->
+                  </div>
+                </td>
+                <td>460DK</td>
+                <td>
+                  <div class="tdGraphBackground">
+                    <p class="tdGraph colorChange progress"></p> <!-- 처리수량 비율 -->
+                    <span class="graphNum progressNum" id="progressNum_3">100</span> <!-- 처리수량 -->
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="tdGraphBackground">
+                    <p class="tdGraph order"></p> <!-- 주문수량 비율 -->
+                    <span class="graphNum orderNum" id="orderNum_4">260</span> <!-- 주문수량 -->
+                  </div>
+                </td>
+                <td>490DK</td>
+                <td>
+                  <div class="tdGraphBackground">
+                    <p class="tdGraph colorChange progress"></p> <!-- 처리수량 비율 -->
+                    <span class="graphNum progressNum" id="progressNum_4">50</span> <!-- 처리수량 -->
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="tdGraphBackground">
+                    <p class="tdGraph order"></p> <!-- 주문수량 비율 -->
+                    <span class="graphNum orderNum" id="orderNum_5">30</span> <!-- 주문수량 -->
+                  </div>
+                </td>
+                <td>GSB220</td>
+                <td>
+                  <div class="tdGraphBackground">
+                    <p class="tdGraph colorChange progress"></p> <!-- 처리수량 비율 -->
+                    <span class="graphNum progressNum" id="progressNum_5">160</span> <!-- 처리수량 -->
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="tdGraphBackground">
+                    <p class="tdGraph order"></p> <!-- 주문수량 비율 -->
+                    <span class="graphNum orderNum" id="orderNum_6">50</span> <!-- 주문수량 -->
+                  </div>
+                </td>
+                <td>GSB250B</td>
+                <td>
+                  <div class="tdGraphBackground">
+                    <p class="tdGraph colorChange progress"></p> <!-- 처리수량 비율 -->
+                    <span class="graphNum progressNum" id="progressNum_6">180</span> <!-- 처리수량 -->
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="tdGraphBackground">
+                    <p class="tdGraph order"></p> <!-- 주문수량 비율 -->
+                    <span class="graphNum orderNum" id="orderNum_7">80</span> <!-- 주문수량 -->
+                  </div>
+                </td>
+                <td>GSB320</td>
+                <td>
+                  <div class="tdGraphBackground">
+                    <p class="tdGraph colorChange progress"></p> <!-- 처리수량 비율 -->
+                    <span class="graphNum progressNum" id="progressNum_7">150</span> <!-- 처리수량 -->
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="tdGraphBackground">
+                    <p class="tdGraph order"></p> <!-- 주문수량 비율 -->
+                    <span class="graphNum orderNum" id="orderNum_8">20</span> <!-- 주문수량 -->
+                  </div>
+                </td>
+                <td>GSB363</td>
+                <td>
+                  <div class="tdGraphBackground">
+                    <p class="tdGraph colorChange progress"></p> <!-- 처리수량 비율 -->
+                    <span class="graphNum progressNum" id="progressNum_8">40</span> <!-- 처리수량 -->
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="tdGraphBackground">
+                    <p class="tdGraph order"></p> <!-- 주문수량 비율 -->
+                    <span class="graphNum orderNum" id="orderNum_9">40</span> <!-- 주문수량 -->
+                  </div>
+                </td>
+                <td>GSB450B</td>
+                <td>
+                  <div class="tdGraphBackground">
+                    <p class="tdGraph colorChange progress"></p> <!-- 처리수량 비율 -->
+                    <span class="graphNum progressNum" id="progressNum_9">50</span> <!-- 처리수량 -->
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="tdGraphBackground">
+                    <p class="tdGraph order"></p> <!-- 주문수량 비율 -->
+                    <span class="graphNum orderNum" id="orderNum_10">120</span> <!-- 주문수량 -->
+                  </div>
+                </td>
+                <td>GSB490</td>
+                <td>
+                  <div class="tdGraphBackground">
+                    <p class="tdGraph colorChange progress"></p> <!-- 처리수량 비율 -->
+                    <span class="graphNum progressNum" id="progressNum_10">30</span> <!-- 처리수량 -->
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="tdGraphBackground">
+                    <p class="tdGraph order"></p> <!-- 주문수량 비율 -->
+                    <span class="graphNum orderNum" id="orderNum_11">45</span> <!-- 주문수량 -->
+                  </div>
+                </td>
+                <td>GSB544</td>
+                <td>
+                  <div class="tdGraphBackground">
+                    <p class="tdGraph colorChange progress"></p> <!-- 처리수량 비율 -->
+                    <span class="graphNum progressNum" id="progressNum_11">90</span> <!-- 처리수량 -->
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="tdGraphBackground">
+                    <p class="tdGraph order"></p> <!-- 주문수량 비율 -->
+                    <span class="graphNum orderNum" id="orderNum_12">15</span> <!-- 주문수량 -->
+                  </div>
+                </td>
+                <td>ETC</td>
+                <td>
+                  <div class="tdGraphBackground">
+                    <p class="tdGraph colorChange progress"></p> <!-- 처리수량 비율 -->
+                    <span class="graphNum progressNum" id="progressNum_12">50</span> <!-- 처리수량 -->
+                  </div>
+                </td>
+              </tr>
+            </table>
+            <div class="input-wrap">
+              <div class="input-box">
+                <input type="text" name="orderTotalNum" id="orderTotalNum" value="0" maxlength="8" readonly>
+              </div>
+              <div class="input-box">
+                <p>합계</p>
+              </div>
+              <div class="input-box">
+                <input type="text" name="progressTotalNum" id="progressTotalNum" value="0" maxlength="8" readonly>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 오늘 작업 남은 호기, 생산실적 -->
+    <div class="d-row">
+      <div class="flex-between info-2">
+        <div class="d-box-wrap shadow remainingWork">
+          <p class="box-title remainingWorkTitle">오늘 작업 남은 호기</p>
+          <div class="d-box-inner">
+            <table class="inner-table remainingWorkTable">
+              <colgroup>
+                <col width="20%">
+                <col width="20%">
+                <col width="20%">
+                <col width="20%">
+                <col width="20%">
+              </colgroup>
+              <tr>
+                <th>Sample1</th>
+                <th>Sample2</th>
+                <th>Sample3</th>
+                <th>Sample4</th>
+                <th>Sample5</th>
+              </tr>
+              <tr>
+                <td>data1</td>
+                <td>data2</td>
+                <td>data3</td>
+                <td>data4</td>
+                <td>data5</td>
+              </tr>
+              <tr>
+                <td>data1</td>
+                <td>data2</td>
+                <td>data3</td>
+                <td>data4</td>
+                <td>data5</td>
+              </tr>
+              <tr>
+                <td>data1</td>
+                <td>data2</td>
+                <td>data3</td>
+                <td>data4</td>
+                <td>data5</td>
+              </tr>
+              <tr>
+                <td>data1</td>
+                <td>data2</td>
+                <td>data3</td>
+                <td>data4</td>
+                <td>data5</td>
+              </tr>
+              <tr>
+                <td>data1</td>
+                <td>data2</td>
+                <td>data3</td>
+                <td>data4</td>
+                <td>data5</td>
+              </tr>
+              <tr>
+                <td>data1</td>
+                <td>data2</td>
+                <td>data3</td>
+                <td>data4</td>
+                <td>data5</td>
+              </tr>
+              <tr>
+                <td>data1</td>
+                <td>data2</td>
+                <td>data3</td>
+                <td>data4</td>
+                <td>data5</td>
+              </tr>
+              <tr>
+                <td>data1</td>
+                <td>data2</td>
+                <td>data3</td>
+                <td>data4</td>
+                <td>data5</td>
+              </tr>
+              <tr>
+                <td>data1</td>
+                <td>data2</td>
+                <td>data3</td>
+                <td>data4</td>
+                <td>data5</td>
+              </tr>
+              <tr>
+                <td>data1</td>
+                <td>data2</td>
+                <td>data3</td>
+                <td>data4</td>
+                <td>data5</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="d-box-wrap shadow perform">
+          <p class="box-title performTitle">생산실적</p>
+          <div class="d-box-inner">
+            <table class="inner-table performTable">
+              <colgroup>
+                <col width="20%">
+                <col width="20%">
+                <col width="20%">
+                <col width="20%">
+                <col width="20%">
+              </colgroup>
+              <tr>
+                <th>Sample1</th>
+                <th>Sample2</th>
+                <th>Sample3</th>
+                <th>Sample4</th>
+                <th>Sample5</th>
+              </tr>
+              <tr>
+                <td>data1</td>
+                <td>data2</td>
+                <td>data3</td>
+                <td>data4</td>
+                <td>data5</td>
+              </tr>
+              <tr>
+                <td>data1</td>
+                <td>data2</td>
+                <td>data3</td>
+                <td>data4</td>
+                <td>data5</td>
+              </tr>
+              <tr>
+                <td>data1</td>
+                <td>data2</td>
+                <td>data3</td>
+                <td>data4</td>
+                <td>data5</td>
+              </tr>
+              <tr>
+                <td>data1</td>
+                <td>data2</td>
+                <td>data3</td>
+                <td>data4</td>
+                <td>data5</td>
+              </tr>
+              <tr>
+                <td>data1</td>
+                <td>data2</td>
+                <td>data3</td>
+                <td>data4</td>
+                <td>data5</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 푸터 Start -->
+  <div class="footer">
+    <div class="footer-inner">
+      <ul class="footer-info">
+        <li>대표자명 : 이명열</li>
+        <li>업체명 : (주)동광사우</li>
+        <li>전화번호 : 031-499-9321</li>
+        <li>팩스 : 031-499-9326</li>
+        <li>주소 : 경기 시흥시 시화벤처로 315번길 12 (정왕동)</li>
+        <li>이메일 : manager@dkinnovation.co.kr</li>
+      </ul>
+      <p class="copyright">Copyright 2020. (주)동광사우 All Rights Reserved.</p>
+    </div>
+  </div>
+  <!-- 푸터 End -->
+</body>
+
+</html>

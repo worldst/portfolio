@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/jquery-ui.min.css">
+    <script src="https://code.jquery.com/jquery-2.2.4.js"
+        integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/jquery.ui.touch-punch.min.js"></script>
+
+    <link rel="stylesheet" href="css/domarrow.css">
+    <script src="js/domarrow.js"></script>
+
+    <script src="js/leader-line.min.js"></script>
+</head>
+<style>
+    * {
+        margin:0;
+        padding:0;
+        box-sizing: border-box;
+    }
+    .process-content, .test {
+        position: relative;
+        width:1200px;
+        height:800px;
+        display:flex;
+        align-items: flex-start;
+        justify-content: space-around;
+        margin:40px auto;
+        border:1px solid #ddd;
+        padding:10px 20px;
+    }
+    .test {
+        padding:0;
+    }
+    .process-wrap {
+        display:flex;
+        align-items:center;
+        justify-content: flex-start;
+        flex-wrap:wrap;
+        width:100%;
+    }
+    .process-wrap + .process-wrap {
+        width:30%;
+        justify-content: center;
+    }
+    .box, .box2 {
+        position: relative;
+        display:flex;
+        align-items:center;
+        justify-content: center;
+        width:calc(100% / 6 - 4%);
+        font-size:30px;
+        border:2px solid #888888;
+        height:160px;
+        margin:30px 2%;
+        background:white;
+        border-radius: 4px;
+        box-shadow: 0 0 5px #949494;
+        cursor:move;
+    }
+    .box_test, .box2_test {
+        position: absolute;
+        display:flex;
+        align-items:center;
+        justify-content: center;
+        width:calc(100% / 6 - 4%);
+        font-size:30px;
+        border:2px solid #888888;
+        height:160px;
+        margin:30px 2%;
+        background:white;
+        border-radius: 4px;
+        box-shadow: 0 0 5px #949494;
+        cursor:move;
+    }
+    .box:hover {
+        background:#bddffd;
+    }
+    .box .info {
+        display:none;
+        position:absolute;
+        left:0;
+        top:calc(100% + 15px);
+        background:#192635;
+        color:white;
+        width:140px;
+        padding:12px;
+        z-index:999;
+        border-radius: 3px;
+    }
+    .box .info::before {
+        content:'';
+        position:absolute;
+        display:block;
+        width:0;
+        height:0;
+        bottom:100%;
+        left:20px;
+        border:10px solid #192635;
+        border-top:10px solid transparent;
+        border-left:10px solid transparent;
+        border-right:10px solid transparent;
+        z-index: 1000;
+    }
+    .box .info p {
+        font-size:15px;
+        margin:5px 0;
+    }
+    .active {
+        border:2px dashed #888888;
+        opacity: 0.4;
+    }
+    .drop-hover {
+        background:rgb(228, 241, 255);
+        border:2px dashed #888888;
+    }
+    .delete {
+        border:2px solid red;
+        color:red;
+    }
+    .delete.drop-hover {
+        background:#fff1f0;
+        border:2px dashed red;
+    }
+    .start span {
+        border:1px solid #9ab9ff;
+        padding:10px 20px;
+        cursor: pointer;
+        border-radius: 3px;
+        color:#5b8dff;
+    }
+    .disabled {
+        background:#f5f5f5;
+        cursor:default;
+        box-shadow: none;
+    }
+</style>
+<script>
+    const obj = [
+        [], [35], [3], [4], [5], [6], 
+        [7], [8], [32], [23], [11], [12], 
+        [18], [38], [15], [13, 24], [17], [18], 
+        [19], [21], [21], [22], [23], [24], 
+        [25], [26], [27], [28], [29], [30], 
+        [31], [32], [33], [34], [35], [36], 
+        [37], [0], [2, 15, 18], [13, 13, 15]
+    ]
+
+    $(function () {
+        console.log(obj.length)
+        // ajax success 
+        for(let i=0; i<10; i++) {
+            let html = '';
+
+            html += `<div class="box">`;
+            html += `   <div class="num">${i+1}</div>`;
+            html += `</div>`;
+
+            $(".process-content .process").append(html);
+        }
+        
+        initSwap();
+
+        function initSwap() {
+            initDraggable($(".box"));
+            setData();
+        }
+
+        function initDraggable($element) {
+            $element.draggable({
+                containment : ".process-content",
+                cursor : "move"
+            });
+        }
+
+        function setData() {
+            $(".process .box").each(function(i) {
+                $(this).attr('id', i+1);
+            });
+        }
+
+        function setData2() {
+            $(".process .box_test").each(function (i) {
+                $(this).attr('id', `test_${i+1}`);
+            });
+        }
+
+        
+        $(".start span").click(function() {
+            $("connection").remove();
+
+            const from = $("input[name='from']").val().split(",");
+            const to = $("input[name='to']").val().split(",");
+            const pos = [];
+
+            for(let i=0; i<to.length; i++) {
+                to[i] = Number(to[i]);
+                from[i] = Number(from[i]);
+
+                if(to[i] > from[i]) {
+                    if(to[i] != (from[i] + 1)) {
+                        new LeaderLine(
+                            document.getElementById(from[i]),
+                            document.getElementById(to[i]),
+                            {
+                                color: "#f95c42",
+                                size: 4,
+                                startPlug: 'disc',
+                                path: 'straight',
+                                dash : {
+                                    animation : true
+                                }
+                            }
+                        );
+
+                        $(".process .box").each(function () {
+                            $(".box").addClass("disabled");
+
+                            if ($(this).attr("id") == from[i]) {
+                                $(this).css("background", "#f9fde2");
+                            }
+                            if ($(this).attr("id") == to[i]) {
+                                $(this).css("background", "#e8fdff");
+                            }
+                        });
+                    }
+                }
+            }
+
+            $(".box").draggable("destroy");
+            $(".process-content .delete").hide();
+            
+            $(".process .box").each(function() {
+                console.log($(this))
+                const posTop = $(this).position().top;
+                const posLeft = $(this).position().left;
+                
+                posInfo = {
+                    top : posTop,
+                    left : posLeft
+                }
+
+                pos.push(posInfo)
+            });
+
+            console.log(pos)
+
+            for(let i=0; i<10; i++) {
+                let html = '';
+
+                html += `<div class="box_test" style="left:${pos[i].left}px; top:${pos[i].top}px">`;
+                html += `   <div class="num">${i+1}</div>`;
+                html += `</div>`;
+
+                $(".test .process").append(html);
+            }
+            setData2();
+            for (let i=0; i<to.length; i++) {
+                to[i] = Number(to[i]);
+                from[i] = Number(from[i]);
+
+                if (to[i] > from[i]) {
+                    if (to[i] != (from[i] + 1)) {
+                        new LeaderLine(
+                            document.getElementById('test_' + from[i]),
+                            document.getElementById('test_' + to[i]),
+                            {
+                                color: "#5e89e8",
+                                size: 4,
+                                startPlug: 'disc'
+                            }
+                        );
+
+                        $(".process .box_test").each(function () {
+                            $(".box_test").addClass("disabled");
+
+                            if ($(this).attr("id") == 'test_' + from[i]) {
+                                $(this).css("background", "#f9fde2");
+                            }
+                            if ($(this).attr("id") == 'test_' + to[i]) {
+                                $(this).css("background", "#e8fdff");
+                            }
+                        });
+                    }
+                }
+
+                
+            }
+        });
+
+    });
+    
+</script>
+
+<body>
+
+    <div class="process-content">
+        <div class="process-wrap process">
+            <!-- 스크립트 처리 -->
+        </div>
+        <!--
+        <div class="process-wrap">
+            <div class="box delete" data-status="delete"><span>X</span></div>
+        </div>
+        -->
+    </div>
+
+    <div class="test">
+        <div class="process-wrap process">
+            <!-- 스크립트 처리 -->
+        </div>
+    </div>
+
+    <!-- 시작 공정 ~ 도착 공정 -->
+    <input type="hidden" name="from" value="1,5">
+    <input type="hidden" name="to" value="3,8">
+
+    <!-- 테스트 버튼 (추후 삭제) -->
+    <div class="start"><span>시작</span></div>
+</body>

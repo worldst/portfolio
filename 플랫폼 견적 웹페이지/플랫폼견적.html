@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>플랫폼 견적</title>
+    <link rel="stylesheet" href="css/all.min.css">
+    <link rel="stylesheet" href="css/플랫폼견적.css">
+
+    <script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
+
+    <script src="js/moment-with-locales.js"></script>
+    <script src="js/moment.min.js"></script>
+
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/waypoints/2.0.3/waypoints.min.js"></script>
+    <script src="js/jquery.counterup.min.js"></script>
+    
+    <script src="js/base.js"></script>
+    <script src="js/플랫폼견적.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <!-- header -->
+        <div class="header">
+            <div class="header_top">
+                <div class="inner flex_center_between">
+                    <div class="title">스타트업 전문 개발사, 디케이 이노베이션</div>
+                    <div class="menu flex_center_between">
+                        <div class="menu__btn">개발 강의</div>
+                        <div class="menu__btn"><i class="fas fa-user-circle"></i> <span>로그인</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="header_bot">
+                <div class="inner flex_center_between">
+                    <div class="left flex_center_between">
+                        <div class="logo"><a href="#">DK INNO.</a></div>
+                        <div class="nav flex_center_between">
+                            <a href="#" class="nav__btn">견적 계산</a>
+                            <a href="#" class="nav__btn">도움말</a>
+                            <a href="#" class="nav__btn">포트폴리오</a>
+                            <a href="#" class="nav__btn">보유 인력</a>
+                            <a href="#" class="nav__btn">스타트업 꿀팁</a>
+                        </div>
+                    </div>
+                    <div class="right">
+                        <div class="btn">개발 문의하기</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- // header -->
+
+        <!-- content -->
+        <div class="content">
+            <div class="fixed_side inner_box">
+                <div class="expected_estimate">
+                    <div class="title">예상 견적</div>
+                    <div class="total_price"><span>0</span> 원</div>
+                </div>
+                <div class="pdf_estimate">
+                    <div class="title">견적서 PDF 받기</div>
+                    <input type="text" name="name" placeholder="이름(견적서의 수신인)">
+                    <input type="text" name="company" placeholder="회사명">
+                    <input type="text" name="email" placeholder="견적서를 받을 메일주소">
+                    <div class="estimate_btn">견적서 PDF 받기</div>
+                </div>
+            </div>
+            <div class="section">
+                <div class="inner_box">
+                    <div class="sub_title">플랫폼 및 개발언어</div>
+                    <div class="list">
+                        <label class="list__menu inner_box">                        
+                            <p class="title flex_center_between">
+                                <span class="flex_center_between">반응형 웹</span> 
+                                <input type="checkbox" name="1_1" class="selected_box">
+                            </p>
+                            <p class="price"><span>2,000,000</span> 원</p>
+                            <p class="cont">PC와 모바일 브라우져에 대략적인 대응, 인터넷 익스플로러는 대응하지 않습니다</p>
+                        </label>
+                        <label class="list__menu inner_box">
+                            <p class="title flex_center_between">
+                                <span class="flex_center_between">하이브리드 앱 <a href="#"><i class="fa fa-play-circle"></i></a></span>
+                                <input type="checkbox" name="1_2" class="selected_box">
+                            </p>
+                            <p class="price"><span>4,000,000</span> 원</p>
+                            <p class="cont">앱스토어에 출시를 위한 모바일 최적화. 아이폰/안드로이드 패키징, 앱스토어 출시 가이드</p>
+                        </label>
+                        <label class="list__menu inner_box">
+                            <p class="title flex_center_between">
+                                <span class="flex_center_between">루비온레일즈</span>
+                                <input type="checkbox" name="1_3" class="selected_box">
+                            </p>
+                            <p class="price"><span>0</span> 원</p>
+                            <p class="cont">루비온레일즈의 개발 생산성이 가장 좋기 때문에 개발 비용이 절감됩니다</p>
+                        </label>
+                        <label class="list__menu inner_box">
+                            <p class="title flex_center_between">
+                                <span class="flex_center_between">파이썬장고</span>
+                                <input type="checkbox" name="1_4" class="selected_box">
+                            </p>
+                            <p class="price"><span>8,000,000</span> 원</p>
+                            <p class="cont">장고로 개발시 개발 시간이 좀더 소요되지만 개발자 채용/인수인계가 용이합니다</p>
+                        </label>
+                        <label class="list__menu inner_box">
+                            <p class="title flex_center_between">
+                                <span class="flex_center_between">노드JS</span>
+                                <input type="checkbox" name="1_5" class="selected_box">
+                            </p>
+                            <p class="price"><span>8,000,000</span> 원</p>
+                            <p class="cont">노드로 개발시 개발 시간이 좀더 소요되지만 개발자 채용/인수인계가 용이합니다</p>
+                        </label>
+                        <label class="list__menu inner_box">
+                            <p class="title flex_center_between">
+                                <span class="flex_center_between">서버리스</span>
+                                <input type="checkbox" name="1_6" class="selected_box">
+                            </p>
+                            <p class="price"><span>8,000,000</span> 원</p>
+                            <p class="cont">사용자 증가에도 완벽히 대응이 가능한 AWS Lambda 서버리스로 구축, 언어는 JS</p>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="inner_box">
+                    <div class="sub_title">구현할 UI 페이지 분량</div>
+                    <div class="list">
+                        <label class="list__menu inner_box">
+                            <p class="title flex_center_between">
+                                <span class="flex_center_between">10 페이지 이하</span>
+                                <input type="checkbox" name="2_1" class="selected_box">
+                            </p>
+                            <p class="price"><span>4,000,000</span> 원</p>
+                            <p class="cont">10페이지 이내의 UI 개발</p>
+                        </label>
+                        <label class="list__menu inner_box">
+                            <p class="title flex_center_between">
+                                <span class="flex_center_between">20 페이지 이하</span>
+                                <input type="checkbox" name="2_2" class="selected_box">
+                            </p>
+                            <p class="price"><span>8,000,000</span> 원</p>
+                            <p class="cont">20페이지 이내의 UI 개발</p>
+                        </label>
+                        <label class="list__menu inner_box">
+                            <p class="title flex_center_between">
+                                <span class="flex_center_between">30 페이지 이하</span>
+                                <input type="checkbox" name="2_3" class="selected_box">
+                            </p>
+                            <p class="price"><span>12,000,000</span> 원</p>
+                            <p class="cont">30페이지 이내의 UI 개발</p>
+                        </label>
+                        <label class="list__menu inner_box">
+                            <p class="title flex_center_between">
+                                <span class="flex_center_between">40 페이지 이하</span>
+                                <input type="checkbox" name="2_4" class="selected_box">
+                            </p>
+                            <p class="price"><span>16,000,000</span> 원</p>
+                            <p class="cont">40페이지 이내의 UI 개발</p>
+                        </label>
+                        <label class="list__menu inner_box">
+                            <p class="title flex_center_between">
+                                <span class="flex_center_between">50 페이지 이하</span>
+                                <input type="checkbox" name="2_5" class="selected_box">
+                            </p>
+                            <p class="price"><span>20,000,000</span> 원</p>
+                            <p class="cont">50페이지 이내의 UI 개발</p>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="inner_box">
+                    <div class="sub_title">관리자/업체 기능 구현</div>
+                    <div class="list">
+                        <label class="list__menu inner_box">
+                            <p class="title flex_center_between">
+                                <span class="flex_center_between">주요 데이터 조회/수정/삭제 <a href="#"><i class="fa fa-question-circle"></i></a></span>
+                                <input type="checkbox" name="3_1" class="selected_box">
+                            </p>
+                            <p class="price"><span>1,000,000</span> 원</p>
+                            <p class="cont">주요 데이터에 대한 조회/편집/삭제/검색/정렬 기능</p>
+                        </label>
+                        <label class="list__menu inner_box">
+                            <p class="title flex_center_between">
+                                <span class="flex_center_between">재고 관리</span>
+                                <input type="checkbox" name="3_2" class="selected_box">
+                            </p>
+                            <p class="price"><span>2,000,000</span> 원</p>
+                            <p class="cont">상품 재고 및 판매 수량 관리</p>
+                        </label>
+                        <label class="list__menu inner_box">
+                            <p class="title flex_center_between">
+                                <span class="flex_center_between">상품 관리 <a href="#"><i class="fa fa-play-circle"></i></a></span>
+                                <input type="checkbox" name="3_3" class="selected_box">
+                            </p>
+                            <p class="price"><span>1,500,000</span> 원</p>
+                            <p class="cont">업체/판매자가 상품 정보 등록하고 관리하는 기능</p>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="inner_box">
+                    <div class="sub_title">알람 기능 관련</div>
+                    <div class="list">
+                        <label class="list__menu inner_box">
+                            <p class="title flex_center_between">
+                                <span class="flex_center_between">개별 푸시 알림</span>
+                                <input type="checkbox" name="4_1" class="selected_box">
+                            </p>
+                            <p class="price"><span>2,000,000</span> 원</p>
+                            <p class="cont">사용자별 디바이스 토큰을 서버에 저장해야 하며 발송 종류가 많을수록 비용이 증가</p>
+                        </label>
+                        <label class="list__menu inner_box">
+                            <p class="title flex_center_between">
+                                <span class="flex_center_between">국내 SMS 알림</span>
+                                <input type="checkbox" name="4_2" class="selected_box">
+                            </p>
+                            <p class="price"><span>1,000,000</span> 원</p>
+                            <p class="cont">단문/장문 문자 알림 발송, 다양한 상황에 발송이 되어야 하면 비용이 증가</p>
+                        </label>
+                        <label class="list__menu inner_box">
+                            <p class="title flex_center_between">
+                                <span class="flex_center_between">이메일 알림</span>
+                                <input type="checkbox" name="4_3" class="selected_box">
+                            </p>
+                            <p class="price"><span>1,000,000</span> 원</p>
+                            <p class="cont">알림 발송의 경우의 수가 많거나 발송되는 이메일에 디자인이 필요한 경우 비용이 증가</p>
+                        </label>
+                        <label class="list__menu inner_box">
+                            <p class="title flex_center_between">
+                                <span class="flex_center_between">카카오톡 알림</span>
+                                <input type="checkbox" name="4_4" class="selected_box">
+                            </p>
+                            <p class="price"><span>1,500,000</span> 원</p>
+                            <p class="cont">메시지 템플릿의 승인 절차와 테스트 과정이 필요</p>
+                        </label>
+                        <label class="list__menu inner_box">
+                            <p class="title flex_center_between">
+                                <span class="flex_center_between">050 가상번호</span>
+                                <input type="checkbox" name="4_5" class="selected_box">
+                            </p>
+                            <p class="price"><span>2,000,000</span> 원</p>
+                            <p class="cont">수신자의 전화번호를 숨기기 위해 가상 전화번호를 매칭</p>
+                        </label>
+                        <label class="list__menu inner_box">
+                            <p class="title flex_center_between">
+                                <span class="flex_center_between">내 알림 내역 <a href="#"><i class="fa fa-play-circle"></i></a></span>
+                                <input type="checkbox" name="4_6" class="selected_box">
+                            </p>
+                            <p class="price"><span>2,000,000</span> 원</p>
+                            <p class="cont">친구 초대가 왔거나 내 글에 좋아요가 달렸다는 등의 알림 내역을 표시하는 경우</p>
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- // content -->
+    </div>
+</body>
+</html>

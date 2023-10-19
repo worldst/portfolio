@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% block title %}
+<div class="title_box" data-cate="5,1,2">
+    <i class="far fa-rectangle-list"></i><span class="title">사용자 정보</span>
+    <div class="path_box"></div>
+</div>
+{% endblock %}
+{% load static %}
+{% load humanize %}
+{% load mathfilters %}
+{% block contents %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/system/account/add_account.css' %}">
+<script type="text/javascript" src="{% static 'js/system/account/add_account.js' %}"></script>
+<!-- <script type="text/javascript" src="{% static 'js/tablesorter.js' %}"></script> -->
+
+{% csrf_token %}
+<div class="content edit-form">
+    <div class="edit-form__inner" id="base">
+        <div class="form-title flex-top-between">
+            <div class="title">기본 정보</div>
+            <div class="req_txt">* 표시된 정보는 필수 사항 입니다.</div>
+        </div>
+        <div class="data-form">
+            <div class="form-group" style="width:49%;">
+                <div class="form-group__title">
+                    <div class="title">사용자  ID <span class="required-item">*</span></div>
+                </div>
+                <div class="form-group__input">
+                    <input type="text" name="username" class="data-input" value="{{object.username | default_if_none:''}}" disabled>
+                </div>
+            </div>
+            <div class="form-group" style="width:49%;">
+                <div class="form-group__title flex">
+                    <div class="title">사용자 이름 <span class="required-item">*</span></div>
+                </div>
+                <div class="form-group__input">
+                    <input type="text" name="name" class="data-input" value="{{ object.name | default_if_none:'' }}" disabled>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="data-form">
+            <div class="form-group" style="width:49%;">
+                <div class="form-group__title">
+                    <div class="title">비밀번호 <span class="required-item">*</span></div>
+                </div>
+                <div class="form-group__input">
+                    <input type="password" name="password" class="data-input">
+                </div>
+            </div>
+            <div class="form-group" style="width:49%;">
+                <div class="form-group__title flex">
+                    <div class="title">비밀번호 확인 <span class="required-item">*</span></div>
+                </div>
+                <div class="form-group__input">
+                    <input type="password" name="password_check" class="data-input">
+                </div>
+            </div>
+        </div> -->
+        <div class="data-form">
+            <div class="form-group" style="width:49%;">
+                <div class="form-group__title flex">
+                    <div class="title">계정 유형 <span class="required-item">*</span></div>
+                </div>
+                <div class="form-group__input">
+                    <input type="text" name="type" class="data-input" value="{{ object.type | default_if_none:''}}" disabled>
+                </div>
+            </div>
+            <div class="form-group" style="width:49%;">
+                <div class="form-group__title flex">
+                    <div class="title">메모</div>
+                </div>
+                <div class="form-group__input">
+                    <input type="text" name="memo" class="data-input" value="{{ object.memo | default_if_none:''}}" disabled>
+                </div>
+            </div>
+        </div>
+        <div class="data-form">
+            <div class="form-group" style="width:49%;">
+                <div class="form-group__title flex">
+                    <div class="title">이메일</div>
+                </div>
+                <div class="form-group__input">
+                    <input type="text" name="email" class="data-input" value="{{ object.email | default_if_none:''}}" disabled>
+                </div>
+            </div>
+            <div class="form-group" style="width:49%;">
+                <div class="form-group__title flex">
+                    <div class="title">연락처</div>
+                </div>
+                <div class="form-group__input">
+                    <input type="text" name="phone_number" class="data-input" value="{{object.phone_number | default_if_none:''}}" disabled>
+                </div>
+            </div>
+        </div>
+        <div class="data-form">
+            <div class="form-group" style="width:49%;">
+                <span class="form-name">계정 활성화</span>
+                <label class="switch">
+                    <input type="checkbox" class="switch_input" id="is_active" name="is_active" value="{{object.is_active | default_if_none:'True'}}" disabled>
+                    <span class="stat on">ON</span>
+                    <span class="stat off">OFF</span>
+                    <span class="handle"></span>
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="edit-form__button_box flex-between">
+    <div class="left">
+
+    </div>
+    <div class="right">
+        <a href="/system/account/list/" class="edit-form__button cancel">목록으로</a>
+        <a href="/system/account/{{ object.pk }}/update" class="edit-form__button update">수정</a>
+    </div>
+</div>
+
+
+{% endblock %}

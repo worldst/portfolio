@@ -1,0 +1,408 @@
+{% extends "base.html" %}
+{% load static %} 
+{% block title %}로그인{% endblock %}
+{% block login %}
+<!-- 로드 스태틱, css 링크 추가-->
+<link rel="stylesheet" type="text/css" href="{% static 'css/system/account/login.css' %}">
+
+<div class="login-bg">
+    <div class="login">
+        <div class="login__box">
+            <p class="login__title"><span>DK</span> Innovation</p>
+            <p class="login__img">
+                <img src="{% static 'img/login-logo.png' %}" alt="로그인로고" class="img-user">
+            </p>
+            <form method="POST" id="login_form" autocomplete="off">
+                {% csrf_token %}
+                {% for field in form %}
+                {% if field.label == '아이디' %}
+                <div class="group-box">
+                    <label for="id_username">User</label>
+                    <div class="input-box">
+                        <input type="text" id="id_username" class="input-control" placeholder="아이디를 입력하세요." name="username">
+                        <img src="{% static 'img/user.png' %}" alt="사용자아이콘" class="input-icon">
+                    </div>
+                    {% if field.errors %}
+                    <p class="error"><i class="fas fa-exclamation-circle"></i> {{ field.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                {% endif %}
+                {% if field.label == '비밀번호' %}
+                <div class="group-box">
+                    <label for="id_password">Password</label>
+                    <div class="input-box">
+                        <input type="password" id="id_password" class="input-control" placeholder="비밀번호를 입력하세요." name="password">
+                        <img src="{% static 'img/password.png' %}" alt="비밀번호아이콘" class="input-icon">
+                    </div>
+                    {% if field.errors %}
+                    <p class="error"><i class="fas fa-exclamation-circle"></i> {{ field.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                {% endif %}
+                {% endfor %}
+                <span class="login__btn login__btn--submit" onclick="loginSystem();">LOGIN</span>
+                <!--<input type="submit" class="login__btn login__btn--submit" value="LOGIN">-->
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- 아이디/비밀번호 찾기 -->
+<!--
+<div id="modal" class="searchModal findInfoModal">
+    <div class="search-modal-content">
+        <div class="page-header" style="text-align: center">
+            <h2>아이디/비밀번호 찾기</h2>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="row">
+                    <div class="col-sm-12">
+                        {% csrf_token %}
+                        <input type="hidden" name="type">
+                        <div class="tabBtnWrap">
+                            <div class="tabBtn id_btn" id="id">아이디 찾기</div>
+                            <div class="tabBtn pw_btn" id="pw">비밀번호 찾기</div>
+                        </div>
+                        <div class="findInfo findID">
+                            <table class="modal-table">
+                                <thead>
+                                    <tr>
+                                        <th>이메일</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><input type="text" name="email" class="form-control"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="findInfo findPW hidden">
+                            <table class="modal-table">
+                                <thead>
+                                    <tr>
+                                        <th>아이디</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><input type="text" name="id" class="form-control"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <table class="modal-table">
+                                <thead>
+                                    <tr>
+                                        <th>이메일</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><input type="text" name="email2" class="form-control"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="regBtnWrap">
+                    <span class="btn btn-primary" onclick="findInfoSubmit();">확인</span>
+                    <span onclick="closeModal();" class="btn btn-danger">취소</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+-->
+<!-- 회원가입 -->
+<!--
+<div id="modal" class="searchModal regInfoModal">
+    <div class="search-modal-content">
+        <div class="page-header" style="text-align: center">
+            <h2>회원가입</h2>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="row">
+                    <div class="col-sm-12">
+                        {% csrf_token %}
+                        <div>
+                            <table class="modal-table">
+                                <thead>
+                                    <tr>
+                                        <th>업체명</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><input type="text" name="company_name" class="form-control"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <table class="modal-table">
+                                <thead>
+                                    <tr>
+                                        <th>사업자 등록번호</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><input type="text" name="reg_num" class="form-control"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                
+                            <table class="modal-table">
+                                <thead>
+                                    <tr>
+                                        <th>관리자 아이디</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><input type="text" name="username" class="form-control"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <table class="modal-table">
+                                <thead>
+                                    <tr>
+                                        <th>비밀번호</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><input type="password" name="password" class="form-control"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                            <table class="modal-table">
+                                <thead>
+                                    <tr>
+                                        <th>비밀번호 확인</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><input type="password" name="password_chk" class="form-control"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="regBtnWrap">
+                    <span class="btn btn-primary" onclick="regInfoSubmit();">확인</span>
+                    <span onclick="closeModal();" class="btn btn-danger">취소</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+-->
+<style>
+    .flex {
+        display: flex;
+        align-items: center;
+        justify-content: space-between !important;
+    }
+    .regBtnWrap {
+        margin-top:0;
+    }
+    .tabBtnWrap {
+        margin-bottom:15px;
+    }
+    .tabBtnWrap .tabBtn {
+        display: inline-block;
+        font-size:14px;
+        padding:7px 15px;
+        border:1px solid #505b78;
+        color:#505b78;
+        margin-right:10px;
+        cursor: pointer;
+    }
+    .tabBtnWrap .tabBtn.act {
+        background:#505b78;
+        color:white;
+        border:1px solid #505b78;
+    }
+    .findInfoModal .search-modal-content {
+        width:600px;
+    }
+</style>
+<script>
+    $(document).keyup(function(e) {
+        if(e.keyCode == 13) {
+            loginSystem();
+        }
+    });
+
+    $(".tabBtn").click(function() {
+        const idx = $(this).index();
+        const type = $(this).attr("id");
+
+        $(".findInfoModal input[name='type']").val(type);
+
+        $(".tabBtn").removeClass("act");
+        $(this).addClass("act");
+
+        $(".findInfo").addClass("hidden");
+        $(".findInfo").eq(idx).removeClass("hidden");
+    });
+
+    function findInfo() {
+        $(".tabBtn").eq(0).trigger("click");
+        $(".findInfoModal").show();
+    }
+
+    function findInfoSubmit() {
+        const token = $("input[name='csrfmiddlewaretoken']").val();
+        const type = $(".findInfoModal input[name='type']").val();
+        const id = $(".findInfoModal input[name='id']").val();
+        const email = $(".findInfoModal input[name='email']").val();
+        const email2 = $(".findInfoModal input[name='email2']").val();
+        let data;
+
+        if(type == "id") { // ID
+            if(!email) {
+                alert("이메일을 입력해주세요.");
+                $(".findInfoModal input[name='email']").focus();
+                return false;
+            }
+
+            if(email) {
+                if(!email_check(email)) {
+                    alert("올바른 이메일을 형식을 입력해주세요.");
+                    $(".findInfoModal input[name='email']").focus();
+                    return false;
+                }
+            }
+
+            data = {
+                csrfmiddlewaretoken: token,
+                type: type,
+                email : email
+            }
+        } else { // PW
+            if(!id) {
+                alert("아이디를 입력해주세요.");
+                $(".findInfoModal input[name='id']").focus();
+                return false;
+            }
+
+            if(!email2) {
+                alert("이메일을 입력해주세요.");
+                $(".findInfoModal input[name='email2']").focus();
+                return false;
+            }
+
+            if(email2) {
+                if(!email_check(email2)) {
+                    alert("올바른 이메일을 형식을 입력해주세요.");
+                    $(".findInfoModal input[name='email2']").focus();
+                    return false;
+                }
+            }
+
+            data = {
+                csrfmiddlewaretoken: token,
+                type: type,
+                email : email2,
+                id : id
+            }
+        }
+        console.log(data)
+
+        $.ajax({
+            url: "/find/",
+            type: 'POST',
+            data: data,
+            success:function(data) {
+                const is_success = true;
+
+                /*** ID 찾기 결과 ***/
+                if(type == 'id') {                    
+                    if(data.result =='A') {  // 일치하는 이메일이 없는 경우
+                        alert("존재하지 않는 이메일입니다. 다시 입력해주세요.");
+                        is_success = false;
+                    } else {                        
+                        alert("해당 이메일로 아이디를 전송하였습니다.");
+                    }
+                }
+
+                /*** PassWord 찾기 결과 ***/
+                if(type == 'pw') {
+                    if(data.result =='B') {  // 일치하는 아이디가 없는 경우
+                        alert("존재하지 않는 아이디, 이메일입니다. 다시 입력해주세요.");
+                        is_success = false;
+                    } else {
+                        alert("해당 이메일로 임시비밀번호를 전송하였습니다.");
+                    }
+                }
+                
+                if(is_success) {
+                    $(".findInfoModal").hide();
+                }
+            }
+        });
+    }
+
+    function regInfo() {
+        $(".tabBtn").eq(0).trigger("click");
+        $(".regInfoModal").show();
+    }
+
+    function regInfoSubmit() {
+        const token = $("input[name='csrfmiddlewaretoken']").val();
+        const company_name = $(".regInfoModal input[name='company_name']").val();
+        const reg_num = $(".regInfoModal input[name='reg_num']").val();
+        const username = $(".regInfoModal input[name='username']").val();
+        const password = $(".regInfoModal input[name='password']").val();
+        const password_chk = $(".regInfoModal input[name='password_chk']").val();
+        let data;
+
+        obj = {
+            csrfmiddlewaretoken: token,
+            company_name: company_name,
+            reg_num: reg_num,
+            username: username,
+            password : password,
+            password_chk : password_chk
+        }
+        console.log(data)
+
+        $.ajax({
+            url: "/api/registration",
+            type: 'POST',
+            data: JSON.stringify(obj),
+            success:function(data, status) {
+                const is_success = true;
+                console.log(data, status)
+
+                if(data.status == "PWD_DIFFERENT" || data.status == "COMPANY_EXISTS" || data.status == "USERNAME_EXISTS"){
+                    alert(data.message);
+                    //$(".findInfoModal input[name='username']").focus();
+                    return false;
+                }
+
+                if(is_success) {
+                    $(".regInfoModal").hide();
+                }
+            }
+        });
+    }
+
+    function email_check(email) {    
+        var regex=/([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+        return (email != '' && email != 'undefined' && regex.test(email)); 
+    }
+</script>
+{% endblock %}

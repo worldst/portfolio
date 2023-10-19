@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}{% endblock %}
+{% load bootstrap3 %}
+{% load static %}
+{% load humanize %}
+{% block contents %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/base/quality/quality_master.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/system/notice/get_postings.css' %}">
+<script type="text/javascript" src="{% static 'js/system/notice/get_postings.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/tablesorter.js' %}"></script>
+
+{% csrf_token %}
+<input type="hidden" name="create_url" value="/base/api/employee/master/">
+<input type="hidden" name="update_url" value="/base/api/employee/master/mod/">
+
+<div class="listView" style="width:96%; margin:0 auto;">
+    <div class="row">
+        <div class="flex-top-around">
+            Index Dashboard 기획 필요..
+            1. 일별 회원가입 업체 별 데이터 대쉬보드 기획 필요
+        </div>
+    </div>
+</div>
+
+{% endblock %}

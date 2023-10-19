@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+{% block title %}
+<div class="title_box" data-cate="5,2,2">
+    <i class="far fa-rectangle-list"></i><span class="title">업체 상세 정보</span>
+    <div class="path_box"></div>
+</div>
+{% endblock %}
+{% load static %}
+{% load humanize %}
+{% block contents %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/base/company/add_company.css' %}">
+<!-- <script type="text/javascript" src="{% static 'js/base/company/add_company.js' %}"></script> -->
+<!-- <script type="text/javascript" src="{% static 'js/tablesorter.js' %}"></script> -->
+
+{% csrf_token %}
+<div class="content edit-form">
+    <div class="edit-form__inner" id="base">
+        <div class="form-title flex-top-between">
+            <div class="title">기본 정보</div>
+            <div class="req_txt">* 표시된 정보는 필수 사항 입니다.</div>
+        </div>
+        <div class="data-form">
+            <div class="form-group" style="width:58%;">
+                <div class="form-group__title">
+                    <div class="title">업체명 <span class="required-item">*</span></div>
+                </div>
+                <div class="form-group__input">
+                    <input type="text" name="name" class="data-input" value="{{ object.name }}" disabled>
+                </div>
+            </div>
+            <div class="form-group" style="width:20%;">
+                <div class="form-group__title flex">
+                    <div class="title">업체 구분</div>
+                </div>
+                <div class="form-group__input">
+                    <input type="text" name="type" class="data-input" value="{{ object.type | default:'' }}" disabled>
+                </div>
+            </div>
+            <div class="form-group" style="width:20%;">
+                <div class="form-group__title flex">
+                    <div class="title">업체 담당자</div>
+                </div>
+                <div class="form-group__input">
+                    <input type="text" name="account" class="data-input" value="{{ object.account.name }}" disabled>
+                </div>
+            </div>
+        </div>
+
+        <div class="data-form">
+            <div class="form-group" style="width:100%;">
+                <div class="form-group__title">
+                    <div class="title">업체 주소</div>
+                </div>
+                <div class="form-group__input">
+                    <input type="text" name="address" class="data-input" value="{{ object.address | default:'' }}" disabled>
+                </div>
+            </div>
+        </div>
+
+        <div class="data-form">
+            <div class="form-group" style="width:25%;">
+                <div class="form-group__title">
+                    <div class="title">업태</div>
+                </div>
+                <div class="form-group__input">
+                    <input type="text" name="line_of_business" class="data-input" value="{{ object.line_of_business | default:'' }}" disabled>
+                </div>
+            </div>
+            <div class="form-group" style="width:24%;">
+                <div class="form-group__title">
+                    <div class="title">종목</div>
+                </div>
+                <div class="form-group__input">
+                    <input type="text" name="type_of_business" class="data-input" value="{{ object.type_of_business | default:'' }}" disabled>
+                </div>
+            </div>
+            <div class="form-group" style="width:49%;">
+                <div class="form-group__title">
+                    <div class="title">이메일</div>
+                </div>
+                <div class="form-group__input">
+                    <input type="text" name="email" class="data-input" value="{{ object.email | default:'' }}" disabled>
+                </div>
+            </div>
+        </div>
+
+        <div class="data-form">
+            <div class="form-group" style="width:34%;">
+                <div class="form-group__title">
+                    <div class="title">대표자</div>
+                </div>
+                <div class="form-group__input">
+                    <input type="text" name="onwer" class="data-input" value="{{ object.onwer | default:'' }}" disabled>
+                </div>
+            </div>
+            <div class="form-group" style="width:32%;">
+                <div class="form-group__title">
+                    <div class="title">대표 번호</div>
+                </div>
+                <div class="form-group__input">
+                    <input type="text" name="onwer_phone" class="data-input" value="{{ object.onwer_phone | default:'' }}" disabled>
+                </div>
+            </div>
+            <div class="form-group" style="width:32%;">
+                <div class="form-group__title">
+                    <div class="title">팩스 번호</div>
+                </div>
+                <div class="form-group__input">
+                    <input type="text" name="fax" class="data-input" value="{{ object.fax | default:'' }}" disabled>
+                </div>
+            </div>
+        </div>
+
+        <div class="data-form">
+            <div class="form-group" style="width:34%;">
+                <div class="form-group__title">
+                    <div class="title">사업자 등록번호</div>
+                </div>
+                <div class="form-group__input">
+                    <input type="text" name="registration_num" class="data-input" value="{{ object.registration_num | default:'' }}" disabled>
+                </div>
+            </div>
+            <div class="form-group" style="width:32%;">
+                <div class="form-group__title">
+                    <div class="title">담당자 이름</div>
+                </div>
+                <div class="form-group__input">
+                    <input type="text" name="manager_name" class="data-input" value="{{ object.manager_name | default:'' }}" disabled>
+                </div>
+            </div>
+            <div class="form-group" style="width:32%;">
+                <div class="form-group__title">
+                    <div class="title">담당자 연락처</div>
+                </div>
+                <div class="form-group__input">
+                    <input type="text" name="manager_phone" class="data-input" value="{{ object.manager_phone | default:'' }}" disabled>
+                </div>
+            </div>
+        </div>
+
+        <div class="data-form">
+            <div class="form-group" style="width:100%;">
+                <div class="form-group__title flex">
+                    <div class="title">메모</div>
+                </div>
+                <div class="form-group__input">
+                    <input type="text" name="memo" class="data-input" value="{{ object.memo | default:'' }}" disabled>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="edit-form__button_box flex-between">
+    <div class="left">
+
+    </div>
+    <div class="right">
+        <a href="/base/company/list/" class="edit-form__button cancel">목록으로</a>
+        <a href="/base/company/{{ object.pk }}/update" class="edit-form__button update">수정</a>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}
+<div class="title_box" data-cate="3,1,1">
+    <i class="fa-solid fa-qrcode"></i><span class="title">입고 검색</span>
+    <div class="path_box"></div>
+</div>
+{% endblock %}
+{% load static %}
+{% load humanize %}
+{% block contents %}
+{% csrf_token %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/material/purchase/material_purchase_index.css' %}">
+<script type="text/javascript" src="{% static 'js/material/purchase/material_purchase_index.js' %}"></script>
+
+<div class="content edit-form">
+    <div class="edit-form__inner" id="base">
+        <div class="form-title flex-top-between">
+            <div class="title">발주번호 검색</div>
+        </div>
+        <div class="data-form">
+            <div class="form-group" style="width:100%;">
+                <div class="form-group__title">
+                    <div class="title">발주번호 (QR)</div>
+                </div>
+                <div class="form-group__input">
+                    <input type="text" name="search_qrcode" class="data-input qr" placeholder="해당 칸을 클릭한 후, 스캐너로 QR 코드를 스캔해주세요.">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,181 @@
+.contents__inner {
+    width:90%;
+}
+.label_checkbox {
+    position: absolute;
+    top:-2px;
+    left: 60px;
+}
+
+.edit-form__inner#file .data-form {
+    align-items: center;
+    margin-left:20px;
+}
+.edit-form__inner#file .data-form .row_title {
+    font-size:15px;
+    color:#737373;
+    text-shadow: 0px 0px 1px #9f9f9f;
+    margin-right:20px;
+}
+.edit-form__inner#file .data-form .file_url {
+    width:500px;
+}
+.edit-form__inner#file .data-form .dynamic-btn {
+    position: static;
+    margin-left:15px;
+}
+
+.edit-form__inner#process .process_wrap {
+    /* flex-wrap: wrap; */
+    gap:15px 10px;
+}
+.edit-form__inner#process .process_inner {
+    position: relative;
+    width:10%;    
+}
+.edit-form__inner#process .process_inner + .process_inner {
+    margin-left:10px;
+}
+.edit-form__inner#process .process_inner .active_mark {
+    position: absolute;
+    background: #3d75db;
+    color: white;
+    border-radius: 100px;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    left: calc(50% - 10px);
+    top: -10px;
+}
+.edit-form__inner#process .process_inner .process_box {
+    width:100%;
+    height:111px;
+    border: 1px solid #dbdbdb;
+    border-radius: 3px;
+    box-shadow: 0 0 5px #dfdfdf;
+    padding: 10px 6px;
+    cursor: pointer;
+    background-color: #f7f7f7;
+}
+.edit-form__inner#process .process_inner .process_box .process {
+    text-align: center;
+    height:55px;
+    font-size:16px;    
+    color:#adadad;
+}
+.edit-form__inner#process .process_inner input[name=process]:checked + .process_box {
+    border: 1px solid #90b6ef;
+    background: #0f3cbd14;
+}
+.edit-form__inner#process .process_inner input[name=process]:checked + .process_box .process {
+    color:#3880ef;
+    text-shadow: 0px 0px 1px #9f9f9f;
+}
+.edit-form__inner#process .process_inner.notExist .process_box {
+    cursor:not-allowed;
+    background-color: #efefef;
+}
+.edit-form__inner#process .process_inner.notExist .process_box .process {
+    height:100%;
+}
+
+#enterModal .common-modal__inner .imgBox {
+    margin: 40px 0 20px 0;
+}
+
+#enterModal .common-modal__inner .imgBox svg {
+    font-size: 64px;
+    color: #504b50;
+}
+
+#enterModal .common-modal__inner .deleteCont {
+    font-size: 16px;
+    color: #848484;
+}
+
+#enterModal .common-modal__inner .deleteCont .delSubMessage {
+    margin-top: 7px;
+    font-size: 13px;
+    color: #73b8ff;
+}
+
+#enterModal .common-modal__inner .modalBtnWrap {
+    margin-top: 40px;
+    overflow: hidden;
+}
+
+#enterModal .common-modal__inner .modalBtnWrap .modalBtn {
+    float: left;
+    width: 50%;
+    height: 44px;
+    line-height: 44px;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    margin:0;
+    padding:0;
+    border-radius: 0;
+}
+
+#enterModal .common-modal__inner .modalBtnWrap .modalBtn--yes {
+    background: #05ca9c;
+}
+
+#enterModal .common-modal__inner .modalBtnWrap .modalBtn--no {
+    background: #818592;
+}
+
+#enterModal .common-modal__inner .modalBtnWrap .modalBtn:hover {
+    opacity: 0.7;
+}
+
+
+#partEnterModal .common-modal__inner .imgBox {
+    margin: 40px 0 20px 0;
+}
+
+#partEnterModal .common-modal__inner .imgBox svg {
+    font-size: 64px;
+    color: #504b50;
+}
+
+#partEnterModal .common-modal__inner .deleteCont {
+    font-size: 16px;
+    color: #848484;
+}
+
+#partEnterModal .common-modal__inner .deleteCont .delSubMessage {
+    margin-top: 7px;
+    font-size: 13px;
+    color: #73b8ff;
+}
+
+#partEnterModal .common-modal__inner .modalBtnWrap {
+    margin-top: 40px;
+    overflow: hidden;
+}
+
+#partEnterModal .common-modal__inner .modalBtnWrap .modalBtn {
+    float: left;
+    width: 50%;
+    height: 44px;
+    line-height: 44px;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    margin:0;
+    padding:0;
+    border-radius: 0;
+}
+
+#partEnterModal .common-modal__inner .modalBtnWrap .modalBtn--yes {
+    background: #05ca9c;
+}
+
+#partEnterModal .common-modal__inner .modalBtnWrap .modalBtn--no {
+    background: #818592;
+}
+
+#partEnterModal .common-modal__inner .modalBtnWrap .modalBtn:hover {
+    opacity: 0.7;
+}

@@ -1,0 +1,11 @@
+form > .form-group:first-of-type .field-label::before {
+    content:'*';
+    display:inline-block;
+    vertical-align: middle;
+    color:red;
+    margin-right:3px;
+}
+
+.errorlist {
+    margin:5px 0 15px 0;
+}

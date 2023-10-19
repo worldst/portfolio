@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}
+<div class="title_box" data-cate="4,1,1">
+    <i class="far fa-edit"></i><span class="title">자재 등록</span>
+    <div class="path_box"></div>
+</div>
+{% endblock %}
+{% load static %}
+{% load humanize %}
+{% block contents %}
+{% csrf_token %}
+<!-- <link rel="stylesheet" type="text/css" href="{% static 'css/sales/order/crud/add_order.css' %}">
+<script type="text/javascript" src="{% static 'js/sales/order/crud/add_order.js' %}"></script> -->
+<!-- <script type="text/javascript" src="{% static 'js/tablesorter.js' %}"></script> -->
+{% endblock %}

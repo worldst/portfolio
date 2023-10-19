@@ -1,0 +1,276 @@
+{% extends "base.html" %}
+{% block title %}
+<div class="title_box" data-cate="1,2,2">
+    <i class="far fa-rectangle-list"></i><span class="title">수주 목록</span>
+    <div class="path_box"></div>
+</div>
+{% endblock %}
+{% load static %}
+{% load humanize %}
+{% block contents %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/sales/order/get_orders.css' %}">
+<script type="text/javascript" src="{% static 'js/pagination.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/sales/order/get_orders.js' %}"></script>
+<!-- <script type="text/javascript" src="{% static 'js/tablesorter.js' %}"></script> -->
+
+<input type="hidden" name="save_search_type">
+<input type="hidden" name="save_keyword">
+<input type="hidden" name="save_date_type">
+<input type="hidden" name="save_search_start_dt">
+<input type="hidden" name="save_search_end_dt">
+
+{% csrf_token %}
+<div class="content info flex-between">
+    <div class="list-tab flex">
+        <div class="tab act" data-type="">
+            <span class="title">전체</span>
+            <span class="count">{{ object_list | length }}</span>
+        </div>
+        <div class="tab" data-type="WAIT">
+            <span class="title">대기 수주</span>
+            <span class="count">{{ wait | length }}</span>
+        </div>
+        <div class="tab" data-type="START,PAUSE,PART">
+            <span class="title">진행 수주</span>
+            <span class="count">{{ start | length }}</span>
+        </div>
+        <div class="tab" data-type="COMPLT">
+            <span class="title">완료 수주</span>
+            <span class="count">{{ complt | length }}</span>
+        </div>
+        <div class="tab" data-type="CANCEL">
+            <span class="title">취소 수주</span>
+            <span class="count">{{ cancel | length }}</span>
+        </div>
+    </div>
+    <div class="list-func flex">
+        <div class="func filter" onclick="filterSearchModalOpen();">
+            <i class="fa-solid fa-sliders"></i>
+            <span class="title">필터</span>
+        </div>
+        <div class="func excel" onclick="exportExcel();">
+            <i class="fa-solid fa-download"></i>
+            <span class="title">목록 다운로드</span>
+        </div>
+    </div>
+</div>
+
+<div class="content list">
+    <div class="content__inner">
+        <div class="table-search">
+            <div class="total-info">
+                <p class="total">총 <span>-</span> 개의 데이터가 등록되어있습니다. </p>
+            </div>
+            <div class="search-group">
+                <select name="search-kinds">
+                    <option value="">통합검색</option>
+                    <option value="num">수주번호</option>
+                    <option value="pjt_name">프로젝트명</option>
+                    <option value="company_name">업체명</option>
+                    <option value="account">담당자</option>
+                    <option value="memo">메모</option>
+                </select>
+                <input type="text" class="search-data" placeholder="검색할 데이터를 입력해주세요.">
+                <button id="table-search-bar" class="search-bar" onclick="searchData();">조회</button>
+                <input type="hidden" name="search_key" value="">
+            </div>
+        </div>
+        <table class="table list" id="list-table">
+            <colgroup>
+                <col width="4%"> <!-- check -->
+                <col width="10%"> <!-- 수주번호 -->
+                <col width="7%"> <!-- 수출여부 -->
+                <col width="24%"> <!-- 프로젝트명 -->
+                <col width="16%"> <!-- 업체명 -->
+                <col width="8%"> <!-- 담당자 -->
+                <col width="15%"> <!-- 메모 -->
+                <col width="8%"> <!-- 출하상태 -->
+                <col width="8%"> <!-- 수주상태 -->
+            </colgroup>
+            <thead>
+                <tr>
+                    <th><input type="checkbox" name="rowCheck" class="all_chk"></th>
+                    <th>수주번호</th>
+                    <th>수출여부</th>
+                    <th>프로젝트명</th>
+                    <th>업체명</th>
+                    <th>담당자</th>
+                    <th>메모</th>
+                    <th>출하상태</th>
+                    <th>수주상태</th>
+                </tr>
+            </thead>
+            <tbody aria-live="polite" aria-relevant="all">
+                <!-- 스크립트 -->
+            </tbody>
+        </table>
+
+        <div class="pagination flex-center">
+            <div class="button-box left">
+                <span class="common-btn common-btn--delete" onclick="delModalOpen(this);"><i class="far fa-trash-alt"></i> 삭제</span>
+                <span class="common-btn common-btn--fail" onclick="cancelModalOpen(this);"><i class="fa-solid fa-ban"></i> 취소</span>
+                <span class="space_line"></span>
+                <span class="common-btn common-btn--download" onclick="workExcel(this)"><i class="fa-solid fa-download"></i> 작업지시서</span>
+            </div>
+            <div class="pagination__inner flex-center">
+                <span class="page_arrow prev" style="display: none;"><i class="fas fa-chevron-left"></i></span>
+                <ul class="page">
+                    <!-- 스크립트 -->
+                </ul>
+                <span class="page_arrow next" style="display: none;"><i class="fas fa-chevron-right"></i></span>
+            </div>
+            <div class="button-box right">
+                <a href="/sales/order/add/" class="common-btn common-btn--create"><i class="fa-solid fa-plus"></i> 신규 등록</a>
+            </div>
+        </div>
+
+        <!-- 데이터 로딩 대기 화면 -->
+        <div class="load-screen">
+            <div class="load">
+                <img src="{% static '/img/spinner.gif' %}" alt="데이터 로딩중" class="load__img">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 필터 모달창 -->
+<div id="filterSearchModal" class="common-modal">
+    <div class="common-modal__inner">
+        <div class="form-title">
+            <div class="data-reset flex-center" onclick="resetFilterData();"><i class="fa-solid fa-rotate-right"></i> 초기화</div>
+            <span class="title">상세 검색</span>
+            <div class="modal-close flex-center" onclick="closeModal(this);"><i class="fa-solid fa-xmark"></i></div>
+        </div>
+        <div class="filter__inner">
+            <div class="form-group">
+                <div class="form-group__title">수주 상태</div>
+                <div class="form-group__inner flex" id="status">
+                    <div class="radioBox">
+                        <input type="radio" name="status" id="all" class="hidden" data-status="" checked>
+                        <label class="reason" for="all"><i class="fa-solid fa-check"></i> <span>전체</span></label>
+                    </div>
+                    <div class="radioBox">
+                        <input type="radio" name="status" id="wait" class="hidden" data-status="WAIT">
+                        <label class="reason" for="wait"><i class="fa-solid fa-check"></i> <span>대기</span></label>
+                    </div>
+                    <div class="radioBox">
+                        <input type="radio" name="status" id="start" class="hidden" data-status="START,PAUSE,PART">
+                        <label class="reason" for="start"><i class="fa-solid fa-check"></i> <span>진행</span></label>
+                    </div>
+                    <div class="radioBox">
+                        <input type="radio" name="status" id="complt" class="hidden" data-status="COMPLT">
+                        <label class="reason" for="complt"><i class="fa-solid fa-check"></i> <span>완료</span></label>
+                    </div>
+                    <div class="radioBox">
+                        <input type="radio" name="status" id="cancel" class="hidden" data-status="CANCEL">
+                        <label class="reason" for="cancel"><i class="fa-solid fa-check"></i> <span>취소</span></label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-group__title">기간 타입</div>
+                <div class="form-group__inner flex" id="date_type">
+                    <div class="radioBox">
+                        <input type="radio" name="date_type" id="created_dt" class="hidden" data-date_type="" checked>
+                        <label class="reason" for="created_dt"><i class="fa-solid fa-check"></i> <span>등록 일자</span></label>
+                    </div>
+                    <div class="radioBox">
+                        <input type="radio" name="date_type" id="registration_date" class="hidden" data-date_type="registration_date">
+                        <label class="reason" for="registration_date"><i class="fa-solid fa-check"></i> <span>수주 일자</span></label>
+                    </div>
+                    <div class="radioBox">
+                        <input type="radio" name="date_type" id="due_date" class="hidden" data-date_type="due_date">
+                        <label class="reason" for="due_date"><i class="fa-solid fa-check"></i> <span>납기 일자</span></label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-group__title">기간 설정</div>
+                <div class="form-group__inner flex-between">
+                    <div class="input-group">
+                        <input type="text" name="start_date" class="data-input datetimepicker_update" placeholder="시작일자">
+                        <div class="input-group-addon input-group-append">
+                            <div class="input-group-text"><i class="glyphicon glyphicon-calendar"></i></div>
+                        </div>
+                    </div>
+                    <span class="space_line">~</span>
+                    <div class="input-group">
+                        <input type="text" name="end_date" class="data-input datetimepicker_update" placeholder="종료일자">
+                        <div class="input-group-addon input-group-append">
+                            <div class="input-group-text"><i class="glyphicon glyphicon-calendar"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-group__title">데이터 입력</div>
+                <div class="form-group__inner flex-between">
+                    <select name="search_type" class="data-select">
+                        <option value="">통합검색</option>
+                        <option value="num">수주번호</option>
+                        <option value="pjt_name">프로젝트명</option>
+                        <option value="company_name">업체명</option>
+                        <option value="account">담당자</option>
+                        <option value="memo">메모</option>
+                    </select>
+                    <input type="text" name="keyword" class="data-input">
+                </div>
+            </div>
+        </div>
+        <div class="modalBtnWrap flex-center">
+            <span class="modalBtn modalBtn--yes" onclick="filterData();">조회</span>
+            <span class="modalBtn modalBtn--no" onclick="closeModal(this);">닫기</span>
+        </div>
+    </div>
+</div>
+
+<!-- 정보 삭제 모달창 -->
+<div id="delModal" class="common-modal">
+    <input type="hidden" name="ids">
+    <div class="common-modal__inner">
+        <div class="imgBox">
+            <i class="far fa-trash-alt"></i>
+        </div>
+        <div class="deleteCont">
+            <p class="delMessage">정말 삭제하시겠습니까 ?</p>
+            <p class="delSubMessage">한 번 삭제된 데이터는 복원이 불가능합니다.</p>
+        </div>
+        <div class="modalBtnWrap">
+            <span class="modalBtn modalBtn--yes" onclick="deleteData();">예</span>
+            <span class="modalBtn modalBtn--no" onclick="closeModal(this);">아니오</span>
+        </div>
+    </div>
+</div>
+
+<!-- 정보 취소 모달창 -->
+<div id="cancelModal" class="common-modal">
+    <input type="hidden" name="ids">
+    <div class="common-modal__inner">
+        <div class="cancelCont">
+            <p class="cancelMessage">아래의 항목 중 <span>취소사유</span>를 선택해주세요.</p>
+        </div>
+        <div class="reasonBox">
+            <div class="radioBox">
+                <input type="radio" name="reason" id="reason_1" class="hidden" checked>
+                <label class="reason" for="reason_1"><i class="fa-solid fa-check"></i> <span>주문 실수</span></label>
+            </div>
+            <div class="radioBox">
+                <input type="radio" name="reason" id="reason_2" class="hidden">
+                <label class="reason" for="reason_2"><i class="fa-solid fa-check"></i> <span>납기일 지연</span></label>
+            </div>
+            <div class="radioBox">
+                <input type="radio" name="reason" id="reason_3" class="hidden">
+                <label class="reason" for="reason_3"><i class="fa-solid fa-check"></i> <span>서비스 불만족</span></label>
+            </div>
+            <div class="radioBox">
+                <input type="radio" name="reason" id="reason_4" class="hidden">
+                <label class="reason" for="reason_4"><i class="fa-solid fa-check"></i> <span>단순 변심</span></label>
+            </div>
+        </div>
+        <div class="modalBtnWrap flex-center">
+            <span class="modalBtn modalBtn--yes" onclick="cancelData();">선택</span>
+            <span class="modalBtn modalBtn--no" onclick="closeModal(this);">닫기</span>
+        </div>
+    </div>
+</div>
+{% endblock %}

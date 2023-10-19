@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+{% block title %}
+<div class="title_box" data-cate="2,2,2">
+    <i class="far fa-rectangle-list"></i><span class="title">작업 일보</span>
+    <div class="path_box"></div>
+</div>
+{% endblock %}
+{% load static %}
+{% load humanize %}
+{% block contents %}
+<script type="text/javascript" src="{% static 'js/pagination.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/report/get_job_report.js' %}"></script>
+<!-- <script type="text/javascript" src="{% static 'js/tablesorter.js' %}"></script> -->
+
+<input type="hidden" name="save_search_type">
+<input type="hidden" name="save_keyword">
+<input type="hidden" name="save_date_type">
+<input type="hidden" name="save_search_start_dt">
+<input type="hidden" name="save_search_end_dt">
+
+{% csrf_token %}
+<div class="content info flex-between">
+    <div class="list-tab flex">
+        <div class="tab act" data-type="">
+            <span class="title">전체</span>
+            <span class="count">{{ object_list | length }}</span>
+        </div>
+    </div>
+    <div class="list-func flex">
+        <div class="func filter" onclick="filterSearchModalOpen();">
+            <i class="fa-solid fa-sliders"></i>
+            <span class="title">필터</span>
+        </div>
+        <div class="func excel" onclick="exportExcel();">
+            <i class="fa-solid fa-download"></i>
+            <span class="title">목록 다운로드</span>
+        </div>
+    </div>
+</div>
+
+<div class="content list">
+    <div class="content__inner">
+        <div class="table-search">
+            <div class="total-info">
+                <p class="total">총 <span>-</span> 개의 데이터가 등록되어있습니다. </p>
+            </div>
+            <div class="search-group">
+                <select name="search-kinds">
+                    <option value="">통합검색</option>
+                    <option value="order_num">수주번호</option>
+                    <option value="company_name">업체명</option>
+                    <option value="pjt_name">프로젝트명</option>
+                    <option value="equipment">설비명</option>
+                    <option value="worker">작업자명</option>
+                </select>
+                <input type="text" class="search-data" placeholder="검색할 데이터를 입력해주세요.">
+                <button id="table-search-bar" class="search-bar" onclick="searchData();">조회</button>
+                <input type="hidden" name="search_key" value="">
+            </div>
+        </div>
+        <table class="table list" id="list-table">
+            <colgroup>
+                <col width="10%"> <!-- 수주번호 -->
+                <col width="13%"> <!-- 업체명 -->
+                <col width="17%"> <!-- 프로젝트명 -->
+                <col width="13%"> <!-- 설비명 -->
+                <col width="9%"> <!-- 작업자명 -->
+                <col width="14%"> <!-- 시작시간 -->
+                <col width="14%"> <!-- 종료시간 -->
+                <col width="10%"> <!-- 작업시간 -->
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>수주번호</th>
+                    <th>업체명</th>
+                    <th>프로젝트명</th>
+                    <th>설비명</th>
+                    <th>작업자명</th>
+                    <th>시작시간</th>
+                    <th>종료시간</th>
+                    <th>작업시간</th>
+                </tr>
+            </thead>
+            <tbody aria-live="polite" aria-relevant="all">
+                <!-- 스크립트 -->
+            </tbody>
+        </table>
+
+        <div class="pagination flex-center">
+            <div class="button-box left">
+            </div>
+            <div class="pagination__inner flex-center">
+                <span class="page_arrow prev" style="display: none;"><i class="fas fa-chevron-left"></i></span>
+                <ul class="page">
+                    <!-- 스크립트 -->
+                </ul>
+                <span class="page_arrow next" style="display: none;"><i class="fas fa-chevron-right"></i></span>
+            </div>
+            <div class="button-box right">
+            </div>
+        </div>
+
+        <!-- 데이터 로딩 대기 화면 -->
+        <div class="load-screen">
+            <div class="load">
+                <img src="{% static '/img/spinner.gif' %}" alt="데이터 로딩중" class="load__img">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- 필터 모달창 -->
+<div id="filterSearchModal" class="common-modal">
+    <div class="common-modal__inner">
+        <div class="form-title">
+            <div class="data-reset flex-center" onclick="resetFilterData();"><i class="fa-solid fa-rotate-right"></i> 초기화</div>
+            <span class="title">상세 검색</span>
+            <div class="modal-close flex-center" onclick="closeModal(this);"><i class="fa-solid fa-xmark"></i></div>
+        </div>
+        <div class="filter__inner">
+            <div class="form-group">
+                <div class="form-group__title">작업 상태</div>
+                <div class="form-group__inner flex" id="status">
+                    <div class="radioBox">
+                        <input type="radio" name="status" id="all" class="hidden" data-status="" checked>
+                        <label class="reason" for="all"><i class="fa-solid fa-check"></i> <span>전체</span></label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-group__title">기간 타입</div>
+                <div class="form-group__inner flex" id="date_type">
+                    <div class="radioBox">
+                        <input type="radio" name="date_type" id="create" class="hidden" data-date_type="create" checked>
+                        <label class="reason" for="create"><i class="fa-solid fa-check"></i> <span>수주 등록 일자</span></label>
+                    </div>
+                    <div class="radioBox">
+                        <input type="radio" name="date_type" id="start" class="hidden" data-date_type="start">
+                        <label class="reason" for="start"><i class="fa-solid fa-check"></i> <span>시작시간</span></label>
+                    </div>
+                    <div class="radioBox">
+                        <input type="radio" name="date_type" id="end" class="hidden" data-date_type="end">
+                        <label class="reason" for="end"><i class="fa-solid fa-check"></i> <span>종료시간</span></label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-group__title">기간 설정</div>
+                <div class="form-group__inner flex-between">
+                    <div class="input-group">
+                        <input type="text" name="start_date" class="data-input datetimepicker_update" placeholder="시작일자">
+                        <div class="input-group-addon input-group-append">
+                            <div class="input-group-text"><i class="glyphicon glyphicon-calendar"></i></div>
+                        </div>
+                    </div>
+                    <span class="space_line">~</span>
+                    <div class="input-group">
+                        <input type="text" name="end_date" class="data-input datetimepicker_update" placeholder="종료일자">
+                        <div class="input-group-addon input-group-append">
+                            <div class="input-group-text"><i class="glyphicon glyphicon-calendar"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-group__title">데이터 입력</div>
+                <div class="form-group__inner flex-between">
+                    <select name="search_type" class="data-select">
+                        <option value="">통합검색</option>
+                        <option value="order_num">수주번호</option>
+                        <option value="company_name">업체명</option>
+                        <option value="pjt_name">프로젝트명</option>
+                        <option value="equipment">설비명</option>
+                        <option value="worker">작업자명</option>
+                    </select>
+                    <input type="text" name="keyword" class="data-input">
+                </div>
+            </div>
+        </div>
+        <div class="modalBtnWrap flex-center">
+            <span class="modalBtn modalBtn--yes" onclick="filterData();">조회</span>
+            <span class="modalBtn modalBtn--no" onclick="closeModal(this);">닫기</span>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+{% block title %}
+<div class="title_box" data-cate="1,1,1">
+    <i class="far fa-edit"></i><span class="title">견적 등록</span>
+    <div class="path_box"></div>
+</div>
+{% endblock %}
+{% load static %}
+{% load humanize %}
+{% block contents %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/sales/order/add_order.css' %}">
+<script type="text/javascript" src="{% static 'js/sales/estimate/add_estimate.js' %}"></script>
+<!-- <script type="text/javascript" src="{% static 'js/tablesorter.js' %}"></script> -->
+
+{% csrf_token %}
+<div class="content edit-form">
+    <div class="edit-form__inner" id="base">
+        <div class="form-title flex-top-between">
+            <div class="title">기본 정보</div>
+            <div class="req_txt">* 표시된 정보는 필수 사항 입니다.</div>
+        </div>
+        <div class="data-form">
+            <div class="form-group" style="width:25%;">
+                <div class="form-group__title">
+                    <div class="title">업체명 <span class="required-item">*</span></div>
+                    <div class="label_checkbox">
+                        <input type="checkbox" name="toggle" id="toggle">
+                        <label for="toggle" class="flex">
+                            <i class="fa-solid fa-rotate"></i>
+                            <span class="l_txt">직접입력</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group__input" id="form_company">
+                    <select name="company" class="select2_form">
+                        <option value="" title="choice">선택</option>
+                        {% for obj in company %}
+                        <option value="{{ obj.id }}">{{ obj.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group__input hidden" id="form_company_txt">
+                    <input type="text" name="company_name" class="data-input">
+                </div>
+            </div>
+            <div class="form-group" style="width:53%;">
+                <div class="form-group__title flex">
+                    <div class="title">프로젝트명 <span class="required-item">*</span></div>
+                </div>
+                <div class="form-group__input">
+                    <input type="text" name="pjt_name" class="data-input">
+                </div>
+            </div>
+            <div class="form-group" style="width:20%;">
+                <div class="form-group__title flex">
+                    <div class="title">견적 일자</div>
+                </div>
+                <div class="form-group__input">
+                    <div class="input-group">
+                        <input type="text" name="registration_date" class="data-input datetimepicker_update" value="{% now 'Y-m-d' %}">
+                        <div class="input-group-addon input-group-append">
+                            <div class="input-group-text"><i class="glyphicon glyphicon-calendar"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="data-form">
+            <div class="form-group" style="width:20%;">
+                <div class="form-group__title flex">
+                    <div class="title">접수 담당자</div>
+                </div>
+                <div class="form-group__input">
+                    <select name="account" class="select2_form">
+                        <option value="" title="choice">선택</option>
+                        {% for obj in account %}
+                        <option value="{{ obj.id }}">{{ obj.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="form-group" style="width:37%;">
+                <div class="form-group__title flex">
+                    <div class="title">주문 특이사항</div>
+                </div>
+                <div class="form-group__input">
+                    <select name="special_note" class="select2_form" multiple="multiple">
+                        {% for obj in code %}
+                        {% if obj.sort == 'special_note' and obj.is_active == True %}
+                        <option value="{{ obj.name }}">{{ obj.name }}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="form-group" style="width:20%;">
+                <div class="form-group__title flex">
+                    <div class="title">견적 금액</div>
+                </div>
+                <div class="form-group__input">
+                    <input type="text" name="price" class="data-input txt_right fixed_num">
+                </div>
+            </div>
+            <div class="form-group" style="width:20%;">
+                <div class="form-group__title flex">
+                    <div class="title">견적 기한</div>
+                </div>
+                <div class="form-group__input">
+                    <div class="input-group">
+                        <input type="text" name="due_date" class="data-input datetimepicker_update">
+                        <div class="input-group-addon input-group-append">
+                            <div class="input-group-text"><i class="glyphicon glyphicon-calendar"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="data-form">
+            <div class="form-group" style="width:100%;">
+                <div class="form-group__title flex">
+                    <div class="title">메모</div>
+                </div>
+                <div class="form-group__input">
+                    <input type="text" name="memo" class="data-input">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="edit-form__inner upload_file" id="file">
+        <div class="form-title">
+            <div class="title">견적 파일</div>
+        </div>
+        <div class="data-form">
+            <div class="row_title">업로드 파일</div>
+            <div class="file_box flex-around">
+                <input type="file" id="upload_file_1" class="file_upload etc data" name="upload_file">
+                <input type="text" class="data-input file_url" disabled>
+                <label class="common-btn common-btn--upload" for="upload_file_1">찾기</label>
+            </div>
+            <span class="dynamic-btn plus" onclick="addRowFile();">+</span>
+        </div>
+    </div>
+
+</div>
+
+<div class="edit-form__button_box">
+    <!-- <div class="edit-form__button cancel">목록으로</div> -->
+    <div class="edit-form__button create" onclick="createData();">등록</div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,539 @@
+{% extends "base.html" %}
+{% block title %}
+<div class="title_box" data-cate="3,1,4">
+    <i class="far fa-rectangle-list"></i><span class="title">자재 목록</span>
+    <div class="path_box"></div>
+</div>
+{% endblock %}
+{% load static %}
+{% load humanize %}
+{% block contents %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/material/material/get_materials.css' %}">
+<script type="text/javascript" src="{% static 'js/pagination.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/material/material/get_materials.js' %}"></script>
+<!-- <script type="text/javascript" src="{% static 'js/tablesorter.js' %}"></script> -->
+
+<input type="hidden" name="save_search_type">
+<input type="hidden" name="save_keyword">
+<input type="hidden" name="save_date_type">
+<input type="hidden" name="save_search_start_dt">
+<input type="hidden" name="save_search_end_dt">
+
+{% csrf_token %}
+<div class="content info flex-between">
+    <div class="list-tab flex">
+        <div class="tab act" data-type="">
+            <span class="title">전체</span>
+            <span class="count">{{ object_list | length }}</span>
+        </div>
+    </div>
+    <div class="list-func flex">
+        <div class="func upload" onclick="uploadDataModalOpen();">
+            <i class="fa-solid fa-upload"></i>
+            <span class="title">데이터 업로드</span>
+        </div>
+        <span class="space_line"></span>
+        <div class="func filter" onclick="filterSearchModalOpen();">
+            <i class="fa-solid fa-sliders"></i>
+            <span class="title">필터</span>
+        </div>
+        <div class="func excel" onclick="exportExcel();">
+            <i class="fa-solid fa-download"></i>
+            <span class="title">목록 다운로드</span>
+        </div>
+    </div>
+</div>
+
+<div class="content list">
+    <div class="content__inner">
+        <div class="table-search">
+            <div class="total-info">
+                <p class="total">총 <span>-</span> 개의 데이터가 등록되어있습니다. </p>
+            </div>
+            <div class="search-group">
+                <select name="search-kinds">
+                    <option value="">통합검색</option>
+                    <option value="name">자재명</option>
+                    <option value="unit_price">단가</option>
+                    <option value="unit">단위</option>
+                    <option value="stock">현재고</option>
+                    <option value="safety_stock">안전재고</option>
+                </select>
+                <input type="text" class="search-data" placeholder="검색할 데이터를 입력해주세요.">
+                <button id="table-search-bar" class="search-bar" onclick="searchData();">조회</button>
+                <input type="hidden" name="search_key" value="">
+            </div>
+        </div>
+        <table class="table list" id="list-table">
+            <colgroup>
+                <col width="5%"> <!-- check -->
+                <col width="21%"> <!-- 자재명 -->
+                <col width="11%"> <!-- 단가 -->
+                <col width="9%"> <!-- 단위 -->
+                <col width="11%"> <!-- 현재고 -->
+                <col width="11%"> <!-- 안전재고 -->
+                <col width="8%"> <!-- 입고내역 -->
+                <col width="8%"> <!-- 사용내역 -->
+                <col width="8%"> <!-- 변경내역 -->
+                <col width="8%"> <!-- 관리 -->
+            </colgroup>
+            <thead>
+                <tr>
+                    <th><input type="checkbox" name="rowCheck" class="all_chk"></th>
+                    <th>자재명</th>
+                    <th>단가</th>
+                    <th>단위</th>
+                    <th>현재고</th>
+                    <th>안전재고</th>
+                    <th>입고내역</th>
+                    <th>사용내역</th>
+                    <th>변경내역</th>
+                    <th>관리</th>
+                </tr>
+            </thead>
+            <tbody aria-live="polite" aria-relevant="all">
+                <!-- 스크립트 -->
+            </tbody>
+        </table>
+
+        <div class="pagination flex-center">
+            <div class="button-box left">
+                <span class="common-btn common-btn--delete" onclick="delModalOpen(this);"><i class="far fa-trash-alt"></i> 삭제</span>
+            </div>
+            <div class="pagination__inner flex-center">
+                <span class="page_arrow prev" style="display: none;"><i class="fas fa-chevron-left"></i></span>
+                <ul class="page">
+                    <!-- 스크립트 -->
+                </ul>
+                <span class="page_arrow next" style="display: none;"><i class="fas fa-chevron-right"></i></span>
+            </div>
+            <div class="button-box right">
+                <span class="common-btn common-btn--create" onclick="createModalOpen();"><i class="fa-solid fa-plus"></i> 신규 등록</span>
+            </div>
+        </div>
+
+        <!-- 데이터 로딩 대기 화면 -->
+        <div class="load-screen">
+            <div class="load">
+                <img src="{% static '/img/spinner.gif' %}" alt="데이터 로딩중" class="load__img">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 정보 등록 모달창 -->
+<div id="createModal" class="common-modal edit-modal">
+    <div class="common-modal__inner">
+        <div class="edit-modal__title">
+            <span class="title">신규 자재 등록</span>
+            <div class="modal-close flex-center" onclick="closeModal(this);"><i class="fa-solid fa-xmark"></i></div>
+        </div>
+        <div class="edit-modal__body edit-form">
+            <div class="data-form">
+                <div class="form-group" style="width:100%;">
+                    <div class="form-group__title flex">
+                        <div class="title">자재명 <span class="required-item">*</span></div>
+                    </div>
+                    <div class="form-group__input">
+                        <input type="text" name="name" class="data-input">
+                    </div>
+                </div>
+            </div>
+            <div class="data-form">
+                <div class="form-group">
+                    <div class="form-group__title flex">
+                        <div class="title">단가</div>
+                    </div>
+                    <div class="form-group__input">
+                        <input type="text" name="unit_price" class="data-input txt_right fixed_num">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-group__title flex">
+                        <div class="title">단위</div>
+                    </div>
+                    <div class="form-group__input">
+                        <input type="text" name="unit" class="data-input">
+                    </div>
+                </div>
+            </div>
+            <div class="data-form">
+                <div class="form-group">
+                    <div class="form-group__title flex">
+                        <div class="title">현재고</div>
+                    </div>
+                    <div class="form-group__input">
+                        <input type="text" name="stock" class="data-input txt_right fixed_num">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-group__title flex">
+                        <div class="title">안전재고</div>
+                    </div>
+                    <div class="form-group__input">
+                        <input type="text" name="safety_stock" class="data-input txt_right fixed_num">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modalBtnWrap flex-between">
+            <div class="left"></div>
+            <div class="right">
+                <span class="modalBtn modalBtn--create" onclick="createData();">등록</span>
+                <span class="modalBtn modalBtn--close" onclick="closeModal(this);">닫기</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 정보 수정 모달창 -->
+<div id="updateModal" class="common-modal edit-modal">
+    <input type="hidden" name="pk">
+    <div class="common-modal__inner">
+        <div class="edit-modal__title">
+            <span class="title">자재 정보 수정</span>
+            <div class="modal-close flex-center" onclick="closeModal(this);"><i class="fa-solid fa-xmark"></i></div>
+        </div>
+        <div class="edit-modal__body edit-form">
+            <div class="data-form">
+                <div class="form-group" style="width:100%;">
+                    <div class="form-group__title flex">
+                        <div class="title">자재명 <span class="required-item">*</span></div>
+                    </div>
+                    <div class="form-group__input">
+                        <input type="text" name="name" class="data-input">
+                    </div>
+                </div>
+            </div>
+            <div class="data-form">
+                <div class="form-group">
+                    <div class="form-group__title flex">
+                        <div class="title">단가</div>
+                    </div>
+                    <div class="form-group__input">
+                        <input type="text" name="unit_price" class="data-input txt_right fixed_num">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-group__title flex">
+                        <div class="title">단위</div>
+                    </div>
+                    <div class="form-group__input">
+                        <input type="text" name="unit" class="data-input">
+                    </div>
+                </div>
+            </div>
+            <div class="data-form">
+                <div class="form-group">
+                    <div class="form-group__title flex">
+                        <div class="title">현재고</div>
+                    </div>
+                    <div class="form-group__input">
+                        <input type="text" name="stock" class="data-input txt_right fixed_num">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-group__title flex">
+                        <div class="title">안전재고</div>
+                    </div>
+                    <div class="form-group__input">
+                        <input type="text" name="safety_stock" class="data-input txt_right fixed_num">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modalBtnWrap flex-between">
+            <div class="left"></div>
+            <div class="right">
+                <span class="modalBtn modalBtn--update" onclick="updateData();">저장</span>
+                <span class="modalBtn modalBtn--close" onclick="closeModal(this);">닫기</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 필터 모달창 -->
+<div id="filterSearchModal" class="common-modal">
+    <div class="common-modal__inner">
+        <div class="form-title">
+            <div class="data-reset flex-center" onclick="resetFilterData();"><i class="fa-solid fa-rotate-right"></i> 초기화</div>
+            <span class="title">상세 검색</span>
+            <div class="modal-close flex-center" onclick="closeModal(this);"><i class="fa-solid fa-xmark"></i></div>
+        </div>
+        <div class="filter__inner">
+            <div class="form-group">
+                <div class="form-group__title">자재 상태</div>
+                <div class="form-group__inner flex" id="status">
+                    <div class="radioBox">
+                        <input type="radio" name="status" id="all" class="hidden" data-status="" checked>
+                        <label class="reason" for="all"><i class="fa-solid fa-check"></i> <span>전체</span></label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-group__title">기간 타입</div>
+                <div class="form-group__inner flex" id="date_type">
+                    <div class="radioBox">
+                        <input type="radio" name="date_type" id="created_dt" class="hidden" data-date_type="" checked>
+                        <label class="reason" for="created_dt"><i class="fa-solid fa-check"></i> <span>등록 일자</span></label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-group__title">기간 설정</div>
+                <div class="form-group__inner flex-between">
+                    <div class="input-group">
+                        <input type="text" name="start_date" class="data-input datetimepicker_update" placeholder="시작일자">
+                        <div class="input-group-addon input-group-append">
+                            <div class="input-group-text"><i class="glyphicon glyphicon-calendar"></i></div>
+                        </div>
+                    </div>
+                    <span class="space_line">~</span>
+                    <div class="input-group">
+                        <input type="text" name="end_date" class="data-input datetimepicker_update" placeholder="종료일자">
+                        <div class="input-group-addon input-group-append">
+                            <div class="input-group-text"><i class="glyphicon glyphicon-calendar"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-group__title">데이터 입력</div>
+                <div class="form-group__inner flex-between">
+                    <select name="search_type" class="data-select">
+                        <option value="">통합검색</option>
+                        <option value="name">자재명</option>
+                        <option value="unit_price">단가</option>
+                        <option value="unit">단위</option>
+                        <option value="stock">현재고</option>
+                        <option value="safety_stock">안전재고</option>
+                    </select>
+                    <input type="text" name="keyword" class="data-input">
+                </div>
+            </div>
+        </div>
+        <div class="modalBtnWrap flex-center">
+            <span class="modalBtn modalBtn--yes" onclick="filterData();">조회</span>
+            <span class="modalBtn modalBtn--no" onclick="closeModal(this);">닫기</span>
+        </div>
+    </div>
+</div>
+
+<!-- 정보 삭제 모달창 -->
+<div id="delModal" class="common-modal">
+    <input type="hidden" name="ids">
+    <div class="common-modal__inner">
+        <div class="imgBox">
+            <i class="far fa-trash-alt"></i>
+        </div>
+        <div class="deleteCont">
+            <p class="delMessage">정말 삭제하시겠습니까 ?</p>
+            <p class="delSubMessage">한 번 삭제된 데이터는 복원이 불가능합니다.</p>
+        </div>
+        <div class="modalBtnWrap">
+            <span class="modalBtn modalBtn--yes" onclick="deleteData();">예</span>
+            <span class="modalBtn modalBtn--no" onclick="closeModal(this);">아니오</span>
+        </div>
+    </div>
+</div>
+
+<!-- 데이터 업로드 -->
+<div id="uploadDataModal" class="common-modal edit-modal">
+    <div class="common-modal__inner">
+        <div class="edit-modal__title">
+            <span class="title">데이터 업로드</span>
+            <div class="modal-close flex-center" onclick="closeModal(this);"><i class="fa-solid fa-xmark"></i></div>
+        </div>
+        <div class="edit-modal__body edit-form">
+            <div class="data-form" style="flex-wrap: wrap; margin-bottom:25px;">
+                <div class="form-title">
+                    <div class="title">업로드 파일 목록</div>
+                </div>
+                <div class="scroll">
+                    <table class="table edit" id="t_upload_file">
+                        <colgroup>
+                            <col width="10%">
+                            <col width="39%">
+                            <col width="30%">
+                            <col width="21%">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>파일명</th>
+                                <th>업로드 일시</th>
+                                <th>관리</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if not excel %}
+                            <tr style="height:40px;">
+                                <td colspan="4" class="no-data">현재 등록된 데이터가 없습니다.</td>
+                            </tr>
+                            {% endif %}
+                            {% for obj in excel %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td class="txt_left">{{ obj.file_name }}</td>
+                                <td>{{ obj.upload_date | date:'Y-m-d H:i:s' }}</td>
+                                <td><a href="/base/media/{{ obj.excel_file }}" class="tdBtn download" download="">다운로드</a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="data-form">
+                <div class="form-group" style="width:100%;">
+                    <div class="form-group__title flex">
+                        <div class="title">업로드 파일 <span class="required-item">*</span></div>
+                    </div>
+                    <div class="form-group__input">
+                        <div class="file_box flex-around">
+                            <input type="file" id="upload_file_1" class="file_upload etc data" name="upload_file" accept=".xlsx">
+                            <input type="text" class="data-input file_url" disabled>
+                            <label class="common-btn common-btn--upload" for="upload_file_1">찾기</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modalBtnWrap flex-between">
+            <div class="left">
+                <a href="{% static 'excel_file/material_upload.xlsx' %}" class="modalBtn modalBtn--download flex-center" download="자재샘플파일.xlsx"><i class="fa-solid fa-download"></i> 샘플파일 다운로드</a>
+            </div>
+            <div class="right">
+                <span class="modalBtn modalBtn--upload" onclick="uploadData();">등록</span>
+                <span class="modalBtn modalBtn--close" onclick="closeModal(this);">닫기</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 입고 내역 -->
+<div id="enterRecordModal" class="common-modal edit-modal view">
+    <div class="common-modal__inner">
+        <div class="form-title">
+            <span class="title">입고 내역</span>
+            <div class="modal-close flex-center" onclick="closeModal(this);"><i class="fa-solid fa-xmark"></i></div>
+        </div>
+        <div class="scroll">
+            <table class="table edit">
+                <colgroup>
+                    <col width="8%"> <!-- No -->
+                    <col width="35%"> <!-- 자재명 -->
+                    <col width="17%"> <!-- 발주자 -->
+                    <col width="17%"> <!-- 입고수량 -->
+                    <col width="23%"> <!-- 입고일시 -->
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>자재명</th>
+                        <th>발주자</th>
+                        <th>입고 수량</th>
+                        <th>입고 일시</th>
+                    </tr>
+                </thead>
+                <tbody aria-live="polite" aria-relevant="all">
+                    <!-- 스크립트 -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="modalBtnWrap flex-between">
+            <div class="left">
+
+            </div>
+            <div class="right">
+                <span class="modalBtn modalBtn--close" onclick="closeModal(this);">닫기</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 사용 내역 -->
+<div id="usedRecordModal" class="common-modal edit-modal view">
+    <div class="common-modal__inner">
+        <div class="form-title">
+            <span class="title">사용 내역</span>
+            <div class="modal-close flex-center" onclick="closeModal(this);"><i class="fa-solid fa-xmark"></i></div>
+        </div>
+        <div class="scroll">
+            <table class="table edit">
+                <colgroup>
+                    <col width="8%"> <!-- No -->
+                    <col width="35%"> <!-- 자재명 -->
+                    <col width="17%"> <!-- 수주번호 -->
+                    <col width="17%"> <!-- 사용수량 -->
+                    <col width="23%"> <!-- 사용일시 -->
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>자재명</th>
+                        <th>수주번호</th>
+                        <th>사용 수량</th>
+                        <th>사용 일시</th>
+                    </tr>
+                </thead>
+                <tbody aria-live="polite" aria-relevant="all">
+                    <!-- 스크립트 -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="modalBtnWrap flex-between">
+            <div class="left">
+
+            </div>
+            <div class="right">
+                <span class="modalBtn modalBtn--close" onclick="closeModal(this);">닫기</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 변경 내역 -->
+<div id="historyModal" class="common-modal edit-modal view">
+    <div class="common-modal__inner" style="width:1100px;">
+        <div class="form-title">
+            <span class="title">변경 내역</span>
+            <div class="modal-close flex-center" onclick="closeModal(this);"><i class="fa-solid fa-xmark"></i></div>
+        </div>
+        <div class="scroll">
+            <table class="table edit">
+                <colgroup>
+                    <col width="6%"> <!-- No -->
+                    <col width="27%"> <!-- 자재명 -->
+                    <col width="48%"> <!-- 변경내용 -->
+                    <col width="19%"> <!-- 변경일시 -->
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>자재명</th>
+                        <th>변경 내용</th>
+                        <th>변경 일시</th>
+                    </tr>
+                </thead>
+                <tbody aria-live="polite" aria-relevant="all">
+                    <!-- 스크립트 -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="modalBtnWrap flex-between">
+            <div class="left">
+
+            </div>
+            <div class="right">
+                <span class="modalBtn modalBtn--close" onclick="closeModal(this);">닫기</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

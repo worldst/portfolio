@@ -1,0 +1,236 @@
+{% extends "base.html" %}
+{% block title %}
+<div class="title_box" data-cate="3,1,3">
+    <i class="far fa-rectangle-list"></i><span class="title">[{{object.num}}] 자재 발주 상세 정보</span>
+    <div class="path_box"></div>
+</div>
+{% endblock %}
+{% load static %}
+{% load humanize %}
+{% load mathfilters %}
+{% block contents %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/material/purchase/add_material_purchase.css' %}">
+<script type="text/javascript" src="{% static 'js/material/purchase/get_material_purchase.js' %}"></script>
+
+<input type="hidden" name="object_id" value="{{ object.id }}">
+
+{% csrf_token %}
+<div class="contents__info flex">
+    {% if object.status == 'WAIT' %}
+    <div class="status wait"><i class="fa-solid fa-share-nodes"></i> 입고 대기</div>
+    {% elif object.status == 'START' %}
+    <div class="status start"><i class="fa-solid fa-share-nodes"></i> 부분 입고</div>
+    {% elif object.status == 'CANCEL' %}
+    <div class="status cancel"><i class="fa-solid fa-share-nodes"></i> 발주 취소</div>
+    {% elif object.status == 'COMPLT' %}
+    <div class="status complt"><i class="fa-solid fa-share-nodes"></i> 입고 완료</div>
+    {% endif %}
+</div>
+
+<div class="content edit-form">
+    <div class="edit-form__inner" id="base">
+        <div class="form-title flex-top-between">
+            <div class="title">기본 정보</div>
+            <div class="req_txt">* 표시된 정보는 필수 사항 입니다.</div>
+        </div>
+        <div class="data-form">
+            <div class="form-group" style="width:25%;">
+                <div class="form-group__title">
+                    <div class="title">업체명 <span class="required-item">*</span></div>
+                </div>
+                <div class="form-group__input" id="form_company">
+                    <input type="text" name="company" class="data-input" value="{{ object.company_name }}" disabled>
+                </div>
+            </div>
+            <div class="form-group" style="width:53%;">
+                <div class="form-group__title flex">
+                    <div class="title">자재 발주건명 <span class="required-item">*</span></div>
+                </div>
+                <div class="form-group__input">
+                    <input type="text" name="name" class="data-input" value="{{ object.name }}" disabled>
+                </div>
+            </div>
+            <div class="form-group" style="width:20%;">
+                <div class="form-group__title flex">
+                    <div class="title">발주 생성일</div>
+                </div>
+                <div class="form-group__input">
+                    <div class="input-group">
+                        <input type="text" name="purchase_date" class="data-input datetimepicker_update" value="{{ object.purchase_date | date:'Y-m-d' }}" disabled>
+                        <div class="input-group-addon input-group-append">
+                            <div class="input-group-text"><i class="glyphicon glyphicon-calendar"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="data-form">
+            <div class="form-group" style="width:20%;">
+                <div class="form-group__title flex">
+                    <div class="title">접수 담당자</div>
+                </div>
+                <div class="form-group__input">
+                    <input type="text" name="account" class="data-input" value="{{ object.account.name }}" disabled>
+                </div>
+            </div>
+            <div class="form-group" style="width:37%;">
+                <div class="form-group__title flex">
+                    <div class="title">주문 특이사항</div>
+                </div>
+                <div class="form-group__input">
+                    <select name="special_note" class="select2_form" multiple="multiple" disabled data-before="{{ object.special_note }}">
+                        {% for obj in code %}
+                        {% if obj.sort == 'special_note' and obj.is_active == True %}
+                            <option value="{{ obj.name }}">{{ obj.name }}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="form-group" style="width:20%;">
+                <div class="form-group__title flex">
+                    <div class="title">총금액</div>
+                </div>
+                <div class="form-group__input">
+                    <input type="text" name="price" class="data-input txt_right fixed_num control_price" disabled value="{{ object.price|intcomma }}">
+                </div>
+            </div>
+            <div class="form-group" style="width:20%;">
+                <div class="form-group__title flex">
+                    <div class="title">예상 요청일</div>
+                </div>
+                <div class="form-group__input">
+                    <div class="input-group">
+                        <input type="text" name="due_date" class="data-input datetimepicker_update" value="{{ object.due_date | date:'Y-m-d' }}" disabled>
+                        <div class="input-group-addon input-group-append">
+                            <div class="input-group-text"><i class="glyphicon glyphicon-calendar"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="data-form">
+            <div class="form-group" style="width:68%;">
+                <div class="form-group__title flex">
+                    <div class="title">메모</div>
+                </div>
+                <div class="form-group__input">
+                    <input type="text" name="memo" class="data-input" value="{{ object.memo }}" disabled>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="edit-form__inner" id="material">
+        <div class="form-title">
+            <div class="title">자재 정보</div>
+        </div>
+        <table class="table edit" id="t_material" style="width:97%;">
+            <colgroup>
+                <col width="20%"> <!-- 자재/외주명 -->
+                <col width="12%"> <!-- 단가 -->
+                <col width="9%"> <!-- 단위 -->
+                <col width="10%"> <!-- 수량 -->
+                <col width="10%"> <!-- 수량 -->
+                <col width="14%"> <!-- 금액 -->
+                <col width="20%"> <!-- 메모 -->
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>자재/외주명</th>
+                    <th>단가</th>
+                    <th>단위</th>
+                    <th>수량</th>
+                    <th>잔여수</th>
+                    <th>금액</th>
+                    <th>메모</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for obj in material_purchase_list %}
+                    <tr data-pk="{{ obj.pk }}" data-remain_cnt="{{obj.remain_cnt|intcomma }}">
+                        <td>
+                            <input type="text" name="name" class="data-input" value="{{ obj.material.name }}" disabled>
+                        </td>
+                        <td>
+                            <input type="text" name="unit_price" class="data-input txt_right" value="{{ obj.unit_price | intcomma }}" disabled>
+                        </td>
+                        <td>
+                            <input type="text" name="unit" class="data-input txt_right" value="{{ obj.unit }}" disabled>
+                        </td>
+                        <td>
+                            <input type="text" name="quantity" class="data-input txt_right" value="{{ obj.cnt | intcomma }}" disabled>
+                        </td>
+                        <td>
+                            <input type="text" name="remain_cnt" class="data-input txt_right" value="{{ obj.remain_cnt | intcomma }}" disabled>
+                        </td>
+                        <td>
+                            <input type="text" name="amount" class="data-input txt_right" value="{{ obj.price | intcomma }}" disabled>
+                        </td>
+                        <td>
+                            <div class="file_box flex-around">
+                                <input type="text" name="memo" class="data-input material" value="{{ obj.memo | default_if_none:'' }}" disabled>
+                            </div>
+                            {% if obj.status != 'COMPLT' %}
+                                <span class="dynamic-btn plus" onclick="partEnterModal(this);">✔</span>
+                            {% endif%}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="edit-form__button_box flex-between">
+    <div class="left flex-center">
+        {% if object.status != 'COMPLT' %}
+        <span class="edit-form__button complt" onclick="enterModalOpen('{{ object.pk }}');">전체 입고 완료</span>
+        <span class="space_line"></span>
+        {% endif %}
+        <span class="edit-form__button download" onclick="workExcel('{{object.pk}}')">발주서</span>
+    </div>
+    <div class="right">
+        <a href="/material/purchases/" class="edit-form__button cancel">목록으로</a>
+        <a href="/material/purchase/{{ object.pk }}/update" class="edit-form__button update">수정</a>
+    </div>
+</div>
+
+<!-- 전체 입고 모달창 -->
+<div id="enterModal" class="common-modal">
+    <input type="hidden" name="id">
+    <div class="common-modal__inner">
+        <div class="imgBox">
+            <i class="fa-solid fa-truck-fast"></i>
+        </div>
+        <div class="deleteCont">
+            <p class="delMessage">자재 입고 완료하시겠습니까?</p>
+            <p class="delSubMessage">입고 완료 탭으로 데이터가 이동됩니다.</p>
+        </div>
+        <div class="modalBtnWrap">
+            <span class="modalBtn modalBtn--yes" onclick="enterData();">예</span>
+            <span class="modalBtn modalBtn--no" onclick="closeModal(this);">아니오</span>
+        </div>
+    </div>
+</div>
+<!-- 부분 입고 모달창 -->
+<div id="partEnterModal" class="common-modal">
+    <input type="hidden" name="id">
+    <div class="common-modal__inner">
+        <div class="imgBox">
+            <i class="fa-solid fa-truck-fast"></i>
+        </div>
+        <div class="deleteCont">
+            <p class="delMessage">부분 입고 완료처리 하시겠습니까?</p>
+            <input type="text" name="cnt" class="data-input txt_right fixed_num" style="width:80% !important; margin-top:10px;">
+        </div>
+        <div class="modalBtnWrap">
+            <span class="modalBtn modalBtn--yes" onclick="partEnterData();">예</span>
+            <span class="modalBtn modalBtn--no" onclick="closeModal(this);">아니오</span>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

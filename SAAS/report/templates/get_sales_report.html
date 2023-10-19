@@ -1,0 +1,222 @@
+{% extends "base.html" %}
+{% block title %}
+<div class="title_box" data-cate="1,3,1">
+    <i class="fa-solid fa-chart-line"></i><span class="title">매출 분석</span>
+    <div class="path_box"></div>
+</div>
+{% endblock %}
+{% load static %}
+{% load humanize %}
+{% block contents %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/report/get_sales_report.css' %}">
+<!-- <script type="text/javascript" src="{% static 'js/pagination.js' %}"></script> -->
+<script type="text/javascript" src="{% static 'js/report/get_sales_report.js' %}"></script>
+
+<input type="hidden" name="save_search_month" value="{% now 'Y-m' %}">
+<input type="hidden" name="save_start_month" value="{% now 'Y-m' %}">
+<input type="hidden" name="save_end_month" value="{% now 'Y-m' %}">
+
+<div class="content info flex-between">
+    <div class="list-tab flex">
+        <div class="tab act" data-type="sales">
+            <span class="title">매출 현황</span>
+        </div>
+        <div class="tab" data-type="company">
+            <span class="title">업체별 현황</span>
+        </div>
+    </div>
+    <div class="list-func flex">
+        <!-- 스크립트 -->
+    </div>
+</div>
+
+<div class="tab_data_wrap sales">
+    <div class="flex-between" style="flex-wrap:wrap; gap:20px 1%; margin-bottom:20px;">        
+        <div class="content data money">
+            <div class="data_title flex">매출 합계 <span class="mark price flex-center">매</span></div>
+            <div class="data_num highlight"><span class="all_sales_price">0</span> 원</div>
+            <div class="data_icon flex-center"><i class="fa-solid fa-won-sign"></i></div>
+        </div>
+        <div class="content data money">
+            <div class="data_title flex">원가 합계 <span class="mark cost flex-center">원</span></div>
+            <div class="data_num highlight"><span class="all_total_cost">0</span> 원</div>
+            <div class="data_icon flex-center"><i class="fa-solid fa-won-sign"></i></div>
+        </div>
+        <div class="content data money">
+            <div class="data_title">손익 합계</div>
+            <div class="data_num highlight"><span class="all_profit_loss">0</span> 원</div>
+            <div class="data_icon flex-center"><i class="fa-solid fa-won-sign"></i></div>
+        </div>
+        <div class="content data compare">
+            <div class="data_title">전월 대비 증감</div>
+            <div class="data_num"><span class="ex_month_rate">0</span> %</div>
+            <div class="data_icon flex-center"><i class="fa-solid fa-arrow-trend-up"></i></div>
+        </div>
+        <!--
+        <div class="content data compare" style="width:14%;">
+            <div class="data_title">전년 대비 증감</div>
+            <div class="data_num"><span class="ex_year_rate">0</span> %</div>
+            <div class="data_icon flex-center"><i class="fa-solid fa-arrow-trend-up"></i></div>
+        </div>
+        -->
+        
+        <div class="content data money">
+            <div class="data_title flex">가공비 합계 <span class="mark price flex-center">매</span></div>
+            <div class="data_num"><span class="all_process_price">0</span> 원</div>
+            <div class="data_icon flex-center"><i class="fa-solid fa-won-sign"></i></div>
+        </div>
+        <div class="content data money">
+            <div class="data_title flex">자재비 합계 <span class="mark price flex-center">매</span></div>
+            <div class="data_num"><span class="all_material_price">0</span> 원</div>
+            <div class="data_icon flex-center"><i class="fa-solid fa-won-sign"></i></div>
+        </div>
+        <div class="content data money">
+            <div class="data_title flex">외주비 합계 <span class="mark price flex-center">매</span></div>
+            <div class="data_num"><span class="all_outsourcing_price">0</span> 원</div>
+            <div class="data_icon flex-center"><i class="fa-solid fa-won-sign"></i></div>
+        </div>
+        <div class="content data money">
+            <div class="data_title flex">기타비용 합계 <span class="mark price flex-center">매</span></div>
+            <div class="data_num"><span class="all_etc_price">0</span> 원</div>
+            <div class="data_icon flex-center"><i class="fa-solid fa-won-sign"></i></div>
+        </div>
+
+        <div class="content data money">
+            <div class="data_title flex">가공비 합계 <span class="mark cost flex-center">원</span></div>
+            <div class="data_num"><span class="all_process_cost">0</span> 원</div>
+            <div class="data_icon flex-center"><i class="fa-solid fa-won-sign"></i></div>
+        </div>
+        <div class="content data money">
+            <div class="data_title flex">자재비 합계 <span class="mark cost flex-center">원</span></div>
+            <div class="data_num"><span class="all_material_cost">0</span> 원</div>
+            <div class="data_icon flex-center"><i class="fa-solid fa-won-sign"></i></div>
+        </div>
+        <div class="content data money">
+            <div class="data_title flex">외주비 합계 <span class="mark cost flex-center">원</span></div>
+            <div class="data_num"><span class="all_outsourcing_cost">0</span> 원</div>
+            <div class="data_icon flex-center"><i class="fa-solid fa-won-sign"></i></div>
+        </div>
+        <div class="content data num">
+            <div class="data_title">전체 주문 건수</div>
+            <div class="data_num"><span class="total">0</span> 건</div>
+            <div class="data_icon flex-center"><i class="fa-solid fa-layer-group"></i></div>
+        </div>
+    </div>
+
+    <div class="content graph edit-form">
+        <div class="form-title" style="margin-bottom:30px;">
+            <div class="title">월별 주문 매출금액</div>
+        </div>
+        <div class="graph">            
+            <canvas id="ctx_sales"></canvas>
+        </div>
+    </div>
+
+    <div class="content list edit-form">
+        <div class="form-title" style="margin-bottom:25px;">
+            <div class="title">조회 데이터</div>
+        </div>
+        <div class="content__inner">
+            <div class="table-search hidden">
+                <div class="total-info">
+                    <p class="total">총 <span>-</span> 개의 데이터가 등록되어있습니다. </p>
+                </div>
+            </div>
+            <table class="table list" id="list-table-sales">
+                <colgroup>
+                    <col width="10%"> <!-- 수주번호 -->
+                    <col width="13%"> <!-- 등록일자 -->
+                    <col width="24%"> <!-- 프로젝트명 -->
+                    <col width="18%"> <!-- 업체명 -->
+                    <col width="9%"> <!-- 담당자 -->
+                    <col width="13%"> <!-- 매출 -->
+                    <col width="13%"> <!-- 손익 -->
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>수주번호</th>
+                        <th>등록일자</th>
+                        <th>프로젝트명</th>
+                        <th>업체명</th>
+                        <th>담당자</th>
+                        <th>매출</th>
+                        <th>손익</th>
+                    </tr>
+                </thead>
+                <tbody aria-live="polite" aria-relevant="all">
+                    <!-- 스크립트 -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 데이터 로딩 대기 화면 -->
+    <div class="load-screen">
+        <div class="load">
+            <img src="{% static '/img/spinner.gif' %}" alt="데이터 로딩중" class="load__img">
+        </div>
+    </div>
+</div>
+
+<div class="tab_data_wrap company">
+    <div class="flex-between" style="height:500px;">
+        <div class="content graph edit-form" style="width:40%; height:100%; margin-bottom:0;">
+            <div class="form-title" style="margin-bottom:25px;">
+                <div class="title">업체별 매출 비율</div>
+            </div>
+            <div class="graph">                
+                <canvas id="ctx_company_by_cnt"></canvas>
+            </div>
+        </div>
+        <div class="content list edit-form" style="width:59%; height:100%; margin-bottom:0;">
+            <div class="form-title" style="margin-bottom:25px;">
+                <div class="title">조회 데이터</div>
+            </div>
+            <div class="content__inner">
+                <div class="table-search hidden">
+                    <div class="total-info">
+                        <p class="total">총 <span>-</span> 개의 데이터가 등록되어있습니다. </p>
+                    </div>
+                </div>
+                <div class="scroll" style="max-height:calc(100% - 50px);">
+                    <table class="table list" id="list-table-company">
+                        <colgroup>
+                            <col width="44%"> <!-- 업체명 -->
+                            <col width="16%"> <!-- 완료건수 -->
+                            <col width="20%"> <!-- 매출 -->
+                            <col width="20%"> <!-- 손익 -->
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>업체명</th>
+                                <th>완료 건 수</th>
+                                <th>매출</th>
+                                <th>손익</th>
+                            </tr>
+                        </thead>
+                        <tbody aria-live="polite" aria-relevant="all">
+                            <!-- 스크립트 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content graph edit-form" style="margin-top:20px;">
+        <div class="form-title" style="margin-bottom:30px;">
+            <div class="title">업체별 손익금액</div>
+        </div>
+        <div class="graph">
+            <canvas id="ctx_company_by_price"></canvas>
+        </div>
+    </div>
+    
+    <!-- 데이터 로딩 대기 화면 -->
+    <div class="load-screen">
+        <div class="load">
+            <img src="{% static '/img/spinner.gif' %}" alt="데이터 로딩중" class="load__img">
+        </div>
+    </div>
+</div>
+{% endblock %}

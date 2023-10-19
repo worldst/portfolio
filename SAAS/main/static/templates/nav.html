@@ -1,0 +1,391 @@
+<ul class="nav__category">
+    {% if request.session.company_type == 'dkinno' %}
+    <li class="menu">
+        <p>도입업체관리</p>
+        <ul class="depth-2">
+            <li class="depth-2-item"><span>업체</span>
+                <ul class="depth-3">
+                    <li class="depth-3-item"><a href="#"><i class="far fa-edit"></i>업체 목록</a></li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+    {% endif %}
+    
+    {% if request.session.account_type != '현장' %}
+        <li class="menu">
+    {% else %}
+        <li class="menu hidden">
+    {% endif %}
+        <p>영업 관리</p>
+        <ul class="depth-2">
+            <li class="depth-2-item"><span>견적 관리</span>
+                <ul class="depth-3">
+                    <li class="depth-3-item"><a href="{% url 'add_estimate' %}"><i class="far fa-edit"></i>견적 등록</a></li>
+                    <li class="depth-3-item"><a href="{% url 'get_estimates' %}"><i class="far fa-list-alt"></i>견적 목록</a></li>
+                </ul>
+            </li>
+            <li class="depth-2-item"><span>수주 관리</span>
+                <ul class="depth-3">
+                    <li class="depth-3-item"><a href="{% url 'add_order' %}"><i class="far fa-edit"></i>수주 등록</a></li>
+                    <li class="depth-3-item"><a href="{% url 'get_orders' %}"><i class="far fa-list-alt"></i>수주 목록</a></li>
+                </ul>
+            </li>
+            {% if request.session.account_type == '관리자' or request.session.account_type == '최고관리자'%}
+                <li class="depth-2-item"><span>영업 정보</span>
+            {% else %}
+                    <li class="depth-2-item hidden"><span>영업 정보</span>
+            {% endif %}
+                    <ul class="depth-3">
+                        <li class="depth-3-item"><a href="{% url 'get_sales_report' %}"><i class="fa-solid fa-chart-line"></i>매출 분석</a></li>
+                    </ul>
+                </li>
+        </ul>
+    </li>
+    <li class="menu">
+        <p>생산 관리</p>
+        <ul class="depth-2">
+            <li class="depth-2-item"><span>생산 정보</span>
+                <ul class="depth-3">
+                    <li class="depth-3-item"><a href="{% url 'get_order_dashboard' %}"><i class="fa-solid fa-list"></i>생산 현황판</a></li>                    
+                </ul>
+            </li>
+            <li class="depth-2-item"><span>작업 정보</span>
+                <ul class="depth-3">
+                    <li class="depth-3-item"><a href="{% url 'work_index' %}"><i class="fa-solid fa-qrcode"></i>작업 검색</a></li>
+                    <li class="depth-3-item"><a href="{% url 'get_job_report' %}"><i class="far fa-list-alt"></i>작업 일보</a></li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+    <li class="menu">
+        <p>자재 관리</p>
+        <ul class="depth-2">
+            <li class="depth-2-item"><span>자재 정보</span>
+                <ul class="depth-3">
+                    <li class="depth-3-item"><a href="{% url 'material_purchase_index' %}"><i class="fa-solid fa-qrcode"></i>입고 검색</a></li>
+                    {% if request.session.account_type != '현장'%}
+                    <li class="depth-3-item"><a href="{% url 'add_material_purchase' %}"><i class="far fa-edit"></i>자재 발주</a></li>
+                    {% else %}
+                    <li class="depth-3-item hidden"><a href="{% url 'add_material_purchase' %}"><i class="far fa-edit"></i>자재 발주</a></li>
+                    {% endif %}
+                    <li class="depth-3-item"><a href="{% url 'get_material_purchases' %}"><i class="far fa-list-alt"></i>자재 발주 목록</a></li>
+                    <li class="depth-3-item"><a href="{% url 'get_materials' %}"><i class="far fa-list-alt"></i>자재 목록</a></li>
+                </ul>
+            </li>            
+        </ul>
+    </li>
+    <li class="menu">
+        <p>출하 관리</p>
+        <ul class="depth-2">
+            <li class="depth-2-item"><span>출하 정보</span>
+                <ul class="depth-3">
+                    <li class="depth-3-item"><a href="{% url 'get_order_shipments' %}"><i class="far fa-list-alt"></i>출하 목록</a></li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+    {% if request.session.account_type != '현장'%}
+        <li class="menu">
+    {% else %}
+        <li class="menu hidden">
+    {% endif %}
+        <p>시스템 관리</p>
+        <ul class="depth-2">            
+            <li class="depth-2-item"><span>사용자 정보</span>
+                <ul class="depth-3">
+                    {% if request.session.account_type == '관리자' or request.session.account_type == '최고관리자' %}
+                        <li class="depth-3-item"><a href="{% url 'add_account' %}"><i class="far fa-edit"></i>사용자 등록</a></li>
+                    {% else %}
+                        <li class="depth-3-item hidden"><a href="{% url 'add_account' %}"><i class="far fa-edit"></i>사용자 등록</a></li>
+                    {% endif %}
+                    <li class="depth-3-item"><a href="{% url 'get_accounts' %}"><i class="far fa-list-alt"></i>사용자 목록</a></li>
+                </ul>
+            </li>
+            <li class="depth-2-item"><span>거래처 정보</span>
+                <ul class="depth-3">
+                    <li class="depth-3-item"><a href="{% url 'add_company' %}"><i class="far fa-edit"></i>업체 등록</a></li>
+                    <li class="depth-3-item"><a href="{% url 'get_companies' %}"><i class="far fa-list-alt"></i>업체 목록</a></li>
+                </ul>
+            </li>
+            {% if request.session.account_type == '관리자' or request.session.account_type == '최고관리자' %}
+                <li class="depth-2-item"><span>기준 정보</span>
+            {% else %}
+                <li class="depth-2-item hidden"><span>기준 정보</span>
+            {% endif %}
+                <ul class="depth-3">
+                    <li class="depth-3-item"><a href="{% url 'code_process_management' %}"><i class="far fa-edit"></i>공정 관리</a></li>
+                    <li class="depth-3-item"><a href="{% url 'code_special_note_management' %}"><i class="far fa-edit"></i>주문 내용 관리</a></li>
+                    <li class="depth-3-item"><a href="{% url 'code_delivery_management' %}"><i class="far fa-edit"></i>납품 방법 관리</a></li>
+                    <li class="depth-3-item"><a href="{% url 'equipment_management' %}"><i class="far fa-list-alt"></i>설비 관리</a></li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+</ul>
+
+<!--
+<nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            {% if request.session.customer_type == '업체' %}
+                {% if request.session.account_type == '대표' %}
+                    <a class="navbar-brand desktop" href="#">DK</a>
+                    <a class="navbar-brand mobile" href="#"><img src="/static/img/dk.png"></a>
+                {% else %}
+                    <a class="navbar-brand desktop" href="#">DK</a>
+                    <a class="navbar-brand mobile" href="#"><img src="/static/img/dk.png"></a>
+                {% endif %}
+            {% else %}
+                <a class="navbar-brand desktop" href="#">DK</a>
+                <a class="navbar-brand mobile" href="#"><img src="/static/img/dk.png"></a>
+            {% endif %}
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse">
+            <ul class="nav navbar-nav" id="menu">
+                {% if request.session.company_type == 'dkinno' %}
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">도입업체관리<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <p class="btn btn-secondary dropdown-toggle production_list_title produce_plan" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            업체
+                        </p>
+                        <li><a href="#"><span class="glyphicon glyphicon-list"></span>업체 목록</a></li>
+                    </ul>
+                </li>
+                {% endif %}
+
+                {% if request.session.customer_type == 'CUSTOMER' and request.session.account_type == '대표' %}
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">기준정보 관리<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <p class="btn btn-secondary dropdown-toggle production_list_title produce_plan" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            공정 관리
+                        </p>
+                        <li><a href="#"><span class="glyphicon glyphicon-plus"></span>공정 관리</a></li>
+                        <p class="btn btn-secondary dropdown-toggle production_list_title produce_plan" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            매입/매출처 관리
+                        </p>
+                        <li><a href="#"><span class="glyphicon glyphicon-plus"></span>매입/매출처 등록</a></li>
+                        <li><a href="#"><span class="glyphicon glyphicon-plus"></span>매입/매출처 목록</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">영업 관리<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <p class="btn btn-secondary dropdown-toggle production_list_title produce_plan" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            견적 관리
+                        </p>
+                        <li><a href="{% url 'add_estimate' %}"><span class="glyphicon glyphicon-plus"></span>견적 등록</a></li>
+                        <li><a href="{% url 'get_estimates' %}"><span class="glyphicon glyphicon-list"></span>견적 목록</a></li>
+                        <p class="btn btn-secondary dropdown-toggle production_list_title produce_plan" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            수주 관리
+                        </p>
+                        <li><a href="{% url 'add_order' %}"><span class="glyphicon glyphicon-plus"></span>수주 등록</a></li>
+                        <li><a href="{% url 'get_orders' %}"><span class="glyphicon glyphicon-list"></span>수주 목록</a></li>
+                        <li><a href="#"><span class="glyphicon glyphicon-list"></span>수주 완료 목록</a></li>
+                        <li><a href="{% url 'get_order_dashboard' %}"><span class="glyphicon glyphicon-list"></span>현황판</a></li>
+                        <p class="btn btn-secondary dropdown-toggle production_list_title produce_plan" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            출하 관리
+                        </p>
+                        <li><a href="#"><span class="glyphicon glyphicon-plus"></span>출하 등록</a></li>
+                        <li><a href="#"><span class="glyphicon glyphicon-list"></span>출하 목록</a></li>
+                        <li><a href="#"><span class="glyphicon glyphicon-list"></span>출하 완료 목록</a></li>
+                        <li><a href="#"><span class="glyphicon glyphicon-upload"></span>출하 현황판</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">인사 관리<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <p class="btn btn-secondary dropdown-toggle production_list_title produce_plan" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            사용자 관리
+                        </p>
+                        <li><a href="#"><span class="glyphicon glyphicon-plus"></span>사용자 등록</a></li>
+                        <li><a href="#"><span class="glyphicon glyphicon-list"></span>사용자 목록</a></li>
+                        <p class="btn btn-secondary dropdown-toggle production_list_title produce_plan" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            작업자 관리
+                        </p>
+                        <li><a href="#"><span class="glyphicon glyphicon-plus"></span>작업자 등록</a></li>
+                        <li><a href="#"><span class="glyphicon glyphicon-list"></span>작업자 목록</a></li>
+                        <p class="btn btn-secondary dropdown-toggle production_list_title produce_plan" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            출퇴근 관리
+                        </p>
+                        <li><a href="#"><span class="glyphicon glyphicon-plus"></span>출퇴근 등록</a></li>
+                        <li><a href="#"><span class="glyphicon glyphicon-list"></span>일자별 근태현황목록</a></li>
+                    </ul>
+                </li>
+                {% endif %}
+            </ul>
+            
+            {% if request.session.account_id %}
+                {% load static %}
+                <div class="func">
+                    <div class="func_box">
+                        <a class="func_btn logout_btn" href="#" onclick="logoutSystem();"><span class="glyphicon glyphicon-off"></span> <span class="func_title">로그아웃</span></a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+-->
+
+<!-- 현재 로그인 정보 -->
+<!--
+<div id="modal" class="searchModal loginInfoModal">
+    <div class="search-modal-content">
+        <div class="page-header" style="text-align: center">
+            <h2>현재 로그인 계정</h2>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="row">
+                    <div class="col-sm-12">
+                        {% csrf_token %}
+                        <div class="loginWrap">
+                            스크립트
+                        </div>
+                    </div>
+                </div>
+                <div class="regBtnWrap">
+                    <span onclick="closeLoginInfo();" class="btn btn-danger">취소</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+-->
+
+<style>
+    .loginWrap {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+
+    .loginWrap .loginBox {
+        border: 1px solid #ddd;
+        box-shadow: 0 0 5px #dbdbdb;
+        padding: 10px 15px;
+        border-radius: 3px;
+        width: 48%;
+        margin-top: 20px;
+        border-left: 4px solid #8dd78f;
+        position: relative;
+    }
+
+    .loginBox:first-child,
+    .loginBox:nth-child(2) {
+        margin: 0;
+    }
+
+    .loginBox.super {
+        border-left: 4px solid #8172d1;
+    }
+
+    .loginBox.super .data {
+        color: #8172d1;
+    }
+
+    .loginBox .loginInfo {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .loginInfo+.loginInfo {
+        margin-top: 8px;
+    }
+
+    .loginInfo .title {
+        color: #a3a3a3;
+    }
+
+    .loginInfo .data {
+        color: #57c164;
+    }
+
+    .loginInfoModal .search-modal-content {
+        width: 570px;
+        margin-top: 30px !important;
+    }
+
+    .current_login_chk {
+        position: absolute;
+        right: 5px;
+        top: 5px;
+        width: 6px;
+        height: 6px;
+        background: #fd5473;
+        border-radius: 50px;
+    }
+</style>
+<script>
+    const user_type = {
+        "SUPERVISOR": "최고관리자",
+        "ORDER_LINE": "공정라인",
+        "E_MANAGER": "출하 담당자"
+    }
+
+    function viewLoginInfo() {
+        const token = $("input[name='csrfmiddlewaretoken']").val();
+        let html = '';
+
+        $.ajax({
+            url: "/system/api/account/",
+            type: 'GET',
+            data: {
+                csrfmiddlewaretoken: token
+            },
+            success: function (data) {
+                const userID = $("[name='user_id']").val();
+                data.forEach(function (v, i) {
+                    if (v.type == 'SUPERVISOR') {
+                        html += `<div class="loginBox super">`;
+                    } else {
+                        html += `<div class="loginBox">`;
+                    }
+                    if (v.id == userID) {
+                        html += `<div class="current_login_chk"></div>`;
+                    }
+                    html += `    <div class="loginInfo">`;
+                    html += `        <span class="title">계정명</span>`;
+                    html += `        <span class="data">${v.username}</span>`;
+                    html += `    </div>`;
+                    html += `    <div class="loginInfo">`;
+                    html += `        <span class="title">유형</span>`;
+                    html += `        <span class="data">${user_type[v.type]}</span>`;
+                    html += `    </div>`;
+                    html += `    <div class="loginInfo">`;
+                    html += `        <span class="title">작업공정</span>`;
+                    html += `        <span class="data">${(v.factory == 'N/A' ? '-' : v.factory)}</span>`;
+                    html += `    </div>`;
+                    html += `    <div class="loginInfo">`;
+                    html += `        <span class="title">공장</span>`;
+                    html += `        <span class="data">${(v.process == 'N/A' ? '-' : v.process)}</span>`;
+                    html += `    </div>`;
+                    html += `</div>`;
+                })
+
+                $(".loginInfoModal .loginWrap").empty();
+                $(".loginInfoModal .loginWrap").append(html);
+
+                $(".loginInfoModal").show();
+            }
+        });
+    }
+
+    function closeLoginInfo() {
+        $(".loginInfoModal").hide();
+    }
+</script>

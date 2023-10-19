@@ -1,0 +1,7 @@
+.contents__inner {
+    width:60%;
+}
+.data-input.qr {
+    height: 90px !important;
+    font-size: 32px;
+}

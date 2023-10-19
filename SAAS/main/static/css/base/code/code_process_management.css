@@ -1,0 +1,54 @@
+.contents__inner {
+    width:70%;
+}
+.contents select {
+    width:100%;
+}
+.edit-form .data-form {
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+.code_box {
+    width:49%;
+    border: 1px solid #dbdbdb;
+    box-shadow: 0 0 5px #dfdfdf;
+    background-color: #f7f7f7;
+    border-radius: 3px;
+    padding: 20px;
+    margin-bottom:25px;
+    transition: all 0.2s;
+}
+.code_box .code_box__body {
+    margin-bottom:20px;
+}
+.code_box .code_box__bottom .common-btn {
+    padding:0 40px;
+}
+.toggle_box {
+    border:1px solid #dbdbdb;
+    border-radius: 100px;
+    padding:2px;
+}
+.toggle_box label {
+    border-radius: 100px;
+    background-color: #dbdbdb;
+    color:#878787;
+    width:80px;
+    text-align: center;
+    padding:8px 0;
+    font-size:13px;
+    cursor: pointer;
+}
+
+.code_box.act {
+    border:1px solid #90b6ef;
+    background-color: #0f3cbd0a;
+}
+.code_box.act .toggle_box {
+    border:1px solid #c8deff;
+}
+.code_box.act .toggle_box label {
+    background-color: #c8deff;
+    color: #277fef;
+    font-weight: 600;
+}

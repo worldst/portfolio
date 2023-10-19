@@ -1,0 +1,148 @@
+.contents__inner {
+    padding:0;
+}
+.contents__scroll {
+    height:100%;
+}
+
+.login-bg {
+  background: url("../../../img/login-back.jpg");
+  background-size: 100% 100%;
+}
+
+.login {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.login__box {
+  width: 500px;
+  padding: 50px 30px;
+  border-radius: 5px;
+  background: #8b8b8b73;
+  backdrop-filter: blur(10px);
+}
+
+.login__title {
+    font-family: 'establishRetrosans';
+    color: #f58a16;
+    font-size: 30px;
+    font-style: italic;
+    text-align: center;
+}
+.login__title span {
+    font-family: 'establishRetrosans';
+    color:#ff5959;
+}
+
+.login__img {
+  text-align: center;
+  margin: 30px 0;
+}
+
+.login__img .img-user {
+  width: 120px;
+}
+
+.login__cont {
+  text-align: center;
+  font-size: 18px;
+  color: gray;
+}
+
+.login .group-box {
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+.login .group-box label {
+  display: block;
+  margin-bottom: 4px;
+  color: #76ebff;
+  font-size: 14px;
+  position: relative;
+  padding-left: 8px;
+}
+
+.login .group-box label::before {
+  content: '';
+  display: block;
+  width: 3px;
+  border-radius: 20px;
+  height: 14px;
+  position: absolute;
+  left: 0;
+  top: calc(50% - 7px);
+  background: #76ebff;
+}
+
+.login .group-box .input-box {
+  position: relative;
+}
+
+.input-control {
+    border: none !important;
+    border-bottom: 1px solid #ddd !important;
+    width: 100% !important;
+    height: 40px !important;
+    padding: 0 8px !important;
+    outline: none !important;
+    border-radius: 0 !important;
+    font-size: 14px !important;
+    background: none !important;
+    color: #ededed !important
+}
+
+.input-control:focus {
+    border-bottom: 1px solid #37acff !important;
+    box-shadow: none !important;
+}
+
+.login .group-box .input-box .input-icon {
+  position: absolute;
+  top: calc(50% - 10px);
+  right: 8px;
+  width: 20px;
+}
+
+.login .group-box .error {
+  margin-top: 5px;
+  padding-left: 4px;
+  color: #fffb4e;
+  font-size: 13px;
+}
+
+.login .group-box .error i {
+  margin-right: 1px;
+}
+
+.login__btn {
+  display: block;
+  width: 100%;
+  text-align: center;
+  border: none;
+  color: white;
+  margin: 70px auto 0;
+  padding: 12px 0;
+  cursor: pointer;
+  border-radius: 100px;
+}
+
+.login__btn--submit {
+  background: #12bd96;
+  font-size: 16px;
+}
+
+.login__btn:hover {
+  opacity: 0.8;
+}

@@ -1,0 +1,195 @@
+{% extends "base.html" %}
+{% block title %}
+<div class="title_box" data-cate="2,1,1">
+    <i class="fa-solid fa-list"></i><span class="title">생산 현황판</span>
+    <div class="path_box"></div>
+</div>
+{% endblock %}
+{% load static %}
+{% load humanize %}
+{% block contents %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/sales/order/get_order_dashboard.css' %}">
+<script type="text/javascript" src="{% static 'js/pagination.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/sales/order/get_order_dashboard.js' %}"></script>
+
+<input type="hidden" name="save_pageNum">
+
+<div class="flex-between" style="flex-wrap:wrap; gap:20px 1%; margin-bottom:20px;">
+    <div class="content data num">
+        <div class="data_title">전체 주문 건수</div>
+        <div class="data_num"><span class="total">0</span> 건</div>
+        <div class="data_icon flex-center"><i class="fa-solid fa-layer-group"></i></div>
+    </div>
+    <div class="content data num">
+        <div class="data_title">생산 대기</div>
+        <div class="data_num"><span class="wait">0</span> 건</div>
+        <div class="data_icon flex-center"><i class="fa-solid fa-layer-group"></i></div>
+    </div>
+    <div class="content data num">
+        <div class="data_title">생산 진행중</div>
+        <div class="data_num"><span class="total">0</span> 건</div>
+        <div class="data_icon flex-center"><i class="fa-solid fa-layer-group"></i></div>
+    </div>
+    <div class="content data num">
+        <div class="data_title">납기 지연</div>
+        <div class="data_num highlight"><span class="delay">0</span> 건</div>
+        <div class="data_icon flex-center"><i class="fa-solid fa-layer-group"></i></div>
+    </div>
+    <div class="content data num">
+        <div class="data_title">긴급 주문</div>
+        <div class="data_num highlight"><span class="urgent">0</span> 건</div>
+        <div class="data_icon flex-center"><i class="fa-solid fa-layer-group"></i></div>
+    </div>
+    <div class="content data percent">
+        <div class="data_title">전체 공정 작업 완료율</div>
+        <div class="data_num"><span class="complt_rate">0</span> %</div>
+        <div class="data_icon flex-center"><i class="fa-solid fa-percent"></i></div>
+    </div>
+</div>
+
+<div class="content list">
+    <div class="content__inner">
+        <div class="table-search hidden">
+            <div class="total-info">
+                <p class="total">총 <span>-</span> 개의 데이터가 등록되어있습니다. </p>
+            </div>
+        </div>
+        <div class="row_scroll">
+            <!-- 스크립트 -->
+        </div>
+
+        <div class="pagination flex-center">
+            <div class="button-box left">
+                
+            </div>
+            <div class="pagination__inner flex-center">
+                <span class="page_arrow prev" style="display: none;"><i class="fas fa-chevron-left"></i></span>
+                <ul class="page">
+                    <!-- 스크립트 -->
+                </ul>
+                <span class="page_arrow next" style="display: none;"><i class="fas fa-chevron-right"></i></span>
+            </div>
+            <div class="button-box right">
+                
+            </div>
+        </div>
+
+        <!-- 데이터 로딩 대기 화면 -->
+        <div class="load-screen">
+            <div class="load">
+                <img src="{% static '/img/spinner.gif' %}" alt="데이터 로딩중" class="load__img">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 작업설정 모달창 -->
+<div id="setWorkProcessModal" class="common-modal edit-modal">
+    <input type="hidden" name="pk">
+    <div class="common-modal__inner">
+        <div class="edit-modal__title">
+            <span class="title">작업 설정</span>
+            <div class="modal-close flex-center" onclick="closeModal(this);"><i class="fa-solid fa-xmark"></i></div>
+        </div>
+        <div class="edit-modal__body edit-form">
+            <div class="data-form">
+                <div class="form-group" style="width:100%;">
+                    <div class="form-group__title flex">
+                        <div class="title">공정 설정</div>
+                    </div>
+                    <div class="form-group__input">
+                        <input type="text" name="process" class="data-input" value="{{ object.process }}" disabled>
+                    </div>
+                </div>
+            </div>
+            <div class="data-form">
+                <div class="form-group" style="width:100%;">
+                    <div class="form-group__title flex">
+                        <div class="title">설비 설정</div>
+                    </div>
+                    <div class="form-group__input">
+                        <select name="equipment" class="select2_form">
+                            <!-- 스크립트 -->
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="data-form">
+                <div class="form-group" style="width:100%;">
+                    <div class="form-group__title flex">
+                        <div class="title">작업자 설정</div>
+                    </div>
+                    <div class="form-group__input">
+                        <select name="worker" class="select2_form">
+                            <option value="" title="choice">선택</option>
+                            {% for obj in account %}
+                            <option value="{{ obj.id }}">{{ obj.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modalBtnWrap flex-between">
+            <div class="left"></div>
+            <div class="right">
+                <span class="modalBtn modalBtn--setting" onclick="setWorkProcess();">등록</span>
+                <span class="modalBtn modalBtn--close" onclick="closeModal(this);">닫기</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 작업설정 선택 모달창 -->
+<div id="cancelModal" class="common-modal selectedWorkModeModal">
+    <input type="hidden" name="pk">
+    <div class="common-modal__inner">
+        <div class="cancelCont">
+            <p class="cancelMessage">아래의 항목 중 <span>작업상태</span>를 선택해주세요.</p>
+        </div>
+        <div class="reasonBox">
+            <div class="radioBox">
+            <input type="radio" name="status" id="status_1" class="hidden" checked>
+                <label class="reason complt" for="status_1"><i class="fa-solid fa-check"></i> <span>완료</span></label>
+            </div>
+            <div class="radioBox">
+                <input type="radio" name="status" id="status_2" class="hidden">
+                <label class="reason pause" for="status_2"><i class="fa-solid fa-check"></i> <span>일시정지</span></label>
+            </div>
+        </div>
+        <div class="modalBtnWrap flex-center">
+            <span class="modalBtn modalBtn--yes" onclick="selectedWorkMode();">선택</span>
+            <span class="modalBtn modalBtn--no" onclick="closeModal(this);">닫기</span>
+        </div>
+    </div>
+</div>
+
+<!-- 작업 중지 모달창 -->
+<div id="cancelModal" class="common-modal pauseWorkProcessModal">
+    <input type="hidden" name="pk">
+    <div class="common-modal__inner">
+        <div class="cancelCont">
+            <p class="cancelMessage">아래의 항목 중 <span>정지사유</span>를 선택해주세요.</p>
+        </div>
+        <div class="reasonBox">
+            <div class="radioBox">
+                <input type="radio" name="reason" id="reason_1" class="hidden" checked>
+                <label class="reason" for="reason_1"><i class="fa-solid fa-check"></i> <span>우선 작업 발생</span></label>
+            </div>
+            <div class="radioBox">
+                <input type="radio" name="reason" id="reason_2" class="hidden">
+                <label class="reason" for="reason_2"><i class="fa-solid fa-check"></i> <span>불량</span></label>
+            </div>
+            <div class="radioBox">
+                <input type="radio" name="reason" id="reason_3" class="hidden">
+                <label class="reason" for="reason_3"><i class="fa-solid fa-check"></i> <span>기타</span></label>
+            </div>
+        </div>
+        <div class="modalBtnWrap flex-center">
+            <span class="modalBtn modalBtn--yes" onclick="pauseWorkProcess();">선택</span>
+            <span class="modalBtn modalBtn--no" onclick="closeModal(this);">닫기</span>
+        </div>
+    </div>
+</div>
+{% endblock %}

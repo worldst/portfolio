@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% block title %}
+<div class="title_box" data-cate="5,1,2">
+    <i class="far fa-rectangle-list"></i><span class="title">사용자 목록</span>
+    <div class="path_box"></div>
+</div>
+{% endblock %}
+{% load static %}
+{% load humanize %}
+{% block contents %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/system/account/get_accounts.css' %}">
+<script type="text/javascript" src="{% static 'js/pagination.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/system/account/get_accounts.js' %}"></script>
+<!-- <script type="text/javascript" src="{% static 'js/tablesorter.js' %}"></script> -->
+
+<input type="hidden" name="save_search_type">
+<input type="hidden" name="save_keyword">
+<input type="hidden" name="save_date_type">
+<input type="hidden" name="save_search_start_dt">
+<input type="hidden" name="save_search_end_dt">
+
+{% csrf_token %}
+<div class="content info flex-between">
+    <div class="list-tab flex">
+        <div class="tab act" data-type="">
+            <span class="title">전체</span>
+            <span class="count">{{ object_list | length }}</span>
+        </div>
+    </div>
+    <div class="list-func flex">
+        <div class="func excel" onclick="exportExcel();">
+            <i class="fa-solid fa-download"></i>
+            <span class="title">목록 다운로드</span>
+        </div>
+    </div>
+</div>
+
+<div class="content list">
+    <div class="content__inner">
+        <div class="table-search">
+            <div class="total-info">
+                <p class="total">총 <span>-</span> 개의 데이터가 등록되어있습니다. </p>
+            </div>
+            <div class="search-group">
+                <select name="search-kinds">
+                    <option value="">통합검색</option>
+                    <option value="username">아이디</option>
+                    <option value="name">이름</option>
+                    <option value="type">유형</option>
+                    <option value="email">이메일</option>
+                    <option value="phone_number">연락처</option>
+                    <option value="memo">메모</option>
+                </select>
+                <input type="text" class="search-data" placeholder="검색할 데이터를 입력해주세요.">
+                <button id="table-search-bar" class="search-bar" onclick="searchData();">조회</button>
+                <input type="hidden" name="search_key" value="">
+            </div>
+        </div>
+        <table class="table list" id="list-table">
+            <colgroup>
+                <col width="6%"> <!-- check -->
+                <col width="11%"> <!-- 아이디 -->
+                <col width="11%"> <!-- 이름 -->
+                <col width="11%"> <!-- 유형 -->
+                <col width="19%"> <!-- 이메일 -->
+                <col width="13%"> <!-- 연락처 -->
+                <col width="20%"> <!-- 메모 -->
+                <col width="9%"> <!-- 계정활성화 -->
+            </colgroup>
+            <thead>
+                <tr>
+                    <th><input type="checkbox" name="rowCheck" class="all_chk"></th>
+                    <th>아이디</th>
+                    <th>이름</th>
+                    <th>계정 유형</th>
+                    <th>이메일</th>
+                    <th>연락처</th>
+                    <th>메모</th>
+                    <th>계정 활성화</th>
+                </tr>
+            </thead>
+            <tbody aria-live="polite" aria-relevant="all">
+                <!-- 스크립트 -->
+            </tbody>
+        </table>
+
+        <div class="pagination flex-center">
+            <div class="button-box left">
+                <span class="common-btn common-btn--delete" onclick="delModalOpen(this);"><i class="far fa-trash-alt"></i> 삭제</span>
+            </div>
+            <div class="pagination__inner flex-center">
+                <span class="page_arrow prev" style="display: none;"><i class="fas fa-chevron-left"></i></span>
+                <ul class="page">
+                    <!-- 스크립트 -->
+                </ul>
+                <span class="page_arrow next" style="display: none;"><i class="fas fa-chevron-right"></i></span>
+            </div>
+            <div class="button-box right">
+            </div>
+        </div>
+
+        <!-- 데이터 로딩 대기 화면 -->
+        <div class="load-screen">
+            <div class="load">
+                <img src="{% static '/img/spinner.gif' %}" alt="데이터 로딩중" class="load__img">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 정보 삭제 모달창 -->
+<div id="delModal" class="common-modal">
+    <input type="hidden" name="ids">
+    <div class="common-modal__inner">
+        <div class="imgBox">
+            <i class="far fa-trash-alt"></i>
+        </div>
+        <div class="deleteCont">
+            <p class="delMessage">정말 삭제하시겠습니까 ?</p>
+            <p class="delSubMessage">한 번 삭제된 데이터는 복원이 불가능합니다.</p>
+        </div>
+        <div class="modalBtnWrap">
+            <span class="modalBtn modalBtn--yes" onclick="deleteData();">예</span>
+            <span class="modalBtn modalBtn--no" onclick="closeModal(this);">아니오</span>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

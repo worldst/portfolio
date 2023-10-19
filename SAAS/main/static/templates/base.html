@@ -1,0 +1,432 @@
+{% load static %}
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
+    <!-- <meta property="og:title" content="밥R - 식수관리" data-dynamic="true"> -->
+    <!-- <meta property="og:url" content="https://www.dk-food.co.kr/"> -->
+    <!--<meta property="og:image" content="{% static 'img/favicon.ico' %}">
+  <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">
+  <link rel="apple-touch-icon" sizes="57x57" href="{% static 'img/logo_57x57.png' %}">
+  <link rel="apple-touch-icon" sizes="72x72" href="{% static 'img/logo_72x72.png' %}">
+  <link rel="apple-touch-icon" sizes="114x114" href="{% static 'img/logo_114x114.png' %}">
+  <link rel="apple-touch-icon" sizes="144x144" href="{% static 'img/logo_144x144.png' %}">
+
+  <meta property="og:image" content="https://www.dk-food.co.kr/static/img/favicon.ico">
+  <link rel="shortcut icon" href="https://www.dk-food.co.kr/static/img/favicon.ico">
+  <link rel="apple-touch-icon" sizes="57x57" href="https://www.dk-food.co.kr/static/img/logo_57x57.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="https://www.dk-food.co.kr/static/img/logo_72x72.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="https://www.dk-food.co.kr/static/img/logo_114x114.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="https://www.dk-food.co.kr/static/img/logo_144x144.png"> -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+
+    <script type="text/javascript" src="{% static 'js/common/jquery-latest.js' %}"></script>
+    <script src="{% static 'js/common/jquery-ui.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/common/jquery-ui.min.css' %}">
+    <script src="{% static 'js/common/jquery.ui.touch-punch.min.js' %}"></script>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/common/webfonts/fontawesome.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/common/webfonts/all.min.css' %}">
+    <script type="text/javascript" src="{% static 'js/common/webfonts/fontawesome.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/common/webfonts/all.min.js' %}"></script>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/common/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/common/bootstrap-theme.min.css' %}">
+    <script type="text/javascript" src="{% static 'js/common/bootstrap.min.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'js/common/moment.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/common/moment-with-locales.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/common/bootstrap-datetimepicker.min.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'js/common/jquery.tablesorter.combined.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/common/jquery.tablesorter.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/common/jquery.tablesorter.widgets.min.js' %}"></script>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/common/theme.default.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/common/tableexport.css' %}">
+
+    <script type="text/javascript" src="{% static 'js/common/xlsx.core.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/common/Blob.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/common/FileSaver.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/common/tableexport.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/common/Chart.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/common/chartjs-plugin-datalabels.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/common/jszip.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/common/jszip-utils.min.js' %}"></script>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/common/choices.min.css' %}">
+    <script type="text/javascript" src="{% static 'js/common/choices.min.js' %}"></script>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
+    <script type="text/javascript" src="{% static 'js/base.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/pdfobject.min.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'js/common/exceljs.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/common/table2excel.core.js' %}"></script>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.css" type="text/css" media="all" rel="stylesheet">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+
+    <!-- tui.calendar -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/common/tui-calendar.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
+    <link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui.time-picker/latest/tui-time-picker.css" />
+
+    <script src="https://uicdn.toast.com/tui.code-snippet/v1.5.2/tui-code-snippet.min.js"></script>
+    <script src="https://uicdn.toast.com/tui.time-picker/latest/tui-time-picker.min.js"></script>
+    <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.min.js"></script>
+    <script type="text/javascript" src="{% static 'js/common/tui-calendar.min.js' %}"></script>
+
+    <!-- select2.js -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/common/select2.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/custom_select2.css' %}">
+    <script type="text/javascript" src="{% static 'js/common/select2.full.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/custom_select2.js' %}"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/inko@1.1.1/inko.min.js"></script>
+
+    {% block header %}
+    {% endblock %}
+</head>
+
+<body>
+    <input type="hidden" name="introducing_company_id" value="{{ request.session.introducing_company_id }}">
+    <input type="hidden" name="is_user" value="{{ request.session.username }}">
+    <input type="hidden" name="user_id" value="{{ request.session.account_id }}">
+    <input type="hidden" name="user_name" value="{{ request.session.account_name }}">
+    <input type="hidden" name="instruction_process" value="{{ session_account.process.id }}">
+    <input type="hidden" name="instruction_equipment" value="{{ session_account.equipment.id }}">
+
+    <div class="c_container">
+        <script>
+            $(function () {
+                /* 메뉴 축소, 확대 토글 버튼 */
+                $(".logo__func").click(function () {
+                    $(".container").toggleClass('toggled');
+                });
+
+                /* 2차 카테고리 클릭 시 3차 카테고리 노출 */
+                $(".depth-2-item span").on('click', function () {
+                    $(this).next('.depth-3').slideToggle(200, function () {
+                        if ($(this).css("display") == 'block') {
+                            $(this).prev().addClass('changed');
+                        } else {
+                            $(this).prev().removeClass('changed');
+                        }
+                    });
+                });
+
+                /* 로드 시 해당 페이지에 대한 카테고리 설정 */
+                const cate_data = ($(".title_box").data("cate") || '').split(",");
+                const [cate_1, cate_2, cate_3] = cate_data
+
+                // 카테고리가 3차 까지 있을 경우
+                if(cate_1 != undefined && cate_2 != undefined && cate_3 != undefined) {
+                    $(".nav__category .menu").eq(cate_1-1).find(".depth-2 .depth-2-item")
+                        .eq(cate_2-1).find(".depth-3").css("display", "block")
+                        .children(".depth-3-item")
+                        .eq(cate_3-1).addClass("act")
+                }
+
+                // 해당 페이지 경로 출력
+                if(cate_1 != undefined && cate_2 != undefined) {
+                    const cate_1_name = $(".nav__category .menu").eq(cate_1-1).find("p").text();
+                    const cate_2_name = $(".nav__category .menu").eq(cate_1-1).find('.depth-2 .depth-2-item').eq(cate_2-1).find("span").text();
+
+                    $(".contents__title .path_box")
+                    .html(`<span class="path path_1">${cate_1_name}</span><i class="fa-solid fa-angles-right"></i><span class="path path_2">${cate_2_name}</span>`);
+                }
+
+                /* 로드 시 노출 카테고리에 대해 화살표 방향 설정 */
+                $(".depth-3").each(function () {
+                    if ($(this).css("display") == 'block') {
+                        $(this).prev().addClass('changed');
+                    } else {
+                        $(this).prev().removeClass('changed');
+                    }
+                });
+
+                // 작업설정 -> 공정 선택 시 설비 데이터 불러오기
+                $(document).on("change","#setProcessModal [name='instruction_process']",function() {
+                    const process_id = $(this).val();
+                    const process = process_id ? $(this).find("option:selected").text() : '';
+                    const instruction_equipment = $("[name='instruction_equipment']").val();
+                                        
+                    $.ajax({
+                        async: false,
+                        url: '/base/api/code/process/worker/equipment',
+                        type: 'GET',
+                        data: {
+                            process: process
+                        },
+                        success: function (data) {
+                            // console.log(data);
+                            const equipment_list = data.equipment_list;
+                            let html = '';
+
+                            html += `<option value="" title="choice">선택</option>`;
+
+                            if(process) {
+                                for (let i=0; i<equipment_list.length; i++) {
+                                    html += `<option value="${equipment_list[i].id}">${equipment_list[i].name}</option>`;
+                                }
+                            }
+
+                            $("#setProcessModal [name='instruction_equipment']").empty().append(html);
+
+                            if(instruction_equipment) {
+                                const before_process_id = $("[name='instruction_process']").val();
+
+                                if(before_process_id == process_id) {
+                                    $("#setProcessModal [name='instruction_equipment']").val(instruction_equipment).trigger("change");
+                                }
+                            }
+                        }
+                    });
+                });
+            });
+
+            function setProcessModalOpen() {
+                const instruction_process = $("[name='instruction_process']").val();                
+                
+                $.ajax({
+                    async: false,
+                    url: '/base/api/codes',
+                    type: 'GET',
+                    data: {
+                        sort: 'process'
+                    },
+                    success: function (data) {
+                        // console.log(data);
+                        let html = '';
+
+                        html += `<option value="" title="choice">선택</option>`;
+                        for(let i=0; i<data.length; i++) {
+                            html += `<option value="${data[i].id}">${data[i].name}</option>`;
+                        }
+
+                        $("#setProcessModal [name='instruction_process']").empty().append(html);
+                        $("#setProcessModal").css('display', 'flex');
+
+                        if(instruction_process) {
+                            $("#setProcessModal [name='instruction_process']").val(instruction_process).trigger("change");
+                        } else {
+                            $("#setProcessModal [name='instruction_equipment']").append(`<option value="" title="choice">선택</option>`);
+                        }
+                    }
+                });
+            }
+            
+            function setProcess() {
+                const token = $("input[name='csrfmiddlewaretoken']").val();
+                let obj;
+
+                const process = $("#setProcessModal [name='instruction_process']").val() || null;
+                const process_txt = $("#setProcessModal [name='instruction_process'] option:selected").text();
+                const equipment = $("#setProcessModal [name='instruction_equipment']").val() || null;
+                const equipment_txt = $("#setProcessModal [name='instruction_equipment'] option:selected").text();
+
+                obj = {
+                    process : process,
+                    equipment : equipment,
+                }
+
+                $.ajax({
+                    url: `/system/api/process/equipment`,
+                    type: 'POST',
+                    contentType: "application/json",
+                    data: JSON.stringify(obj),
+                    beforeSend: function (xhr, settings) {
+                        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                            xhr.setRequestHeader("X-CSRFToken", token);
+                            $(".load_bg").addClass('load_display');
+                        }
+                    },
+                    success: function (data) {
+                        $(".load_bg").removeClass('load_display');
+                        $("#setProcessModal").hide();
+
+                        $("[name='instruction_process']").val(process);
+                        $("[name='instruction_equipment']").val(equipment);
+
+                        // 후처리
+                        if(process) {
+                            $(".content.user").find(".info_box.process").removeClass("notExist");
+                            $(".content.user").find(".info_box.process .info").text(process_txt);
+
+                        } else {
+                            $(".content.user").find(".info_box.process").addClass("notExist");
+                            $(".content.user").find(".info_box.process .info").text("미등록");
+                        }
+
+                        if(equipment) {
+                            $(".content.user").find(".info_box.equipment").removeClass("notExist");
+                            $(".content.user").find(".info_box.equipment .info").text(equipment_txt);
+
+                        } else {
+                            $(".content.user").find(".info_box.equipment").addClass("notExist");
+                            $(".content.user").find(".info_box.equipment .info").text("미등록");
+                        }
+                    },
+                    error: function (request, error) {
+                        alert("code : " + request.status + "\n" + "message : " + request.responseText + "\n" + "error : " + error);
+                    }
+                });
+            }
+        </script>
+
+        {% if request.session.account_id %}
+        <div class="c_wrap">
+            <div class="c_nav">
+                <div class="logo">
+                    <div class="logo__title"><span>DK</span> Innovation</div>
+                    <!-- <div class="logo__func">
+                        <div class="func fold"><i class="fa-solid fa-align-left"></i></div>
+                        <div class="func unfold"><i class="fa-solid fa-align-right"></i></div>
+                    </div> -->
+                </div>
+                {% include "nav.html" %}
+                <!--
+                <div class="func_box flex-between">
+                    <div class="func info"><i class="fa-regular fa-address-card"></i> 마이페이지</div>
+                    <div class="func logout"><i class="fa-solid fa-power-off"></i> 로그아웃</div>
+                </div>
+                -->
+            </div>
+            <div class="contents">
+                <div class="content user flex">
+                    <div class="info_wrap flex-center">
+                        {% if session_account.process %}
+                        <div class="info_box process flex-center">
+                            <span class="title">기준 공정</span>
+                            <div class="info">{{ session_account.process.name }}</div>
+                        </div>
+                        {% else %}
+                        <div class="info_box process notExist flex-center">
+                            <span class="title">기준 공정</span>
+                            <div class="info">미등록</div>
+                        </div>
+                        {% endif %}
+
+                        {% if session_account.equipment %}
+                        <div class="info_box equipment flex-center">
+                            <span class="title">기준 설비</span>
+                            <div class="info">{{ session_account.equipment.name }}</div>
+                        </div>
+                        {% else %}
+                        <div class="info_box equipment notExist flex-center">
+                            <span class="title">기준 설비</span>
+                            <div class="info">미등록</div>
+                        </div>
+                        {% endif %}
+
+                        <div class="info_box flex-center">
+                            <span class="title">계정 유형</span>
+                            <div class="info">{{ request.session.account_type }}</div>
+                        </div>
+                        <div class="info_box flex-center">
+                            <span class="title">사용자 이름</span>
+                            <div class="info">{{ request.session.account_name }}</div>
+                        </div>
+                    </div>
+                    <span class="space_line"></span>
+                    <div class="func_wrap flex-center">
+                        <div class="func_box set_process flex-center" onclick="setProcessModalOpen();">
+                            <i class="fa-solid fa-gear"></i>
+                            <span class="title">작업설정</span>
+                        </div>
+                        <div class="func_box update_user flex-center" onclick="javascript:location.href='/system/account/{{request.session.account_id}}/update'">
+                            <i class="fa-solid fa-user-pen"></i>
+                            <span class="title">정보수정</span>
+                        </div>
+                        <div class="func_box logout flex-center" onclick="javascript:location.href='/logout/'">
+                            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                            <span class="title">로그아웃</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="contents__scroll">
+                    <div class="contents__inner">
+                        <div class="contents__title">{% block title %}(no title){% endblock %}</div>
+
+                        {% block contents %}
+                        {% endblock %}
+                    </div>
+                </div>                            
+            </div>
+        </div>
+    </div>
+
+    <!-- 데이터 처리중 안내 -->
+    <div class="load_bg">
+        <div class="load_box">
+            <div class="load_img">
+                <img src="{% static 'img/load-spin.gif' %}" alt="처리중">
+            </div>
+            <div class="cont">
+                <p>데이터 처리중입니다.</p>
+                <p>잠시만 기다려 주시기 바랍니다.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 작업설정 모달창 -->
+    <div id="setProcessModal" class="common-modal edit-modal">
+        <div class="common-modal__inner">
+            <div class="edit-modal__title">
+                <span class="title">작업 설정</span>
+                <div class="modal-close flex-center" onclick="closeModal(this);"><i class="fa-solid fa-xmark"></i></div>
+            </div>
+            <div class="edit-modal__body edit-form">
+                <div class="data-form">
+                    <div class="form-group" style="width:100%;">
+                        <div class="form-group__title flex">
+                            <div class="title">공정 설정</div>
+                        </div>
+                        <div class="form-group__input">
+                            <select name="instruction_process" class="select2_form">
+                                <!-- 스크립트 -->
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="data-form">
+                    <div class="form-group" style="width:100%;">
+                        <div class="form-group__title flex">
+                            <div class="title">설비 설정</div>
+                        </div>
+                        <div class="form-group__input">
+                            <select name="instruction_equipment" class="select2_form">
+                                <!-- 스크립트 -->
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="modalBtnWrap flex-between">
+                <div class="left"></div>
+                <div class="right">
+                    <span class="modalBtn modalBtn--setting" onclick="setProcess();">등록</span>
+                    <span class="modalBtn modalBtn--close" onclick="closeModal(this);">닫기</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="contents__scroll">
+        <div class="contents__inner">
+            {% block login %}
+            {% endblock %}
+        </div>
+    </div>
+    {% endif %}
+</body>
+
+</html>
+{{ form.media }}

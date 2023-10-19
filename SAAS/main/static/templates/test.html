@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}qrqr{% endblock %}
+{% load bootstrap3 %}
+{% load static %}
+{% block contents %}
+<script type="text/javascript" src="{% static 'js/common/html5-qrcode.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/common/qrcode.min.js' %}"></script>
+
+<div style="width: 500px" id="reader"></div>
+
+<div id="qrcode"></div>
+
+
+<script>
+var QR_CODE = new QRCode("qrcode", {
+  width: 220,
+  height: 220,
+  colorDark: "#000000",
+  colorLight: "#ffffff",
+  correctLevel: QRCode.CorrectLevel.H,
+});
+QR_CODE.makeCode("ㅁㅈㅇㅁㅈㅇ");
+
+function onScanSuccess(decodedText, decodedResult) {
+    // Handle on success condition with the decoded text or result.
+    console.log(`Scan result: ${decodedText}`, decodedResult);
+}
+
+var html5QrcodeScanner = new Html5QrcodeScanner(
+	"reader", { fps: 10, qrbox: 250 });
+html5QrcodeScanner.render(onScanSuccess);
+</script>
+{% endblock %}

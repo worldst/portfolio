@@ -1,0 +1,85 @@
+.work_btn {
+    width: 100%;
+    border-radius: 5px;    
+    box-shadow: 0 0 5px #c3c3c3;
+    font-size: 30px;
+    height: 100px;
+    cursor: pointer;
+}
+.work_btn:not(.finish):hover {
+    opacity: 0.8;
+}
+.work_btn.start {
+    background-color: #6897ff;
+    color: #1c3667;
+}
+.work_btn.pause {
+    background-color: #f7dc57;
+    color: #7f6018;
+}
+.work_btn.complt {
+    background-color: #5df17d;
+    color: #0f713b;
+}
+.work_btn.finish {
+    background-color: #bdbdbd;
+    color: #797979;
+    cursor: not-allowed;
+}
+.work_btn svg {
+    margin-right:15px;
+}
+
+.process_inner:not(.false):not(.notExist):hover {
+    opacity: 0.6;
+}
+.process_inner.false .process_box {
+    cursor: not-allowed !important;
+}
+
+.edit-form__inner#process .process_inner .process_box .process {
+    height:60px;
+}
+.edit-form__inner#process .process_inner .status {
+    position: absolute;
+    color: white;
+    border-radius: 100px;
+    width: 46px;
+    height: 20px;
+    font-size: 12px;
+    left: calc(50% - 23px);
+    top: -10px;
+    cursor: pointer;
+}
+.edit-form__inner#process .process_inner .status.wait {
+    background-color: #737373;
+}
+.edit-form__inner#process .process_inner .status.start {
+    background-color: #1270b3;
+}
+.edit-form__inner#process .process_inner .status.pause {
+    background-color: #bba60f;
+}
+.edit-form__inner#process .process_inner .status.complt {
+    background-color: #33c359;
+}
+
+.process_box .worker {
+    display: inline-block !important;
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    padding:0 10px;
+    font-size:13px;
+    background-color: #dddddd;
+    color: #8d8d8d;
+    border-radius: 3px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-align: center;
+}
+.process_box .worker.act {
+    background-color: #6f60eb;
+    color: white;
+}

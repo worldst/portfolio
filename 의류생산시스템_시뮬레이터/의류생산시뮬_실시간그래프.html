@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap-theme.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-2.2.4.js"
+        integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/Chart.js"></script>
+    <script type="text/javascript" src="js/chartjs-plugin-datalabels.js"></script>
+</head>
+<style>
+    /* noto-sans-kr-regular - latin_korean */
+    @font-face {
+        font-family: 'Noto Sans KR';
+        font-style: normal;
+        font-weight: 400;
+        src: url('fonts/noto-sans-kr-v12-latin_korean-regular.eot'); /* IE9 Compat Modes */
+        src: local('Noto Sans KR Regular'), local('NotoSansKR-Regular'),
+            url('fonts/noto-sans-kr-v12-latin_korean-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+            url('fonts/noto-sans-kr-v12-latin_korean-regular.woff2') format('woff2'), /* Super Modern Browsers */
+            url('fonts/noto-sans-kr-v12-latin_korean-regular.woff') format('woff'), /* Modern Browsers */
+            url('fonts/noto-sans-kr-v12-latin_korean-regular.ttf') format('truetype'), /* Safari, Android, iOS */
+            url('fonts/noto-sans-kr-v12-latin_korean-regular.svg#NotoSansKR') format('svg'); /* Legacy iOS */
+    }
+
+    @font-face {
+        font-family: 'paybooc-Light';
+        src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-07@1.0/paybooc-Light.woff') format('woff');
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    * {
+        font-family: 'Noto Sans KR', sans-serif;
+        box-sizing: border-box;
+    }
+    .dropdown-menu>li>a span.glyphicon {
+        margin-right:5px;
+    }
+    .caret {
+        margin-left:5px;
+    }
+    .content {
+        width:92%;
+        margin:0 auto;
+        padding:0 30px 30px 30px;
+    }
+    .setting {
+        display:flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom:40px;
+        padding-bottom:40px;
+        border-bottom:1px solid #ddd;
+    }
+    .setting .select {
+        display:flex;
+        align-items: center;
+        justify-content: center;
+        margin:0 20px;
+        height:46px;
+        border:1px solid #ddd;
+    }
+    .setting .select span {
+        margin:0 20px;
+        font-size:14px;
+        color:#9391ff;
+        font-weight: bold;
+    }
+    .setting .select select {
+        height:100%;
+        width:120px;
+        border:none;
+        border-left:1px solid #ddd;
+        outline: none;
+        font-size:15px;
+        text-align-last: center;
+    }
+    .setting .select select option {
+        text-align: center;
+    }
+    .setting .btn {
+        margin-left:50px;
+        width:100px;
+        height:46px;
+        line-height: 46px;
+        text-align: center;
+        background:#29d0d8;
+        cursor: pointer;
+        border-radius: 3px;
+        box-shadow: 0 0 5px rgb(207, 207, 207);
+        color:white;
+    }
+    .graph-box {
+        display:flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .graph-box + .graph-box {
+        margin-top:50px;
+    }
+    .graph-box .graph {
+        position: relative;
+        width:100%;
+        height:500px;
+    }
+    .data {
+        display:inline-block;
+        padding:15px 20px;
+        border:1px solid #ddd;
+        border-radius: 4px;
+        box-shadow: 0 0 5px #d8d8d8;
+    }
+    .data p {
+        color:#585858;
+        margin:0;
+    }
+    .data p + p {
+        margin-top:10px;
+    }
+
+    /* Modal */
+    .modal.iteration {
+        background:white;
+        position:absolute;
+        top:50px;
+        left:calc(50% - 140px);
+        width:280px;
+        height:60px;
+        border:1px solid #ddd;
+        border-radius: 4px;
+        box-shadow: 0 0 5px #ececec;
+        background:rgba(230,194,94,0.9);
+    }
+    .modal.iteration .body {
+        width:100%;
+        height:100%;
+        display:flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .modal.iteration .body p {
+        margin:0;
+        color:white;
+        font-size:16px;
+        font-weight: normal;
+    }
+</style>
+<script>
+    const obj = {
+        statement_id: 0,
+        series: [
+            {
+                columns: ["time", "Assembly_status", "Date_Time", "Finished_Items", "Ing", "Input", "Output", "PID", "PN", "Queue", "Source", "WT", "Workload", "breaktime", "iteration", "now", "speed"],
+                name: "simulator",
+                values: [
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, null, 0, 0, "[74.4]", 41, true, 0, 4000.02, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, null, 0, 0, "[74.4]", 41, true, 0, 4000.02, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, null, 0, 0, "[74.4]", 41, true, 0, 4000.02, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 3, 0, 0, "[74.4]", 41, true, 0, 4000.02, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 2, 0, 0, "[74.4]", 20, true, 0, 4000.02, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 1, 0, 0, "[74.4]", 0, true, 0, 4000.02, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 39, 0, 0, "[74.4]", 54, true, 0, 2000.005, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 38, 0, 0, "[74.4]", 0, true, 0, 2000.005, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 37, 0, 0, "[74.4]", 90, true, 0, 2000.005, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 36, 0, 0, "[74.4]", 20, true, 0, 2000.005, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 35, 0, 0, "[74.4]", 41, true, 0, 2000.005, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 34, 0, 0, "[74.4]", 0, true, 0, 2000.005, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 33, 0, 0, "[74.4]", 41, true, 0, 2000.005, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 32, 0, 0, "[74.4]", 50, true, 0, 2000.005, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 31, 0, 0, "[74.4]", 41, true, 0, 2000.005, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 30, 0, 0, "[74.4]", 41, true, 0, 2000.005, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 29, 0, 0, "[74.4]", 41, true, 0, 2000.005, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 28, 0, 0, "[74.4]", 41, true, 0, 2000.005, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 27, 0, 0, "[74.4]", 41, true, 0, 2000.005, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 26, 0, 0, "[74.4]", 41, true, 0, 2000.005, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 25, 0, 0, "[74.4]", 41, true, 0, 2000.005, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 24, 0, 0, "[74.4]", 41, true, 0, 2000.005, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 23, 0, 0, "[74.4]", 98, true, 0, 2000.005, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 22, 0, 0, "[74.4]", 41, true, 0, 2000.005, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 21, 0, 0, "[74.4]", 41, true, 0, 2000.005, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 20, 0, 0, "[74.4]", 100, true, 0, 2000.005, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 19, 0, 0, "[74.4]", 41, true, 0, 2000.005, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 18, 0, 0, "[74.4]", 41, true, 0, 2000.005, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 17, 0, 0, "[74.4]", 20, true, 0, 2000.005, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 16, 0, 0, "[74.4]", 41, true, 0, 2000.005, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 15, 0, 0, "[74.4]", 41, true, 0, 2000.005, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 14, 0, 0, "[74.4]", 0, true, 0, 2000.005, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 13, 0, 0, "[74.4]", 41, true, 0, 2000.005, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 12, 0, 0, "[74.4]", 41, true, 0, 2000.005, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 11, 0, 0, "[74.4]", 41, true, 0, 2000.005, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 10, 0, 0, "[74.4]", 41, true, 0, 2000.005, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 9, 0, 0, "[74.4]", 22, true, 0, 2000.005, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 8, 0, 0, "[74.4]", 41, true, 0, 2000.005, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 7, 0, 0, "[74.4]", 80, true, 0, 2000.005, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 6, 0, 0, "[74.4]", 41, true, 0, 2000.005, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 5, 0, 0, "[74.4]", 41, true, 0, 2000.005, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 4, 0, 0, "[74.4]", 0, true, 0, 2000.005, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 3, 0, 0, "[74.4]", 41, true, 0, 2000.005, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 2, 0, 0, "[74.4]", 41, true, 0, 2000.005, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 1, 0, 0, "[74.4]", 41, true, 0, 2000.005, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 39, 0, 0, "[74.4]", 41, true, 0, 0, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 38, 0, 0, "[74.4]", 41, true, 0, 0, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 37, 0, 0, "[74.4]", 41, true, 0, 0, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 36, 0, 0, "[74.4]", 41, true, 0, 0, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 35, 0, 0, "[74.4]", 41, true, 0, 0, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 34, 0, 0, "[74.4]", 41, true, 0, 0, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 33, 0, 0, "[74.4]", 41, true, 0, 0, 0],
+                    ["2020-01-19", "[1]", "2021-03-03 Wed 00:00:00", 422, 0, 402, 402, 1, 32, 0, 0, "[74.4]", 41, true, 0, 0, 0],
+                ]
+            }
+        ]
+    }
+
+    
+    $(function () {
+        if(window.performance && performance.navigation.type == 0) {
+            localStorage.clear();
+        }
+        let before_iteration = localStorage.getItem("before_iteration") ? localStorage.getItem("before_iteration") : 0;
+        let production_labels = localStorage.getItem("production_labels") ? JSON.parse(localStorage.getItem("production_labels")) : [];
+        let production_data = localStorage.getItem("production_data") ? JSON.parse(localStorage.getItem("production_data")) : [];
+        const X_MAX_LENGTH = 3;
+        const END_LENGTH = 4;
+
+        let sum_now = 0;
+        let sum_finished_items = 0;
+        
+
+        setInterval(() => {
+            for(let i = 0; i < obj['series'][0]['values'].length; i++) {
+                obj['series'][0]['values'][i][14]++;
+            }
+
+            sum_now = 0;
+            sum_finished_items = 0;
+        },15000);
+
+        setInterval(() => {
+        /*
+        const recent_data = production_labels.slice(production_labels.length - (END_LENGTH));
+        const set = new Set(recent_data);
+
+        if(recent_data.length == END_LENGTH) {
+            if(set.size == 1) {
+                localStorage.clear();
+                alert("시뮬레이션을 종료합니다.");
+                // location.href = '';
+                return false;
+            }
+        }
+        */
+
+        let INIT_ITERATION_FLAG = false;
+        const arr_pn = [];
+        const workload_labels = [];
+        const workload_data = [];
+        let max_pn;
+
+        const ctx_wl = document.getElementById('workload');
+        const config_wl = {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'The workload',
+                    data: [],
+                    fill: false,
+                    backgroundColor: 'rgb(77, 148, 255)',
+                    borderColor: 'rgb(77, 148, 255)'
+                }],
+            },
+            options: {
+                maintainAspectRatio: false,
+                legend: {
+                    display: true,
+                    labels: {
+                        fontSize: 14,
+                        fontStyle: 'bold',
+                        fontFamily: 'paybooc-Light',
+                        usePointStyle : true,
+                        boxWidth : 8
+                    }
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            min: 0,
+                            max: 100,
+                            beginAtZero: true,
+                            stepSize: 20,
+                            fontSize: 11,
+                            fontStyle: 'bold',
+                            fontFamily: 'paybooc-Light'
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: '작업자 사용률(%)',
+                            fontColor:'#ff6798',
+                            fontStyle:'bold',
+                            fontSize:13,
+                            fontFamily:'paybooc-Light',
+                            padding: 10
+                        }
+                    }],
+                    xAxes: [{
+                        ticks: {
+                            fontSize: 11,
+                            fontStyle: 'bold',
+                            fontFamily: 'paybooc-Light'
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: '공정번호',
+                            fontColor: '#ff6798',
+                            fontStyle: 'bold',
+                            fontSize: 13,
+                            fontFamily: 'paybooc-Light'
+                        }
+                    }]
+                },
+                plugins: {
+                    datalabels: {
+                        color: '#111',
+                        align: 'right',
+                        anchor: 'top',
+                        font: {
+                            lineHeight: 1.6
+                        },
+                        formatter: function (value, ctx) {
+                            return '';
+                        }
+                    }
+                }
+            }
+        }
+
+        const ctx_pd = document.getElementById('production');
+        const config_pd = {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'The production',
+                    data: [],
+                    fill: false,
+                    backgroundColor: 'rgb(26, 185, 171)',
+                    borderColor: 'rgb(26, 185, 171)'
+                }],
+            },
+            options: {
+                maintainAspectRatio: false,
+                legend: {
+                    display: true,
+                    labels: {
+                        fontSize: 14,
+                        fontStyle: 'bold',
+                        fontFamily: 'paybooc-Light',
+                        usePointStyle : true,
+                        boxWidth: 8
+                    }
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            min: 0,
+                            beginAtZero: true,
+                            fontSize: 11,
+                            fontStyle: 'bold',
+                            fontFamily: 'paybooc-Light'
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: '생산량(개)',
+                            fontColor: '#ff6798',
+                            fontStyle: 'bold',
+                            fontSize: 13,
+                            fontFamily: 'paybooc-Light',
+                            padding: 10
+                        }
+                    }],
+                    xAxes: [{
+                        ticks : {
+                            autoSkip: false,
+                            stepSize: 1000,
+                            callback: function (value, ctx) {
+                                return Math.floor(value);
+                            },
+                            fontSize: 11,
+                            fontStyle: 'bold',
+                            fontFamily: 'paybooc-Light'
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: '시간(분)',
+                            fontColor: '#ff6798',
+                            fontStyle: 'bold',
+                            fontSize: 13,
+                            fontFamily: 'paybooc-Light'
+                        }
+                    }]
+                },
+                plugins: {
+                    datalabels: {
+                        color: '#111',
+                        align: 'right',
+                        anchor: 'top',
+                        font: {
+                            lineHeight: 1.6
+                        },
+                        formatter: function (value, ctx) {
+                            return '';
+                        }
+                    }
+                }
+            }
+        }
+        
+        // PN 최대값 추출
+        for (let i = 0; i < obj['series'][0]['values'].length; i++) {
+            const pn = obj['series'][0]['values'][i][8];
+
+            if (pn != null) {
+                arr_pn.push(pn);
+            }
+        }
+
+        max_pn = Math.max.apply(null, arr_pn);
+
+        // 해당 공정 개수에 대한 데이터 추출
+        for (let i = 0; i < obj['series'][0]['values'].length; i++) {
+            const pn = obj['series'][0]['values'][i][8];
+
+            // i : 시작점
+            if (max_pn == pn) {
+                const first_now = obj['series'][0]['values'][i][15];
+                const first_finished_items = obj['series'][0]['values'][i][3];
+                const first_iteration = obj['series'][0]['values'][i][14];
+
+                if(before_iteration < first_iteration) { 
+                    INIT_ITERATION_FLAG = true;
+                }
+
+                // 시작점으로부터 공정 갯수만큼 출력
+                for (let j = i; j < i + pn; j++) {
+                    const pn = obj['series'][0]['values'][j][8];
+                    const now = obj['series'][0]['values'][j][15];
+                    const workload = obj['series'][0]['values'][j][12];
+                    const date_time = obj['series'][0]['values'][j][15];
+                    
+
+                    // 출력한 데이터들 중에서 시간대 비교 -> 최종 데이터
+                    if (first_now == now) {
+                        workload_labels.unshift(pn);
+                        workload_data.unshift(workload);
+                    }
+                }   
+
+                sum_now += Math.floor(first_now);
+                sum_finished_items += first_finished_items;
+
+                if(INIT_ITERATION_FLAG) { 
+                    production_labels = [];
+                    production_data = [];
+
+                    let modal_iteration = '';
+
+                    modal_iteration += `<div class="modal iteration">`;
+                    modal_iteration += `    <div class="body">`;
+                    modal_iteration += `        <p><span>${before_iteration}</span> 번째 Iteraion 이 종료되었습니다.</p>`;
+                    modal_iteration += `    </div>`;
+                    modal_iteration += `</div>`;
+
+                    $("canvas#production").after(modal_iteration);
+                    $(".modal.iteration").show();
+
+                    setTimeout(() => {
+                        $(".modal.iteration").remove();
+                    }, 1500);
+                }
+
+                before_iteration = first_iteration; 
+                
+                production_labels.push(sum_now);
+                production_data.push(sum_finished_items);
+
+                // production_labels.push(obj['series'][0]['values'][i][15]);
+                // production_data.push(obj['series'][0]['values'][i][3]);
+
+                // 차트 생성 - workload
+                if(window.myLineChartWL != null) {
+                    window.myLineChartWL.destroy();
+                }
+                window.myLineChartWL = new Chart(ctx_wl, config_wl);
+                window.myLineChartWL.data.labels = workload_labels;
+                window.myLineChartWL.data.datasets[0].data = workload_data;
+                window.myLineChartWL.update();
+
+                // 차트 생성 - production
+                if(window.myLineChartPD != null) {
+                    window.myLineChartPD.destroy();
+                }
+                window.myLineChartPD = new Chart(ctx_pd, config_pd);
+                window.myLineChartPD.data.labels = production_labels;
+                window.myLineChartPD.data.datasets[0].data = production_data;
+                
+                // x축 최대값 설정
+                // 이후 첫번째 데이터 삭제되는 방식
+                if(production_labels.length > X_MAX_LENGTH) {
+                    window.myLineChartPD.data.labels.splice(0, 1);
+                    window.myLineChartPD.data.datasets[0].data.splice(0, 1);
+                    
+                    // y축 최소값 설정
+                    window.myLineChartPD.options.scales.yAxes[0].ticks.beginAtZero = false;
+                    window.myLineChartPD.options.scales.yAxes[0].ticks.min = production_data[0];
+                }
+                
+                
+                localStorage.setItem("production_labels", JSON.stringify(production_labels));
+                localStorage.setItem("production_data", JSON.stringify(production_data));
+                localStorage.setItem("before_iteration", before_iteration);
+
+                window.myLineChartPD.update();
+
+
+                $(".data p span#iteration").text(obj['series'][0]['values'][i][14]);
+                $(".data p span#dateTime").text(obj['series'][0]['values'][i][2]);
+                $(".data p span#time").text(addCommas(obj['series'][0]['values'][i][15]));
+                $(".data p span#speed").text(obj['series'][0]['values'][i][16]);
+                $(".data p span#items").text(obj['series'][0]['values'][i][3]);
+
+                return false; 
+            }
+        }
+
+        }, 1000);
+    });
+
+    
+    /* 3자리 단위마다 콤마 생성 */
+    function addCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+</script>
+
+<body>
+    <nav class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">의류생산시스템 시뮬레이터</a>
+            </div>
+    
+            <div class="collapse navbar-collapse" id="navbar-collapse">
+                <ul class="nav navbar-nav" id="menu">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">파일<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <p class="btn btn-secondary dropdown-toggle production_list_title produce_plan" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                프로젝트
+                            </p>
+                            <li><a href="#"><span class="glyphicon glyphicon-plus"></span>새 프로젝트</a></li>
+                            <li><a href="#"><span class="glyphicon glyphicon-list"></span>프로젝트 열기</a></li>
+                            <li><a href="#"><span class="glyphicon glyphicon-list"></span>프로젝트 저장</a></li>
+                            <p class="btn btn-secondary dropdown-toggle production_list_title produce_plan" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                공정 모델
+                            </p>
+                            <li><a href="#"><span class="glyphicon glyphicon-plus"></span>공정 모델 열기</a></li>
+                            <li><a href="#"><span class="glyphicon glyphicon-list"></span>공정 모델 저장</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="content">
+        <div class="data-wrap">
+            <div class="data">
+                <p>Iteration : <span id="iteration"></span></p>
+                <p>Date & Time : <span id="dateTime"></span></p>
+                <p>Time(sec) : <span id="time"></span> sec </p>
+                <p>Simulation speed : <span id="speed"></span> X </p>
+                <p>Finished_Items : <span id="items"></span> </p>
+            </div>
+        </div>
+        <!--
+        <div class="setting">
+            <div class="select">
+                <span>크기</span>
+                <select name="size">
+                    <option value="100%">Default</option>
+                    <option value="1200">1200</option>
+                    <option value="900">900</option>
+                    <option value="600">600</option>
+                </select>
+            </div>
+            <div class="select">
+                <span>범위</span>
+                <select name="length">
+                    <option value="10">10</option>
+                    <option value="7">7</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            <div class="select">
+                <span>위치</span>
+                <select name="position">
+                    <option value="flex-start">left</option>
+                    <option value="center">center</option>
+                    <option value="flex-end">right</option>
+                </select>
+            </div>
+            <div class="btn createChartBtn">설정</div>
+        </div>
+        -->
+
+        <div class="graph-box">
+            <div class="graph">
+                <canvas id="workload"></canvas>
+            </div>
+        </div>
+
+        <div class="graph-box">
+            <div class="graph">
+                <canvas id="production"></canvas>
+            </div>
+        </div>
+    </div>
+
+</body>

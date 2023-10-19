@@ -1,0 +1,56 @@
+version: '2.2'
+
+services:
+  nginx:
+    build:
+      context: .
+      dockerfile: ./.config/prod/nginx/Dockerfile
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80/tcp"
+      - '443:443'
+    volumes: 
+      - static_volume:/static/
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    depends_on:
+      - web
+  certbot:
+    image: certbot/certbot
+    restart: unless-stopped
+    container_name: certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    depends_on:
+      - nginx
+  web:
+    build:
+      context: .
+      dockerfile: ./.config/prod/Dockerfile
+    container_name: web
+    command: gunicorn main.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - static_volume:/static/
+      - ./:/home/
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    working_dir: /home/
+    env_file:
+      - ./.env.prod
+    depends_on:
+      - db
+  db:
+    image: postgres:12.0-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - TZ=Asia/Seoul
+      - POSTGRES_USER=dkinno
+      - POSTGRES_PASSWORD=east0518
+      - POSTGRES_DB=lunch
+volumes:
+  postgres_data:
+  static_volume:

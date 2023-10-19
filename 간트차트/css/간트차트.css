@@ -1,0 +1,205 @@
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+
+* {
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: 'Pretendard-Regular';
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+::-webkit-scrollbar {
+    height:14px;
+    width:14px;
+}
+::-webkit-scrollbar-thumb {
+    background-color: #2f3542;
+}
+::-webkit-scrollbar-track {
+    background-color: grey;
+}
+html, body {
+    background:#eff3f7;
+    width:100%;
+    height:100%;
+}
+.g_wrap {
+    margin:0 auto;
+    width:1400px;
+    height:100%;
+    background:#eff3f7;
+    padding:30px;
+}
+.g_body {
+    display: flex;
+    align-items: flex-start;
+    box-shadow: 0 0 30px #c1c1c1;
+    background: white;
+    overflow: auto;
+    max-height:250px;
+    position: relative;
+}
+p.g_title {
+    font-size:27px;
+    font-weight: bold;
+    margin-bottom:20px;
+}
+.g_box {
+    position: relative;
+    width:300px;
+    height:100%;
+}
+.g_box + .g_box {
+    width:calc(100% - 300px);
+}
+.g_box .row:first-child {
+    height:70px;
+}
+.g_calendar {
+    display: inline-block;
+}
+.row {
+    display:flex;
+    align-items: center;
+    width:100%;
+    height:50px;
+    margin:0 auto;
+    position: relative;
+    border-bottom:1px solid #ddd;
+}
+.cell {
+    display:flex;
+    align-items: center;
+    width:40px;
+    height:100%;
+    border-bottom:1px solid #aaa;
+    font-weight: 600;
+}
+.workList {
+    position:sticky;
+    left:0;
+    background:white;
+    z-index:9999;
+    border-right:1px solid #ddd;
+}
+.workList .row:first-child {
+    position:sticky;
+    top:0;
+    background:white;
+    z-index:9999;
+}
+.workList .row div {
+    position:sticky;
+    background:white;
+    z-index:9998;
+}
+.workList .row div:first-child {
+    left:0;
+}
+.workList .row div:nth-child(2) {
+    left:140px;
+}
+.workList .row div:nth-child(3) {
+    left:220px;
+}
+.workList .row .title:first-child,
+.workList .row .cont:first-child {
+    width:140px;
+}
+.workList .row .title:nth-child(2),
+.workList .row .cont:nth-child(2) {
+    width:80px;
+    justify-content: center;
+}
+.workList .row .title:nth-child(3),
+.workList .row .cont:nth-child(3) {
+    width:80px;
+    justify-content: center;
+}
+.cell.date, .cell.title {
+    justify-content: center;
+    font-size:14px;
+}
+.g_calendar .day {
+    position:sticky;
+    top:35px;
+    background:white;
+    z-index:9998;
+}
+
+.cell.date {
+    font-weight: normal;
+    color:#8b8b8b;
+}
+.cont {
+    font-size:14px;
+    padding:0 7px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color:#626262;
+    height:100%;
+    display: flex;
+    align-items: center;
+}
+.cont .rounded {
+    display: inline-block;
+    padding:5px 8px;
+    border-radius: 3px;
+    color:white;
+}
+.cont .rounded.wait {
+    background:#8d8d8d;
+}
+.cont .rounded.start {
+    background:#4799ff;
+}
+.cont .rounded.comp {
+    background:#dd3f79;
+}
+.fullYearBox {
+    height: 35px;
+    display: flex;
+    align-items: center;
+    position: sticky;
+    left: 0;
+    top: 0;
+    background:white;
+    z-index:9998;
+}
+.fullYear {
+    font-size:19px;
+    position: sticky;
+    left:320px;
+    color:#5d5e7c;
+}
+.row .bar {
+    width:40px;
+    height: 30px;
+    line-height: 30px;
+    z-index:999;
+    position: absolute;
+}
+.row .bar span {
+    display: inline-block;
+    width:100%;
+    height:100%;
+    padding:0px 10px;
+    border-radius: 3px;
+    background:#565a6d;
+    color:white;
+    font-size:13px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    cursor: pointer;
+}

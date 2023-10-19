@@ -1,0 +1,824 @@
+/* noto-sans-kr-regular - latin_korean */
+@font-face {
+    font-family: 'Noto Sans KR';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../fonts/noto-sans-kr-v12-latin_korean-regular.eot'); /* IE9 Compat Modes */
+    src: local('Noto Sans KR Regular'), local('NotoSansKR-Regular'),
+            url('../fonts/noto-sans-kr-v12-latin_korean-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+            url('../fonts/noto-sans-kr-v12-latin_korean-regular.woff2') format('woff2'), /* Super Modern Browsers */
+            url('../fonts/noto-sans-kr-v12-latin_korean-regular.woff') format('woff'), /* Modern Browsers */
+            url('../fonts/noto-sans-kr-v12-latin_korean-regular.ttf') format('truetype'), /* Safari, Android, iOS */
+            url('../fonts/noto-sans-kr-v12-latin_korean-regular.svg#NotoSansKR') format('svg'); /* Legacy iOS */
+}
+
+* { 
+    font-family: 'Noto Sans KR', sans-serif; 
+}
+a:hover {
+    text-decoration: none;
+}
+ul {
+    list-style: none !important;
+    padding:0;
+    margin:0;
+}
+button, input, select, textarea, 
+.listView input[type="button"] {
+    outline:none;
+    border:none;
+}
+/* nav */
+.navbar-brand.logo_wrap {
+    padding:8px;
+}
+.navbar-brand .main_logo {
+    height:100%;
+}
+.dropdown-menu>li>a {
+    padding:3px 15px;
+}
+.dropdown-menu>li>a span.glyphicon {
+    margin-right:5px;
+}
+.dropdown-menu p.btn {
+    color:#0e00e0;
+    font-weight: 600;
+    font-size:14px;
+    padding:4px 12px 2px 12px;
+    display:block;
+    text-align: left;
+}
+.navbar-nav>li>a {
+    font-size:15px;
+}
+.caret {
+    margin-left:5px;
+}
+
+div h1 {
+    margin-bottom: 20px;
+}
+.table tr {
+    background:white;
+}
+.table tr th, .table tr td {
+    font-size:14px !important;
+    vertical-align: middle !important;
+}
+.table tr th {
+    word-break: keep-all;
+}
+.table tbody tr td {
+    padding:12px 8px !important;
+    word-break: break-all;
+}
+.table tr td {
+    padding:8px !important;
+    word-break: break-all;
+}
+.table thead .glyphicon {
+    font-size:13px;
+}
+/* 등록 폼 각 라벨 */
+.field-label {
+    display:inline-block;
+    margin-bottom:4px;
+    font-weight: 600;
+}
+/* 에러메세지 */
+.errorlist {
+    padding:0;
+    margin:-10px 0 15px 0;
+}
+.errorlist li {
+    color:red;
+    list-style: none;
+    padding-left:7px;
+}
+.errorlist li::before {
+    content:'*';
+    display:inline-block;
+    margin-right:3px;
+}
+/* Textarea */
+textarea.form-control {
+    height:60px;
+}
+
+/* 삭제&취소 버튼 */
+.btnWrap {
+    display:flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top:20px;
+}
+.commonBtn {
+    display: inline-block;
+    color: white;
+    padding: 7px 20px;
+    border:none;
+    box-sizing: border-box;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor:pointer;
+    white-space: nowrap;
+}
+.commonBtn:hover {
+    opacity: 0.7;
+}
+.commonDeleteBtn {
+    background:#3040b5;
+}
+.commonCancelBtn {
+    background:#278656;
+}
+/* 플롯 해제 - 정확한 영역 인지 */
+.floatRelease {
+    overflow: hidden;
+}
+.floatRelease .btn {
+    margin-right:0;
+}
+/* 테이블 내 버튼 - 지시하기, 삭제하기 */
+.tdBtn {
+    display:inline-block;
+    color:white;
+    padding:7px 12px;
+    box-sizing: border-box;
+    font-size:14px;
+    border-radius: 4px;
+    white-space: nowrap;
+    cursor: pointer;
+}
+.tdBtn.upload {
+    background:#6274d0;
+}
+.tdBtn.detail {
+    background:#099ead;
+}
+.tdBtn.disabled {
+    background:#8c8c8c !important;
+    cursor: default !important;
+}
+.tdBtn:hover {
+    opacity: 0.7;
+    color:white;
+    text-decoration: none;
+}
+.tdBtn.disabled:hover {
+    opacity: 1 !important;
+}
+.tdDeleteBtn {
+    background:#3040b5;
+}
+.tdOrderBtn {
+    background:#0f887d;
+}
+/* textarea 고정 크기 */
+textarea {
+    width:100%;
+    resize:none;
+}
+/* 모달창 공통 */
+/* The Modal (background) */
+.searchModal {
+    display:none;
+    position: fixed; /* Stay in place */
+    z-index: 9999; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    cursor:pointer;
+}
+.searchModal .page-header {
+    margin-top:20px;
+}
+/* Modal Content/Box */
+.search-modal-content {
+    border-radius: 7px;
+    background-color: #fefefe;
+    margin: 100px auto; /* 15% from the top and centered */
+    padding: 20px;
+    box-shadow: 3px 3px 5px #565656;
+    cursor:default;
+}
+/* 모달창 하단 버튼 */
+.search-modal-content .modalCommonBtnWrap {
+    display:flex;
+    align-items: center;
+    justify-content: space-around;
+    border-top:1px solid #ddd;
+    padding-top:20px;
+}
+.search-modal-content .modalCommonBtnWrap .modalCommonBtn {
+    display:inline-block;
+    width:40%;
+    text-align: center;
+    height:40px;
+    line-height: 40px;
+    font-size:14px;
+    border-radius: 4px;
+    cursor:pointer;
+    color:white;
+    border:none;
+    text-decoration: none;
+}
+.search-modal-content .modalCommonBtnWrap .modalCommonBtn:hover {
+    opacity: 0.8;
+}
+.modalCommonBtn.modalRegBtn {
+    background:#5f72ff;
+}
+.modalCommonBtn.modalCancelBtn {
+    background:#6f6f6f;
+}
+
+.filebox input[type="file"] {
+    position: absolute;
+    width: 0;
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+}
+
+.filebox label {
+    display: inline-block;
+    padding: 0 20px;
+    color: #464646;
+    vertical-align: middle;
+    background-color: #ffffff;
+    cursor: pointer;
+    border: 1px solid #a2a2a2;
+    border-radius: 4px;
+    margin-bottom: 0;
+    height: 35px;
+    line-height: 35px;
+}
+.filebox label.updateFileClear,
+.filebox label.fileDel {
+    border: 1px solid #fb7889;
+    color: #f1417b;
+    margin-left:10px;
+}
+.filebox label#fileAdd {
+    border: 1px solid #4d8cff;
+    color: #4060ff;
+    margin-left: 10px;
+}
+
+/* named upload */
+.filebox .upload-name {
+    display: inline-block;
+    width: 250px;
+    height: 35px;
+    font-size: 15px;
+    padding: 0 10px;
+    vertical-align: middle;
+    background-color: #f5f5f5;
+    border: 1px solid #ebebeb;
+    border-radius: 4px;
+    margin-left: 30px;
+    margin-right: 7px;
+}
+.filebox {
+    margin-top: 20px;
+}
+.reqMsg {
+    padding-left:5px;
+    color:red;
+    text-align: right;
+}
+.reqMsgBox {
+    margin:10px 0 20px;
+}
+.reqMsgBox .reqMsg {
+    padding-left:15px;
+    text-align: left;
+}
+.mb__30 {
+    margin-bottom:30px;
+}
+.alignLeft {
+    text-align: left !important;
+}
+.alignRight {
+    text-align: right !important;
+}
+
+@media screen and (max-width:800px) {
+    .search-modal-content {
+        width:80% !important;
+    }
+}
+
+/* Toggle Check */
+@font-face { 
+    font-family: 'Roboto'; 
+    src: url('../fonts/Roboto-Regular.ttf') format('opentype'); 
+    font-weight: normal; 
+    font-style: normal; 
+}
+.form-name {
+    display:inline-block;
+    vertical-align: middle;
+    font-weight: 600;
+}
+.switch {
+    display:inline-block;
+    vertical-align: middle;
+    width:90px;
+    height:32px;
+    background:linear-gradient(to right, #828282, #313131);
+    cursor:pointer;
+    color:white;
+    border-radius: 38px;
+    position: relative;
+    margin:0;
+    margin-left:10px;
+}
+.switch .switch_input {
+    display:none;
+}
+.switch .stat {
+    font-family: 'Roboto';
+    position: absolute;
+    z-index:1;
+    top:calc(50% - 13px);
+    height:26px;
+    line-height: 26px;
+    text-align: center;
+    font-size:15px;
+}
+.switch .stat.on {
+    left:10px;
+}
+.switch .stat.off {
+    right:10px;
+}
+.switch .handle {
+    position: absolute;
+    z-index:2;
+    left:5px;
+    top:calc(50% - 13px);
+    width:40px;
+    height:26px;
+    background:white;
+    border-radius: 34px;
+    box-shadow: 1px 1px 5px 0px #484848;
+}
+
+/* Form Add , Delete */
+.formBtn {
+    border:1px solid #ddd;
+    width:80px;
+    height:34px;
+    line-height: 34px;
+    text-align: center;
+    cursor:pointer;
+    border-radius: 3px;
+}
+.formBtn.add {
+    color:#8a8aff;
+    border:1px solid #8a8aff;
+}
+.formBtn.del {
+    color:#ff6565;
+    border:1px solid #ff6565;
+}
+
+/* List Style */
+.listView table {
+    border-top:2px solid #797979 !important;
+}
+.listView table tr td input[type="checkbox"] {
+    margin:0;
+    width:20px !important;
+    height:20px !important;
+    zoom:1 !important;
+    background:red;
+    cursor:pointer;
+    vertical-align: middle;
+}
+.listView table tr th,
+.listView table tr td {
+    text-align: center;
+}
+.listView table thead tr th {
+    background:#f5f5f5;
+}
+.listTopBtn {
+    text-align: right;
+    margin-bottom:15px;
+}
+.listView .listTopBtn {
+    margin-bottom:0;
+}
+.listTopBtn .listTopBtn__del,
+.listTopBtn .listTopBtn__mod,
+.listTopBtn .listTopBtn__excel,
+.listTopBtn .listTopBtn__chk,
+.listTopBtn .listTopBtn__add,
+.listTopBtn .listTopBtn__upload {
+    display:inline-block;
+    padding:10px 30px;
+    box-sizing: border-box;
+    font-size:15px;
+    color:white;
+    background:#d21a1a;
+    cursor:pointer;
+    border-radius: 4px;
+    border:none;
+    text-decoration: none;
+}
+.listTopBtn .listTopBtn__mod {
+    background:#cac40a;
+}
+.listTopBtn .listTopBtn__excel {
+    background:#00ce5c;
+}
+.listTopBtn .listTopBtn__chk {
+    background:#5773ff;
+    font-weight: normal;
+    margin-right:10px;
+}
+.listTopBtn .listTopBtn__add {
+    background:#449d44;
+}
+.listTopBtn .listTopBtn__upload {
+    background:#ce0056;
+}
+.listTopBtn .listTopBtn__del:hover,
+.listTopBtn .listTopBtn__mod:hover,
+.listTopBtn .listTopBtn__excel:hover,
+.listTopBtn .listTopBtn__chk:hover,
+.listTopBtn .listTopBtn__add:hover,
+.listTopBtn .listTopBtn__upload:hover {
+    opacity: 0.7;
+}
+.listTopBtn .listTopBtn__del:disabled {
+    background:#8c8c8c;
+    cursor: default;
+}
+.listTopBtn .listTopBtn__del:disabled:hover {
+    opacity: 1;
+}
+.includeExport {
+    display: flex !important;
+    align-items: flex-end !important;
+    justify-content: space-between !important;
+    margin-bottom: 15px !important;
+}
+.hidden_chk {
+    display:none;
+}
+.includeCheckBox table tbody tr {
+    cursor:pointer;
+}
+
+/* 등록&수정 폼 하단 버튼 */
+.regBtnWrap {
+    overflow: hidden;
+    margin-top:20px;
+    padding-top:20px;
+    border-top:1px solid #ececec;
+    text-align: right;
+}
+.regBtnWrap .btn {
+    box-shadow: none;
+    border: none;
+    padding: 10px 40px;
+    display:inline-block;
+}
+.regBtnWrap .btn:hover {
+    opacity: 0.8;
+}
+.regBtnWrap .btn-primary {
+    background: #816aff;
+}
+.regBtnWrap .btn-success {
+    background: #33af81;
+}
+.regBtnWrap .btn-danger {
+    background: #777777;
+    margin-left:10px;
+}
+.form-control-box {
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+.form-control-box .unit {
+    margin-left:3px;
+}
+
+/* container-fluid */
+nav .container-fluid {
+    padding:0 15px !important;
+}
+.container-fluid {
+    padding:0 15px 30px 15px !important;
+}
+
+/* panel-heading */ 
+.panel-heading label {
+    margin:0;
+}
+
+.deleteModal {
+    z-index:9999 !important;
+}
+
+/* The deleteModal */
+.deleteModal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 10; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    align-items: center;
+    justify-content: center;
+}
+.delete-modal-content {
+    border-radius: 10px;
+    background-color: #fefefe;
+    padding: 40px;
+    border: 1px solid #888;
+    width: 400px; /* Could be more or less, depending on screen size */
+    text-align: center;
+    margin-top:50px;
+    box-shadow: 3px 3px 5px #565656;
+}
+.delete-modal-content .imgBox {
+    margin-bottom:10px;
+}
+.delete-modal-content .deleteCont .delMessage {
+    font-weight: bold;
+    font-size:15px;
+}
+.delete-modal-content .deleteCont .delSubMessage {
+    font-size:13px;
+    color:#909cc7;
+}
+.delete-modal-content .modalBtnWrap {
+    text-align: center;
+    margin-top:20px;
+}
+.delete-modal-content .modalBtnWrap .modalBtn {
+    display:inline-block;
+    width:100px;
+    height:35px;
+    line-height: 35px;
+    box-sizing: border-box;
+    cursor:pointer;
+    font-size:13px;
+    color:white;
+    border-radius: 5px;
+    margin:0 5px;
+}
+.delete-modal-content .modalBtnWrap .modalBtn:hover {
+    opacity: 0.7;
+}
+.delete-modal-content .modalBtnWrap .modalBtn.yes {
+    background:#ff6868;
+}
+.delete-modal-content .modalBtnWrap .modalBtn.no {
+    background:#909090;
+}
+.delete-modal-content .imgBox {
+    margin-bottom:15px;
+}
+.delete-modal-content .imgBox img {
+    width:80px;
+}
+
+/* info-tab */
+.info-tab ul {
+    text-align: right;
+    padding: 0;
+    margin: 0;
+    margin-bottom: -1px;
+}
+
+.info-tab ul li {
+    display: inline-block;
+    vertical-align: middle;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+    border-bottom: 1px solid white;
+    padding: 10px 30px;
+    cursor: pointer;
+    background: #f3f3f3;
+    text-align: center;
+    color:#989898;
+}
+
+.info-tab li.act {
+    background: white;
+    font-weight: 600;
+    border-top:2px solid #fb4c95;
+    color:#fb4c95;
+}
+
+.info-inner {
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+    padding: 20px;
+    overflow: hidden;
+}
+
+/* Scroll bar */
+::-webkit-scrollbar {
+    -webkit-appearance: none;
+}
+
+::-webkit-scrollbar:vertical {
+    width: 8px;
+}
+
+::-webkit-scrollbar:horizontal {
+    height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background-color: rgba(0, 0, 0, .5);
+}
+
+::-webkit-scrollbar-track { 
+    background-color: rgb(192, 192, 192); 
+    border-radius: 8px; 
+} 
+
+/* 테이블 헤더 툴팁 */
+.th-tooltip {
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    width: 18px;
+    height: 18px;
+    border-radius: 20px;
+    background: #56acff;
+    color: #ffffff;
+    text-align: center;
+    line-height: 18px;
+    cursor: help;
+    font-weight: normal;
+    font-size: 15px;
+}
+.th-tooltip small {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 12px);
+    left: -20px;
+    background: linear-gradient(45deg, #56acff, #6b90e2);
+    padding: 7px 15px;
+    z-index: 999;
+    white-space: nowrap;
+    font-size: 14px;
+    font-weight: normal;
+    border-radius: 3px;
+    cursor: default;
+    text-align: left;
+    line-height: 22px;
+}
+.th-tooltip small::before {
+    content:'';
+    position: absolute;
+    top:100%;
+    left:22px;
+    border:6px solid transparent;
+    border-top:6px solid #55b0ff;
+}
+.th-tooltip:hover small {
+    display:block;
+}
+
+/* 로드 화면 */
+.load_bg {
+    display:none;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    z-index:9999;
+    background:rgba(0, 0, 0, 0.12);
+}
+.load_bg .load_box {
+    background:white;
+    border:3px solid #4a9bff;
+    display:flex;
+    align-items:center;
+    justify-content: center;
+    flex-direction: column;
+    width:380px;
+    height:240px;
+    border-radius: 10px;
+}
+.load_bg .load_box .load_img {
+    margin-bottom:15px;
+}
+.load_bg .load_box .load_img img {
+    width:80px;
+}
+.load_bg .load_box .cont {
+    text-align: center;
+}
+.load_bg .load_box .cont p {
+    margin:0;
+}
+.load_bg .load_box .cont p:first-child {
+    font-size:17px;
+    margin-bottom:5px;
+    color:#2498fb;
+}
+.load_bg .load_box .cont p:last-child {
+    font-size:15px;
+    color:#9a9a9a;
+}
+.load_display {
+    display:flex;
+}
+
+/* 패드 환경 */
+.pad-worker-nav {
+    display:none;
+    text-align: center;
+    padding:15px 0;
+    border-bottom:1px solid #ddd;
+    position: relative;
+    margin-bottom:20px;
+    box-shadow: 0 0 25px #cccccc;
+}
+.pad-worker-nav .logo p {
+    margin:0;
+}
+.pad-worker-nav .logo p img {
+    height:40px;
+}
+.pad-worker-nav .pos {
+    position: absolute;
+    top:calc(50% - 25px);
+}
+.pad-worker-nav .pos.left {
+    left:20px;
+}
+.pad-worker-nav .pos.right {
+    right:20px;
+}
+.pad-worker-nav .btn {
+    display:flex;
+    align-items:center;
+    color:white;
+    font-size:20px;
+    border-radius: 4px;
+    padding:0 40px;
+    height:50px;
+    box-shadow: 0 0 4px #929292;
+}
+.pad-worker-nav .btn .icon {
+    height:27px;
+    margin-right:7px;
+}
+.pad-worker-nav .btn .icon img {
+    height:100%;
+}
+.pad-worker-nav .btn-search {
+    background: #1eafa8;
+}
+.pad-worker-nav .btn-logout {
+    background: #cc341c;
+}
+.pad .pad_width_100 {
+    width:100%;
+    margin:0 auto;
+    float:none;
+}
+.pad .pad_width_90 {
+    width:90%;
+    margin:0 auto;
+    float:none;
+}
+.pad .pad_width_80 {
+    width:80%;
+    margin:0 auto;
+    float:none;
+}
+.pad .pad_width_50 {
+    width:50%;
+    margin:0 auto;
+    float:none;
+}

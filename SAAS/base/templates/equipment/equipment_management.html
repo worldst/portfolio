@@ -1,0 +1,322 @@
+{% extends "base.html" %}
+{% block title %}
+<div class="title_box" data-cate="5,3,4">
+    <i class="far fa-rectangle-list"></i><span class="title">설비 관리</span>
+    <div class="path_box"></div>
+</div>
+{% endblock %}
+{% load static %}
+{% load humanize %}
+{% block contents %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/base/equipment/equipment_management.css' %}">
+<script type="text/javascript" src="{% static 'js/pagination.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/base/equipment/equipment_management.js' %}"></script>
+<!-- <script type="text/javascript" src="{% static 'js/tablesorter.js' %}"></script> -->
+
+<input type="hidden" name="save_search_type">
+<input type="hidden" name="save_keyword">
+<input type="hidden" name="save_date_type">
+<input type="hidden" name="save_search_start_dt">
+<input type="hidden" name="save_search_end_dt">
+
+{% csrf_token %}
+<div class="content info flex-between">
+    <div class="list-tab flex">
+        <div class="tab act" data-type="">
+            <span class="title">전체</span>
+            <span class="count">{{ object_list | length }}</span>
+        </div>
+    </div>
+    <div class="list-func flex">
+        <div class="func filter" onclick="filterSearchModalOpen();">
+            <i class="fa-solid fa-sliders"></i>
+            <span class="title">필터</span>
+        </div>
+        <div class="func excel" onclick="exportExcel();">
+            <i class="fa-solid fa-download"></i>
+            <span class="title">목록 다운로드</span>
+        </div>
+    </div>
+</div>
+
+<div class="content list">
+    <div class="content__inner">
+        <div class="table-search">
+            <div class="total-info">
+                <p class="total">총 <span>-</span> 개의 데이터가 등록되어있습니다. </p>
+            </div>
+            <div class="search-group">
+                <select name="search-kinds">
+                    <option value="">통합검색</option>
+                    <option value="name">설비명</option>
+                    <option value="process_name">공정</option>
+                    <option value="account">담당자</option>
+                    <option value="memo">메모</option>
+                </select>
+                <input type="text" class="search-data" placeholder="검색할 데이터를 입력해주세요.">
+                <button id="table-search-bar" class="search-bar" onclick="searchData();">조회</button>
+                <input type="hidden" name="search_key" value="">
+            </div>
+        </div>
+        <table class="table list" id="list-table">
+            <colgroup>
+                <col width="5%"> <!-- check -->
+                <col width="24%"> <!-- 설비명 -->
+                <col width="33%"> <!-- 설비공정 -->
+                <col width="9%"> <!-- 담당자 -->
+                <col width="21%"> <!-- 메모 -->
+                <col width="8%"> <!-- 관리 -->
+            </colgroup>
+            <thead>
+                <tr>
+                    <th><input type="checkbox" name="rowCheck" class="all_chk"></th>
+                    <th>설비명</th>
+                    <th>설비 공정</th>
+                    <th>담당자</th>
+                    <th>메모</th>
+                    <th>관리</th>
+                </tr>
+            </thead>
+            <tbody aria-live="polite" aria-relevant="all">
+                <!-- 스크립트 -->
+            </tbody>
+        </table>
+
+        <div class="pagination flex-center">
+            <div class="button-box left">
+                <span class="common-btn common-btn--delete" onclick="delModalOpen(this);"><i class="far fa-trash-alt"></i> 삭제</span>
+            </div>
+            <div class="pagination__inner flex-center">
+                <span class="page_arrow prev" style="display: none;"><i class="fas fa-chevron-left"></i></span>
+                <ul class="page">
+                    <!-- 스크립트 -->
+                </ul>
+                <span class="page_arrow next" style="display: none;"><i class="fas fa-chevron-right"></i></span>
+            </div>
+            <div class="button-box right">
+                <span class="common-btn common-btn--create" onclick="createModalOpen();"><i class="fa-solid fa-plus"></i> 신규 등록</span>
+            </div>
+        </div>
+
+        <!-- 데이터 로딩 대기 화면 -->
+        <div class="load-screen">
+            <div class="load">
+                <img src="{% static '/img/spinner.gif' %}" alt="데이터 로딩중" class="load__img">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 정보 등록 모달창 -->
+<div id="createModal" class="common-modal edit-modal">
+    <div class="common-modal__inner" style="width:800px;">
+        <div class="edit-modal__title">
+            <span class="title">신규 설비 등록</span>
+            <div class="modal-close flex-center" onclick="closeModal(this);"><i class="fa-solid fa-xmark"></i></div>
+        </div>
+        <div class="edit-modal__body edit-form">
+            <div class="data-form">
+                <div class="form-group" style="width:33%;">
+                    <div class="form-group__title flex">
+                        <div class="title">설비명 <span class="required-item">*</span></div>
+                    </div>
+                    <div class="form-group__input">
+                        <input type="text" name="name" class="data-input">
+                    </div>
+                </div>
+                <div class="form-group" style="width:22%;">
+                    <div class="form-group__title flex">
+                        <div class="title">설비 담당자 <span class="required-item">*</span></div>
+                    </div>
+                    <div class="form-group__input">
+                        <select name="account" class="select2_form">
+                            <option value="" title="choice">선택</option>
+                            {% for obj in account_list %}
+                            <option value="{{ obj.id }}">{{ obj.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group" style="width:40%;">
+                    <div class="form-group__title flex">
+                        <div class="title">메모</div>
+                    </div>
+                    <div class="form-group__input">
+                        <input type="text" name="memo" class="data-input">
+                    </div>
+                </div>
+            </div>
+            <div class="data-form" style="flex-wrap: wrap; margin-top:20px;">
+                <div class="form-title">
+                    <div class="title">공정 선택</div>
+                </div>
+                <div class="selected_wrap flex">
+                    {% for obj in code_list %}
+                    <div class="selected_box">
+                        <input type="checkbox" name="process" class="process hidden" id="process_{{ forloop.counter }}" value="{{ obj.id }}">
+                        <label for="process_{{ forloop.counter }}">{{ obj.name }}</label>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="modalBtnWrap flex-between">
+            <div class="left"></div>
+            <div class="right">
+                <span class="modalBtn modalBtn--create" onclick="createData();">등록</span>
+                <span class="modalBtn modalBtn--close" onclick="closeModal(this);">닫기</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 정보 수정 모달창 -->
+<div id="updateModal" class="common-modal edit-modal">
+    <input type="hidden" name="pk">
+    <div class="common-modal__inner" style="width:800px;">
+        <div class="edit-modal__title">
+            <span class="title">설비 정보 수정</span>
+            <div class="modal-close flex-center" onclick="closeModal(this);"><i class="fa-solid fa-xmark"></i></div>
+        </div>
+        <div class="edit-modal__body edit-form">
+            <div class="data-form">
+                <div class="form-group" style="width:33%;">
+                    <div class="form-group__title flex">
+                        <div class="title">설비명 <span class="required-item">*</span></div>
+                    </div>
+                    <div class="form-group__input">
+                        <input type="text" name="name" class="data-input">
+                    </div>
+                </div>
+                <div class="form-group" style="width:22%;">
+                    <div class="form-group__title flex">
+                        <div class="title">설비 담당자 <span class="required-item">*</span></div>
+                    </div>
+                    <div class="form-group__input">
+                        <select name="account" class="select2_form">
+                            <option value="" title="choice">선택</option>
+                            {% for obj in account_list %}
+                            <option value="{{ obj.id }}">{{ obj.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group" style="width:40%;">
+                    <div class="form-group__title flex">
+                        <div class="title">메모</div>
+                    </div>
+                    <div class="form-group__input">
+                        <input type="text" name="memo" class="data-input">
+                    </div>
+                </div>
+            </div>
+            <div class="data-form" style="flex-wrap: wrap; margin-top:20px;">
+                <div class="form-title">
+                    <div class="title">공정 선택</div>
+                </div>
+                <div class="selected_wrap flex">
+                    {% for obj in code_list %}
+                    <div class="selected_box">
+                        <input type="checkbox" name="process" class="process hidden" id="process_1_{{ forloop.counter }}" value="{{ obj.id }}">
+                        <label for="process_1_{{ forloop.counter }}">{{ obj.name }}</label>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="modalBtnWrap flex-between">
+            <div class="left"></div>
+            <div class="right">
+                <span class="modalBtn modalBtn--update" onclick="updateData();">저장</span>
+                <span class="modalBtn modalBtn--close" onclick="closeModal(this);">닫기</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 필터 모달창 -->
+<div id="filterSearchModal" class="common-modal">
+    <div class="common-modal__inner">
+        <div class="form-title">
+            <div class="data-reset flex-center" onclick="resetFilterData();"><i class="fa-solid fa-rotate-right"></i> 초기화</div>
+            <span class="title">상세 검색</span>
+            <div class="modal-close flex-center" onclick="closeModal(this);"><i class="fa-solid fa-xmark"></i></div>
+        </div>
+        <div class="filter__inner">
+            <div class="form-group">
+                <div class="form-group__title">설비 상태</div>
+                <div class="form-group__inner flex" id="status">
+                    <div class="radioBox">
+                        <input type="radio" name="status" id="all" class="hidden" data-status="" checked>
+                        <label class="reason" for="all"><i class="fa-solid fa-check"></i> <span>전체</span></label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-group__title">기간 타입</div>
+                <div class="form-group__inner flex" id="date_type">
+                    <div class="radioBox">
+                        <input type="radio" name="date_type" id="created_dt" class="hidden" data-date_type="" checked>
+                        <label class="reason" for="created_dt"><i class="fa-solid fa-check"></i> <span>등록 일자</span></label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-group__title">기간 설정</div>
+                <div class="form-group__inner flex-between">
+                    <div class="input-group">
+                        <input type="text" name="start_date" class="data-input datetimepicker_update" placeholder="시작일자">
+                        <div class="input-group-addon input-group-append">
+                            <div class="input-group-text"><i class="glyphicon glyphicon-calendar"></i></div>
+                        </div>
+                    </div>
+                    <span class="space_line">~</span>
+                    <div class="input-group">
+                        <input type="text" name="end_date" class="data-input datetimepicker_update" placeholder="종료일자">
+                        <div class="input-group-addon input-group-append">
+                            <div class="input-group-text"><i class="glyphicon glyphicon-calendar"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-group__title">데이터 입력</div>
+                <div class="form-group__inner flex-between">
+                    <select name="search_type" class="data-select">
+                        <option value="">통합검색</option>
+                        <option value="name">설비명</option>
+                        <option value="process_name">공정</option>
+                        <option value="account">담당자</option>
+                        <option value="memo">메모</option>
+                    </select>
+                    <input type="text" name="keyword" class="data-input">
+                </div>
+            </div>
+        </div>
+        <div class="modalBtnWrap flex-center">
+            <span class="modalBtn modalBtn--yes" onclick="filterData();">조회</span>
+            <span class="modalBtn modalBtn--no" onclick="closeModal(this);">닫기</span>
+        </div>
+    </div>
+</div>
+
+<!-- 정보 삭제 모달창 -->
+<div id="delModal" class="common-modal">
+    <input type="hidden" name="ids">
+    <div class="common-modal__inner">
+        <div class="imgBox">
+            <i class="far fa-trash-alt"></i>
+        </div>
+        <div class="deleteCont">
+            <p class="delMessage">정말 삭제하시겠습니까 ?</p>
+            <p class="delSubMessage">한 번 삭제된 데이터는 복원이 불가능합니다.</p>
+        </div>
+        <div class="modalBtnWrap">
+            <span class="modalBtn modalBtn--yes" onclick="deleteData();">예</span>
+            <span class="modalBtn modalBtn--no" onclick="closeModal(this);">아니오</span>
+        </div>
+    </div>
+</div>
+{% endblock %}

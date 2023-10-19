@@ -1,0 +1,243 @@
+@charset "utf-8";
+
+/* 공통 */
+.circle-wrap {
+    display:none;
+    position: absolute;
+    width:100%;
+    height:100%;
+    top:0;
+    left:0;
+    align-items: center;
+    justify-content: center;
+    background:rgba(0,0,0,0.7);
+    z-index:1000;
+}
+.circle-box {
+    width: 100%;
+    height: 100%;
+    display:flex;
+    flex-direction: column;
+    align-items:center;
+    justify-content: center;
+}
+
+/* Circle Type 1 */
+div.circle {
+  width: 30vmin;
+  height: 30vmin;
+  box-shadow: 0 0 0 1.1vmin, inset 3.75vmin 3.75vmin 7.5vmin rgba(0, 0, 0, 0.125), 3.75vmin 3.75vmin 7.5vmin rgba(0, 0, 0, 0.125);
+  font-size: 4vmin;
+  text-shadow: 3.75vmin 3.75vmin 7.5vmin rgba(0, 0, 0, 0.125);
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+          justify-content: center;
+  overflow: hidden;
+  color: white;
+  border-radius: 50%;
+  font-weight: 700;
+  position: relative;
+}
+
+div.circle::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(86, 185, 255, 0.28);
+    -webkit-animation: 3s 1s linear forwards timer_indicator;
+            animation: 3s 1s linear forwards timer_indicator;
+  }
+  @-webkit-keyframes timer_indicator {
+    100% {
+      -webkit-transform: translateY(100%);
+              transform: translateY(100%);
+    }
+  }
+  @keyframes timer_indicator {
+    100% {
+      -webkit-transform: translateY(100%);
+              transform: translateY(100%);
+    }
+  }
+
+p.countDown {
+    color: white;
+    font-weight: 600;
+    font-size: 4vmin;
+    margin-top: 4vmin;
+    -webkit-animation: timer_beat 1s 0.875s 3;
+            animation: timer_beat 1s 0.875s 3;
+}
+p.countDown::before {
+  content: "3";
+  display:block;
+  -webkit-animation: timer_countdown 3s 1s forwards;
+          animation: timer_countdown 3s 1s forwards;
+}
+@-webkit-keyframes timer_beat {
+  40%,
+80% {
+    -webkit-transform: none;
+            transform: none;
+  }
+  50% {
+    -webkit-transform: scale(1.3);
+            transform: scale(1.3);
+  }
+}
+@keyframes timer_beat {
+  40%,
+80% {
+    -webkit-transform: none;
+            transform: none;
+  }
+  50% {
+    -webkit-transform: scale(1.3);
+            transform: scale(1.3);
+  }
+}
+@-webkit-keyframes timer_countdown {
+  0% {
+    content: "3";
+  }
+  33.33% {
+    content: "2";
+  }
+  66.66% {
+    content: "1";
+  }
+  100% {
+    content: "0";
+  }
+}
+@keyframes timer_countdown {
+  0% {
+    content: "3";
+  }
+  33.33% {
+    content: "2";
+  }
+  66.66% {
+    content: "1";
+  }
+  100% {
+    content: "0";
+  }
+}
+
+/* Circle Type 2 */
+.base-timer {
+    position: relative;
+    width: 30vmin;
+    height: 30vmin;
+  }
+  
+  .base-timer__svg {
+    transform: scaleX(-1);
+  }
+  
+  .base-timer__circle {
+    fill: none;
+    stroke: none;
+  }
+  
+  .base-timer__path-elapsed {
+    stroke-width: 4px;
+    stroke: grey;
+  }
+  
+  .base-timer__path-remaining {
+    stroke-width: 4px;
+    stroke-linecap: round;
+    transform: rotate(90deg);
+    transform-origin: center;
+    transition: 1s linear all;
+    fill-rule: nonzero;
+    stroke: currentColor;
+  }
+  
+  .base-timer__path-remaining.green {
+    color: rgb(65, 184, 131);
+  }
+  
+  .base-timer__path-remaining.orange {
+    color: orange;
+  }
+  
+  .base-timer__path-remaining.red {
+    color: red;
+  }
+  
+  .base-timer__label {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4vmin;
+    color:white;
+    margin-top:3vmin;
+  }
+  .base-timer__title {
+    position: absolute;
+    width: 30vmin;
+    height:30vmin;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4vmin;
+    color:white;
+  }
+
+  /* Circle Type 3 */
+  .nb-spinner {
+    width: 30vmin;
+    height:30vmin;
+    font-size:4vmin;
+    margin: 0;
+    background: transparent;
+    border-top: 10px solid #03A9F4;
+    border-right: 10px solid transparent;
+    border-radius: 50%;
+    -webkit-animation: 1s spin linear infinite;
+    animation: 1s spin linear infinite;
+    position: absolute;
+}
+.nb-spinner-title {
+    display:flex;
+    align-items:center;
+    justify-content: center;
+    width:30vmin;
+    height:30vmin;
+    font-size:4vmin;
+    color:white;
+}
+    
+@-webkit-keyframes spin {
+    from {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+          
+@keyframes spin {
+    from {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}

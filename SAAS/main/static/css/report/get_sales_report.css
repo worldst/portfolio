@@ -1,0 +1,65 @@
+.content.data {
+    width:24%;
+}
+.content.graph {
+    height:600px;
+}
+.content.graph .graph {
+    height:calc(100% - 55px);
+}
+.tab_data_wrap {
+    position: relative;
+}
+.search_date_box .title {
+    font-size: 15px;
+    color: #737373;
+    text-shadow: 0px 0px 1px #9f9f9f;
+}
+.search_date_box .input-group {
+    width:180px;
+    margin:0 10px;
+}
+.search_date_box .search-bar {
+    cursor: pointer;
+    background: #5f5f5f;
+    color: white;
+    padding: 0 25px;
+    height: 34px;
+    line-height: 34px;
+    font-size: 14px;
+    border-radius: 3px;
+}
+
+.scroll {
+    max-height:100%;
+}
+#list-table-company {
+    border-collapse: separate !important;
+}
+#list-table-company thead tr th {
+    position: sticky;
+    top:0;
+    z-index:99;
+}
+#list-table-company tr th,
+#list-table-company tr td {
+    border:none !important;
+    /* border-left:1px solid #ececec !important; */
+    /* border-bottom:1px solid #ececec !important; */
+}
+#list-table-company tr td {
+    color:#929292;
+    border-bottom:1px solid #ececec !important;
+}
+
+#list-table-company tr th {
+    /* border-top:1px solid #ececec !important; */
+    /* border-left:1px solid #ececec !important; */
+    /* border-bottom:1px solid #ececec !important; */
+}
+#list-table-company tr th:last-child {
+    /* border-right:1px solid #ececec !important; */
+}
+#list-table-company tr td:last-child {
+    /* border-right:1px solid #ececec !important; */
+}

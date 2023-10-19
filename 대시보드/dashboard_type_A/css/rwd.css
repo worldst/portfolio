@@ -1,0 +1,232 @@
+@charset "utf-8";
+
+@media screen and (max-width:1440px) {
+    .d-wrap {
+        width:96%;
+    }
+    .footer .footer-inner {
+        width:100%;
+        padding:0 3%;
+    }
+    .info-1 {
+        flex-direction: column;
+    }
+    .info-1 .d-box-wrap {
+        margin-bottom:20px;
+    }
+    .info-1 .d-box-wrap:last-child {
+        margin-bottom:0;
+    }
+    .info-1 .safety {
+        width:100%;
+    }
+    .info-1 .board {
+        width:100%;
+    }
+    .chart-box {
+        width:100%;
+    }
+    .header {
+        height:auto;
+        padding:15px 0;
+    }
+    .header .header-inner {
+        padding:0 3%;
+        align-items: flex-start;
+    }
+    .header .header-inner .logo {
+        height:50px;   
+    }
+    .header .header-inner .header-left {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .header .header-inner .nav {
+        margin:0;
+        margin-top:20px;
+    }
+    .header .header-inner .nav ul.gnb > li {
+        line-height: 40px;
+        font-size:15px;
+    }
+    
+    .gnb_depth {
+        top:40px;
+        width:140px;
+        left:calc(50% - 70px);
+    }
+    .gnb_depth li {
+        font-size:11px;
+    }
+}
+
+@media screen and (max-width:1140px) {
+    .top-info-wrap .d-box-inner {
+        padding:5px 10px;
+    }
+    .top-info-wrap .d-box p.info-title {
+        font-size:13px;
+    }
+    .top-info-wrap .d-box p.info span {
+        font-size:14px;
+    }
+    .top-info-wrap .d-box p.info {
+        font-size:12px;
+    }
+}
+
+@media screen and (max-width:900px) {
+    .info-2 {
+        flex-direction: column;
+    }
+    .info-2 .d-box-wrap {
+        margin-bottom:20px;
+    }
+    .info-2 .d-box-wrap:last-child {
+        margin-bottom:0;
+    }
+    .info-2 .remainingWork, .info-2 .perform {
+        width:100%;
+    }
+    .footer .footer-inner .footer-info li::after {
+        display:none;
+    }
+}
+
+@media screen and (max-width:800px) {
+    .board .d-box-inner {
+        height:450px;
+    }
+}
+
+@media screen and (max-width:768px) {
+    .d-wrap {
+        width:100%;
+        padding:3%;
+        border-radius: 0;
+    }
+    .header {
+        padding:10px 0;
+    }
+    .header .header-inner {
+        align-items: center;
+    }
+    .header .header-inner .nav,
+    .header .header-inner .header-right p.logout {
+        display:none;
+    }
+    .header .header-inner .header-right .m_menu_btn {
+        display:block;
+    }
+    .top-info-wrap .flex-between {
+        flex-wrap:wrap;
+    }
+    .top-info-wrap .w-rate-3 {
+        width:48%;
+    }
+    .top-info-wrap .d-box {
+        margin:10px 0;
+    }
+}
+@media screen and (max-width:640px) { 
+    .ct-label.ct-vertical.ct-start,
+    .ct-chart-bar .ct-label.ct-horizontal.ct-end {
+        font-size:11px !important;
+    }
+    .ct-bar {
+        stroke-width:23px !important;
+    }
+    .ct-chart .ct-legend li {
+        font-size:14px;
+        padding-left:19px !important;
+    }
+    .ct-chart .ct-legend li:before {
+        border:1px solid transparent !important;
+    }
+}
+
+@media screen and (max-width:600px) { 
+    p.box-title {
+        font-size:14px;
+        height:36px;
+    }
+    .page-title-wrap {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    h4.page-title {
+        margin-bottom:15px;
+        font-size:17px;
+    }
+    h2.sub-title {
+        font-size:16px;
+        margin-bottom:10px;
+    }
+    .pos_cate a {
+        font-size:12px;
+    }
+    .pos_cate span.arrow {
+        width:14px;
+        height:14px;
+    }
+    .date-select-box {
+        flex-wrap:wrap;
+    }
+    .date-select-box .date {
+        margin:5px 20px 5px 0;
+        width:90px;
+        font-size:14px;
+    }
+    .inner-table tr th {
+        font-size:12px;
+    }
+    .inner-table tr td {
+        font-size:11px;
+    }
+    .safety .inner-table tr th {
+        font-size:13px;
+    }
+    .safety .inner-table tr td {
+        font-size:11px;
+    }
+    .input-wrap .input-box p {
+        font-size:13px;
+    }
+    .graphNum {
+        font-size:11px;
+        width:40px;
+    }
+    .graphNum.progressNum {
+        left:5px;
+    }
+    .graphNum.orderNum {
+        right:5px;
+    }
+    .graphBtn {
+        font-size:12px;
+        left:5px;
+        width:44px;
+    }
+    .graphBtn.progressBtn {
+        right:5px;
+    }
+    .footer .footer-inner .footer-info li {
+        width:100%;
+        margin:3px 0;
+        font-size:13px;
+    }
+    .footer .footer-inner .copyright {
+        font-size:11px;
+        margin-top:10px;
+    }
+    
+}
+
+@media screen and (max-width:400px) { 
+    .inner-table tr th {
+        font-size:11px;
+    }
+    .ct-bar {
+        stroke-width: 15px !important;
+    } 
+}

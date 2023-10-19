@@ -1,0 +1,49 @@
+#enterModal .common-modal__inner .imgBox {
+    margin: 40px 0 20px 0;
+}
+
+#enterModal .common-modal__inner .imgBox svg {
+    font-size: 64px;
+    color: #504b50;
+}
+
+#enterModal .common-modal__inner .deleteCont {
+    font-size: 16px;
+    color: #848484;
+}
+
+#enterModal .common-modal__inner .deleteCont .delSubMessage {
+    margin-top: 7px;
+    font-size: 13px;
+    color: #73b8ff;
+}
+
+#enterModal .common-modal__inner .modalBtnWrap {
+    margin-top: 40px;
+    overflow: hidden;
+}
+
+#enterModal .common-modal__inner .modalBtnWrap .modalBtn {
+    float: left;
+    width: 50%;
+    height: 44px;
+    line-height: 44px;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    margin:0;
+    padding:0;
+    border-radius: 0;
+}
+
+#enterModal .common-modal__inner .modalBtnWrap .modalBtn--yes {
+    background: #05ca9c;
+}
+
+#enterModal .common-modal__inner .modalBtnWrap .modalBtn--no {
+    background: #818592;
+}
+
+#enterModal .common-modal__inner .modalBtnWrap .modalBtn:hover {
+    opacity: 0.7;
+}

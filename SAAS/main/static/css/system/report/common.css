@@ -1,0 +1,130 @@
+/* Chart */
+.graph_tab ul {
+    text-align: right;
+    margin: 0;
+    margin-bottom: -1px;
+}
+
+.graph_tab ul li {
+    display: inline-block;
+    vertical-align: middle;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+    border-bottom: 1px solid white;
+    padding: 10px 20px;
+    cursor: pointer;
+    background: #f3f3f3;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    text-align: center;
+}
+
+.graph_tab li.act {
+    background: white;
+    font-weight: 600;
+}
+
+.graph_wrap {
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+    margin-bottom: 40px;
+}
+
+.graph_box {
+    box-sizing: border-box;
+    padding: 20px;
+    overflow: hidden;
+    display: none;
+}
+
+.graph_box .graph_title {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.graph_box .graph {
+    display: none;
+    width: 100%;
+    height: 600px;
+    float: left;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+}
+
+.graph_box .left-graph {
+    width: 900px;
+}
+
+.graph_box .graph_info {
+    float: right;
+    width: calc(100% - 950px);
+}
+.graph_box .graph_info table {
+    width: 100%;
+    border: 1px solid #ddd;
+    border-collapse: collapse;
+}
+
+.graph_box .graph_info table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.graph_box .graph_info table tr th,
+.graph_box .graph_info table tr td {
+    border-top:1px solid #ddd;
+    box-sizing: border-box;
+    font-size: 15px;
+    padding: 12px 7px;
+    text-align: center;
+}
+
+.graph_box .graph_info table tr th {
+    background: #f7f7f7;
+}
+
+.graph_box .graph_info table tr td span {
+    color: #fd1c1c;
+}
+
+/* Table */
+.table tr th,
+.table tr td {
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+/* The Modal (background) */
+.searchModal {
+    display:block;
+    visibility: hidden;
+}
+
+/* Modal Content/Box */
+.search-modal-content {
+    width: 750px;
+    max-height: 650px;
+}
+#modal table {
+    width: 100%;
+    margin: 0 auto;
+    border: 1px solid #ddd;
+    border-collapse: collapse;
+}
+#modal table tr th,
+#modal table tr td{
+    border :none;
+    border-top: 1px solid #ddd;
+    padding: 8px;
+}
+.tablesorter-scroller-header, 
+.tablesorter-scroller-footer {
+    overflow: initial;
+}
+#scroll-div{
+    width: 100%;
+    max-height: 550px !important;
+    overflow-y: auto !important;
+}

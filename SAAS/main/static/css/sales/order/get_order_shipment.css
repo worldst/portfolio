@@ -1,0 +1,92 @@
+.photo_wrap {
+    width:100%;
+    height:600px;
+}
+.photo_main {
+    width:70%;
+    height:100%;
+    border:1px solid #ececec;
+}
+.photo_main .main_title {
+    width:100%;
+    height:40px;
+    font-size:15px;
+    border-bottom:1px solid #ececec;
+    background: #edf3ff;
+    color: #687fb9;
+    position: relative;
+}
+.photo_main .main_title .file_download_btn {
+    position: absolute;
+    right: 15px;
+    top: calc(50% - 14px);
+    height: 28px;
+    padding: 0 20px;
+    background: #db417a;
+    color: white;
+    border-radius: 3px;
+    font-size: 14px;
+}
+.photo_main .main_title .file_download_btn:hover {
+    opacity: 0.7;
+}
+.photo_main .main_img {
+    padding:15px;
+    height:calc(100% - 40px);
+}
+.photo_main .main_img img {
+    max-width:100%;
+    max-height:100%;
+}
+.photo_sub {
+    width:30%;
+    height:100%;
+    border:1px solid #ececec;
+    border-left:none;
+    padding:15px;
+    overflow-y: auto;
+}
+.photo_sub .sub_img {
+    padding:20px 15px;
+    border:1px solid #dbdbdb;
+    border-radius: 3px;
+    box-shadow: 0 0 5px #dfdfdf;
+    background-color: #f7f7f7;
+    cursor: pointer;
+}
+.photo_sub .sub_img + .sub_img {
+    margin-top:20px;
+}
+.photo_sub .sub_img.act {
+    border: 1px solid #90b6ef;
+    background: #779aff14;
+}
+.photo_sub .sub_img .ext {
+    flex-shrink: 0;
+    font-size:14px;
+    font-weight: 600;
+    border: 2px solid #63d390;
+    border-radius: 100px;
+    color: #63d390;
+    width: 50px;
+    height: 50px;
+}
+.photo_sub .sub_img .info {
+    margin-left:8px;
+    width: calc(100% - 48px);
+}
+.photo_sub .sub_img .info .name {
+    font-weight: 600;
+    font-size:17px;
+    overflow:hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.photo_sub .sub_img .info .created_dt {
+    margin-top:3px;
+    font-size:14px;
+    color:#929292;
+    overflow:hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>간트 차트</title>
+    <link rel="stylesheet" href="css/jquery-ui.min.css">
+    <link rel="stylesheet" href="css/간트차트.css">
+    <script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/moment-with-locales.js"></script>
+    <script src="js/moment.min.js"></script>
+    <script src="js/base.js"></script>
+    <script src="js/간트차트.js"></script>
+</head>
+
+<body>
+    <div class="g_wrap">
+        <p class="g_title">Gantt Chart</p>
+        <div class="g_body">
+            <!-- 좌측 -->
+            <div class="g_box workList">
+                <div class="row">
+                    <div class="cell title">이름</div>
+                    <div class="cell title">담당</div>
+                    <div class="cell title">진행상태</div>
+                </div>
+
+                <div class="row">
+                    <div class="cont"><span class="cate_1">S/W 클래스화 작업</span></div>
+                    <div class="cont"><span class="cate_2">생기원</span></div>
+                    <div class="cont"><span class="cate_3 rounded start">진행중</span></div>
+                </div>
+                <div class="row">
+                    <div class="cont"><span class="cate_1">인식시스템(모바일 버전)</span></div>
+                    <div class="cont"><span class="cate_2">공동</span></div>
+                    <div class="cont"><span class="cate_3 rounded wait">대기</span></div>
+                </div>
+                <div class="row">
+                    <div class="cont"><span class="cate_1">Train 작업(학습)</span></div>
+                    <div class="cont"><span class="cate_2">생기원</span></div>
+                    <div class="cont"><span class="cate_3 rounded wait">대기</span></div>
+                </div>
+                <div class="row">
+                    <div class="cont"><span class="cate_1">라벨링작업</span></div>
+                    <div class="cont"><span class="cate_2">동광사우</span></div>
+                    <div class="cont"><span class="cate_3 rounded comp">완료</span></div>
+                </div>
+                <div class="row">
+                    <div class="cont"><span class="cate_1">정량목표 달성 작업</span></div>
+                    <div class="cont"><span class="cate_2">공동</span></div>
+                    <div class="cont"><span class="cate_3 rounded wait">대기</span></div>
+                </div>
+            </div>
+
+            <!-- 우측 -->
+            <div class="g_box calendar">
+                <div class="g_calendar">
+                    <div class="fullYearBox">
+                        <p class="fullYear"><span class="year"></span>년 <span class="month"></span>월</p>
+                    </div>
+                    <div class="row day" style="height:35px;">
+                        <!-- 스크립트 -->
+                    </div>
+                    
+                    <div class="row">
+                        <p class="bar" data-start="2021-10-08" data-end="2021-10-12"><span>동광사우</span></p>
+                    </div>
+                    <div class="row">
+                        <p class="bar" data-start="2022-02-05" data-end="2022-02-20"><span>케밸 프로젝트</span></p>
+                    </div>
+                    <div class="row">
+                        <p class="bar" data-start="2021-10-06" data-end="2021-10-10"><span>유원</span></p>
+                    </div>
+                    <div class="row">
+                        <p class="bar" data-start="2021-12-01" data-end="2022-01-06"><span>동명전기</span></p>
+                    </div>
+                    <div class="row">
+                        <p class="bar" data-start="2021-10-02" data-end="2021-10-10"><span>진성로프</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

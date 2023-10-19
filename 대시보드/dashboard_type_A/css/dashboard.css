@@ -1,0 +1,244 @@
+@charset "utf-8";
+
+/* 메인 상단 정보 */
+.top-info-wrap .d-box-inner {
+    padding:10px 20px;
+    background-color: rgba(199, 219, 255, 0.32);
+    border: 1px solid #c5d5fb;
+}
+.top-info-wrap {
+    padding:5px 0;
+}
+.top-info-wrap .d-box p {
+    margin:5px 0;
+    font-size:16px;
+}
+.top-info-wrap .d-box p.info-title {
+    font-weight: bold;
+    font-size:16px;
+    color:#405398;
+}
+.top-info-wrap .d-box p.info {
+    text-align: right;
+    font-size:15px;
+}
+/* 메인 상단 정보 색상 기본값 */
+.top-info-wrap .d-box p.info span {
+    color:#5f88ff;
+    font-weight: 600;
+    font-size:19px;
+}
+/* 현재시간 */
+.top-info-wrap .d-box p.info span#currentHour {
+    color:#5f88ff;
+}
+.top-info-wrap .d-box p.info span#currentMin {
+    color:#5f88ff;
+}
+.top-info-wrap .d-box p.info span#currentSec {
+    color:#5f88ff;
+}
+/* 조립 작업 수량 */
+.top-info-wrap .d-box p.info span#assemblyNum {
+    color:#5f88ff;
+}
+/* 용접 작업 수량 */
+.top-info-wrap .d-box p.info span#weldingNum {
+    color:#5f88ff;
+}
+/* 현재 작업 인원 */
+.top-info-wrap .d-box p.info span#workerNum {
+    color:#5f88ff;
+}
+
+
+/* 메인 기간설정 */
+.date-select-box {
+    box-sizing: border-box;
+    display:flex;
+    align-items:center;
+    justify-content: flex-start;
+}
+.date-select-box .date {
+    float:left;
+    width:100px;
+    padding:15px 0;
+    box-sizing:border-box;
+    text-align: center;
+    background:white;
+    font-size:15px;
+    font-weight: 600;
+    cursor:pointer;
+    margin-right:20px;
+    border-radius: 50px;
+    color:#525e6b;
+}
+.date-select-box .date.act {
+    background:rgba(21, 165, 118, 0.8);
+    color:white;
+    transition: all 0.5s;
+}
+.board .d-box-inner {
+    height:673px;
+}
+/* 알림현황판 Chart */
+.chart-box {
+    width:800px;
+    height:100%;
+}
+.ct-chart { 
+    width: 100%;
+    height: calc(100% - 24px);
+}
+#chartdiv {
+    width: 100%;
+    height: 100%;
+    font-size:10px;
+    font-weight: 600;
+}
+
+/* Box Title Customizing */
+p.boardTitle {
+    background:rgba(0, 55, 255, 0.56);
+}
+p.safetyTitle {
+    background:rgba(0, 162, 35, 0.6);
+}
+p.remainingWorkTitle {
+    background:rgba(255, 0, 94, 0.56);
+}
+p.performTitle {
+    background:rgba(49, 6, 220, 0.5686274509803921);
+}
+
+/* 세이프티 발주점검 */
+.safety {
+    width:calc(100% - 850px); /* (-)값은 알림현황판 가로크기(830) + 여백(20) */
+}
+.input-wrap {
+    display:flex;
+    align-items:center;
+}
+.input-wrap .input-box {
+    padding:5px 3px;
+    width:40%;
+}
+.input-wrap .input-box:nth-child(2) {
+    width:20%;
+}
+.input-wrap .input-box input {
+    width:100%;
+    height:40px;
+    border-radius: 4px;
+    padding:10px;
+    font-size:20px;
+    font-family: 'NeoDunggeunmo';
+    text-align: right;
+}
+.input-wrap .input-box p {
+    text-align: center;
+    font-size:15px;
+    font-weight: bold;
+}
+.circle-btn-wrap {
+    display:flex;
+    align-items:center;
+    justify-content: space-between;
+}
+.circle-btn-wrap .circle-btn-box {
+    width:48%;
+    background:linear-gradient(to bottom, #6f6fff 50%, #4455d4 50%);
+    border-radius: 4px;
+    text-align: center;
+    cursor:pointer;
+}
+.circle-btn-wrap .circle-btn-box:nth-of-type(2) {
+    background:linear-gradient(to bottom, #42bfa8 50%, #2c9a86 50%);
+}
+.circle-btn-wrap .circle-btn-box:last-of-type {
+    background:linear-gradient(to bottom, #da6a6a 50%, #b13b3b 50%);
+}
+.circle-btn-wrap .circle-btn-box:hover {
+    opacity: 0.8;
+}
+.circle-btn-wrap .circle-btn-box p {
+    color:white;
+    font-size:17px;
+    font-weight: 600;
+    display:inline-block;
+    width:100%;
+    padding:12px 0;
+}
+.tdGraphBackground {
+    background:#ececec;
+    width:100%;
+    height:36px;
+    position: relative;
+}
+.graphNum {
+    position: absolute;
+    top:calc(50% - 13px);
+    width:44px;
+    height:26px;
+    line-height: 26px;
+    z-index:888;
+    font-size:12px;
+    background:rgba(14, 14, 14, 0.72);
+    color:white;
+    border-radius:20px;
+    overflow:hidden;
+    white-space: nowrap;
+}
+.graphNum.orderNum {
+    right:10px;
+}
+.graphNum.progressNum {
+    left:10px;
+}
+.tdGraph {
+    width:0%;
+    height:100%;
+    background:linear-gradient(to right, #9dc4ff, #872cff);
+    position: absolute;
+    top:0;
+    right:0;
+    z-index:887;
+    text-indent: -9999px;
+}
+.tdGraph.colorChange {
+    background:linear-gradient(to right, #ff9d9d, #bd2673);
+    right:initial;
+    left:0;
+}
+.graphBtn {
+    position: absolute;
+    z-index:888;
+    left:10px;
+    top:calc(50% - 13px);
+    width:50px;
+    height:26px;
+    line-height:26px;
+    background:linear-gradient(to bottom, #ccaa31, #6f4a07);
+    text-align: center;
+    font-size:14px;
+    color:white;
+    cursor:pointer;
+    border-radius: 4px;
+    opacity: 0.6;
+}
+.graphBtn.progressBtn {
+    left:initial;
+    right:10px;
+}
+.safety .inner-table tr th {
+    font-size:14px;
+}
+.safety .inner-table tr td {
+    padding:5px 0;
+    font-size:13px;
+}
+
+/* 오늘 작업 남은 호기, 생산실적 */
+.remainingWork, .perform {
+    width:49%;
+}

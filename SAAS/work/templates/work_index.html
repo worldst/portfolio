@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}
+<div class="title_box" data-cate="2,2,1">
+    <i class="fa-solid fa-qrcode"></i><span class="title">작업 검색</span>
+    <div class="path_box"></div>
+</div>
+{% endblock %}
+{% load static %}
+{% load humanize %}
+{% block contents %}
+{% csrf_token %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/work/work_index.css' %}">
+<script type="text/javascript" src="{% static 'js/work/work_index.js' %}"></script>
+
+<div class="content edit-form">
+    <div class="edit-form__inner" id="base">
+        <div class="form-title flex-top-between">
+            <div class="title">수주번호 검색</div>
+            <div class="req_txt">기준 설정된 공정 및 설비 정보가 자동으로 기입됩니다.</div>
+        </div>
+        <div class="data-form">
+            <div class="form-group" style="width:100%;">
+                <div class="form-group__title">
+                    <div class="title">수주번호 (QR)</div>
+                </div>
+                <div class="form-group__input">
+                    <input type="text" name="search_qrcode" class="data-input qr" placeholder="해당 칸을 클릭한 후, 스캐너로 QR 코드를 스캔해주세요.">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 작업설정 모달창 -->
+<div id="setWorkProcessModal" class="common-modal edit-modal">
+    <div class="common-modal__inner">
+        <div class="edit-modal__title">
+            <span class="title">작업 설정</span>
+            <div class="modal-close flex-center" onclick="closeModal(this);"><i class="fa-solid fa-xmark"></i></div>
+        </div>
+        <div class="edit-modal__body edit-form">
+            <div class="data-form">
+                <div class="form-group" style="width:100%;">
+                    <div class="form-group__title flex">
+                        <div class="title">공정 설정</div>
+                    </div>
+                    <div class="form-group__input">
+                        <select name="instruction_process" class="select2_form">
+                            <!-- 스크립트 -->
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="data-form">
+                <div class="form-group" style="width:100%;">
+                    <div class="form-group__title flex">
+                        <div class="title">설비 설정</div>
+                    </div>
+                    <div class="form-group__input">
+                        <select name="instruction_equipment" class="select2_form">
+                            <!-- 스크립트 -->
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modalBtnWrap flex-between">
+            <div class="left"></div>
+            <div class="right">
+                <span class="modalBtn modalBtn--setting" onclick="setWorkProcess();">등록</span>
+                <span class="modalBtn modalBtn--close" onclick="closeModal(this);">닫기</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

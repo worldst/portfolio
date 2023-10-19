@@ -1,0 +1,383 @@
+{% extends "base.html" %}
+{% block title %}
+<div class="title_box" data-cate="2,2,1">
+    <i class="fa-solid fa-screwdriver-wrench"></i><span class="title">[{{order.num}}] 작업 상세 정보</span>
+    <div class="path_box"></div>
+</div>
+{% endblock %}
+{% load static %}
+{% load humanize %}
+{% load mathfilters %}
+{% block contents %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/sales/order/add_order.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/work/work_order_process.css' %}">
+<script type="text/javascript" src="{% static 'js/work/work_order_process.js' %}"></script>
+
+<input type="hidden" name="object_id" value="{{ object.id }}">
+<input type="hidden" name="object_process" value="{{ object.process }}">
+<input type="hidden" name="object_worker" value="{{ object.worker.id }}">
+<input type="hidden" name="last_equipment_id" value="{{ object.last_equipment.id }}">
+
+{% csrf_token %}
+<div class="contents__info flex">
+    {% if object.status == 'WAIT' %}
+    <div class="status wait"><i class="fa-solid fa-share-nodes"></i> 작업 상태 · 대기</div>
+    {% elif object.status == 'START' %}
+    <div class="status start"><i class="fa-solid fa-share-nodes"></i> 작업 상태 · 진행중</div>
+    {% elif object.status == 'PAUSE' %}
+    <div class="status pause"><i class="fa-solid fa-share-nodes"></i> 작업 상태 · 일시정지</div>
+    {% elif object.status == 'COMPLT' %}
+    <div class="status complt"><i class="fa-solid fa-share-nodes"></i> 작업 상태 · 완료</div>
+    {% endif %}
+
+    <div class="status act"><i class="fa-solid fa-fire"></i> 현재 공정 · {{ object.process }}</div>
+
+    {% if object.last_equipment %}
+    <div class="status act"><i class="fa-solid fa-bolt"></i> 최근 사용 설비 · {{ object.last_equipment.name }}</div>
+    {% else %}
+    <div class="status wait"><i class="fa-solid fa-bolt"></i> 최근 사용 설비 · 없음</div>
+    {% endif %}
+
+    {% if object.worker %}
+    <div class="status act"><i class="fa-solid fa-user-gear"></i> 현재 작업자 · {{ object.worker.name }}</div>
+    {% else %}
+    <div class="status wait"><i class="fa-solid fa-user-gear"></i> 현재 작업자 · 없음</div>
+    {% endif %}
+</div>
+
+<div class="content edit-form work">
+    <div class="form-title flex-top-between">
+        <div class="title">작업 제어</div>
+    </div>
+    <div class="work_btn_box flex-between">
+        {% if object.status == 'WAIT' %}
+        <div class="work_btn start flex-center" onclick="setWorkProcessModalOpen();"><i class="fa-solid fa-play"></i> 시작</div>
+        {% elif object.status == 'START' %}
+        <div class="work_btn pause flex-center" style="width:49%;" onclick="pauseWorkProcessModalOpen();"><i class="fa-solid fa-pause"></i> 일시정지</div>
+        <div class="work_btn complt flex-center" style="width:49%;" onclick="compltWorkProcessModalOpen();"><i class="fa-solid fa-check"></i> 완료</div>
+        {% elif object.status == 'PAUSE' %}
+        <div class="work_btn start flex-center" onclick="setWorkProcessModalOpen();"><i class="fa-solid fa-play"></i> 재시작</div>
+        {% elif object.status == 'COMPLT' %}
+        <div class="work_btn finish flex-center">이미 완료된 작업입니다</div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="content edit-form">
+    <div class="edit-form__inner" id="base">
+        <div class="form-title flex-top-between">
+            <div class="title">기본 정보</div>
+        </div>
+        <div class="data-form">
+            <div class="form-group" style="width:25%;">
+                <div class="form-group__title">
+                    <div class="title">업체명</div>
+                </div>
+                <div class="form-group__input" id="form_company">
+                    <input type="text" name="company" class="data-input" value="{{ order.company_name }}" disabled>
+                </div>
+            </div>
+            <div class="form-group" style="width:53%;">
+                <div class="form-group__title flex">
+                    <div class="title">프로젝트명</div>
+                </div>
+                <div class="form-group__input">
+                    <input type="text" name="pjt_name" class="data-input" value="{{ order.pjt_name }}" disabled>
+                </div>
+            </div>
+            <div class="form-group" style="width:20%;">
+                <div class="form-group__title flex">
+                    <div class="title">납기 예정 일자</div>
+                </div>
+                <div class="form-group__input">
+                    <div class="input-group">
+                        <input type="text" name="due_date" class="data-input datetimepicker_update" value="{{ order.due_date | date:'Y-m-d' }}" disabled>
+                        <div class="input-group-addon input-group-append">
+                            <div class="input-group-text"><i class="glyphicon glyphicon-calendar"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="data-form">
+            <div class="form-group" style="width:100%;">
+                <div class="form-group__title flex">
+                    <div class="title">메모</div>
+                </div>
+                <div class="form-group__input">
+                    <input type="text" name="memo" class="data-input" value="{{ order.memo }}" disabled>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="edit-form__inner" id="process">
+        <div class="form-title flex-top-between">
+            <div class="title">공정</div>
+            <div class="req_txt">공정을 클릭하면 해당 작업 공정으로 이동됩니다.</div>
+        </div>
+        <div class="process_wrap flex-top">
+            {% for obj in order_process %}
+            {% if obj.is_active == True %}            
+            <div class="process_inner" data-ordering="{{ obj.ordering }}" data-id="{{ obj.id }}" onclick="movePage(this);">
+                {% if obj.status == 'WAIT' %}
+                <div class="status wait flex-center">대기</div>
+                {% elif obj.status == 'START' %}
+                <div class="status start flex-center">시작</div>
+                {% elif obj.status == 'PAUSE' %}
+                <div class="status pause flex-center">정지</div>
+                {% elif obj.status == 'COMPLT' %}
+                <div class="status complt flex-center">완료</div>
+                {% endif %}
+
+                {% if obj.process == object.process %}
+                <input type="checkbox" name="process" id="process_{{ forloop.counter }}" class="hidden" checked disabled>
+                <label class="process_box" for="process_{{ forloop.counter }}">
+                    <p class="process flex-center">{{ obj.process }}</p>
+                    {% if obj.worker %}
+                    <div class="worker act">{{ obj.worker.name }}</div>
+                    {% else %}
+                    <div class="worker">-</div>
+                    {% endif %}
+                </label>
+                {% else %}
+                <input type="checkbox" name="process" id="process_{{ forloop.counter }}" class="hidden" disabled>
+                <label class="process_box" for="process_{{ forloop.counter }}">
+                    <p class="process flex-center">{{ obj.process }}</p>
+                    {% if obj.worker %}
+                    <div class="worker">{{ obj.worker.name }}</div>
+                    {% else %}
+                    <div class="worker">-</div>
+                    {% endif %}
+                </label>
+                {% endif %}                
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="edit-form__inner" id="material">
+        <div class="form-title">
+            <div class="title">자재 및 외주 정보</div>
+        </div>
+        <table class="table edit" id="t_material">
+            <colgroup>
+                <col width="8%"> <!-- 타입 -->
+                <col width="25%"> <!-- 자재/외주명 -->
+                <col width="12%"> <!-- 단가 -->
+                <!-- <col width="9%"> 단위 -->
+                <col width="10%"> <!-- 수량 -->
+                <!-- <col width="14%"> 금액 -->
+                <col width="22%"> <!-- 파일 -->
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>타입</th>
+                    <th>자재/외주명</th>
+                    <!-- <th>단가</th> -->
+                    <th>단위</th>
+                    <th>수량</th>
+                    <!-- <th>금액</th> -->
+                    <th>파일</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if not order_material_outsourcing %}
+                <tr>
+                    <td colspan="5" class="no-data">현재 등록된 데이터가 없습니다.</td>
+                </tr>
+                {% endif %}
+                {% for obj in order_material_outsourcing %}
+                <tr>
+                    <td>
+                        {% if obj.sort == 'material' %}
+                        <input type="text" name="type" class="data-input" value="자재" disabled>
+                        {% else %}
+                        <input type="text" name="type" class="data-input" value="외주" disabled>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <input type="text" name="name" class="data-input" value="{{ obj.name }}" disabled>
+                    </td>
+                    <!-- <td>
+                        <input type="text" name="unit_price" class="data-input txt_right" value="{{ obj.unit_price | intcomma }}" disabled>
+                    </td> -->
+                    <td>
+                        <input type="text" name="unit" class="data-input txt_right" value="{{ obj.unit }}" disabled>
+                    </td>
+                    <td>
+                        <input type="text" name="quantity" class="data-input txt_right" value="{{ obj.cnt | intcomma }}" disabled>
+                    </td>
+                    <!-- <td>
+                        <input type="text" name="amount" class="data-input txt_right" value="{{ obj.price | intcomma }}" disabled>
+                    </td> -->
+                    <td>
+                        <div class="file_box flex-around">
+                            <input type="file" id="material_upload_file_1" class="file_upload etc data" name="material_upload_file">
+                            <input type="text" class="data-input file_url" value="{{ obj.upload_file }}" disabled style="width:100%;">
+                            <!-- <label class="common-btn common-btn--upload" for="material_upload_file_1">찾기</label> -->
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<div class="content edit-form">
+    <div class="form-title flex-top-between">
+        <div class="title">작업 정보</div>
+    </div>
+    <table class="table edit notInput" id="t_record">
+        <colgroup>
+            <col width="11%"> <!-- 공정명 -->
+            <col width="20%"> <!-- 설비명 -->
+            <col width="11%"> <!-- 작업자 -->
+            <col width="16%"> <!-- 시작시간 -->
+            <col width="16%"> <!-- 종료시간 -->
+            <col width="12%"> <!-- 작업시간 -->
+            <col width="14%"> <!-- 정지사유 -->
+        </colgroup>
+        <thead>
+            <tr>
+                <th>공정명</th>
+                <th>설비명</th>
+                <th>작업자</th>
+                <th>시작시간</th>
+                <th>정지/종료시간</th>
+                <th>작업시간</th>
+                <th>정지사유</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if not process_record %}
+            <tr>
+                <td colspan="7" class="no-data">현재 등록된 데이터가 없습니다.</td>
+            </tr>
+            {% endif %}
+            {% for obj in process_record %}
+            <tr>
+                <td>{{ obj.order_process.process }}</td>
+                {% if obj.equipment_name %}
+                <td class="txt_left">{{ obj.equipment_name }}</td>
+                {% else %}
+                <td>-</td>
+                {% endif %}
+                <td>{{ obj.worker.name }}</td>
+                <td>{{ obj.start_dt | date:'Y-m-d H:i:s' }}</td>
+                <td>{{ obj.end_dt | date:'Y-m-d H:i:s' | default:'-' }}</td>
+                <td>{{ obj.lead_time }}</td>
+                <td>{{ obj.reason | default:'-' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- 작업설정 모달창 -->
+<div id="setWorkProcessModal" class="common-modal edit-modal">
+    <div class="common-modal__inner">
+        <div class="edit-modal__title">
+            <span class="title">작업 설정</span>
+            <div class="modal-close flex-center" onclick="closeModal(this);"><i class="fa-solid fa-xmark"></i></div>
+        </div>
+        <div class="edit-modal__body edit-form">
+            <div class="data-form">
+                <div class="form-group" style="width:100%;">
+                    <div class="form-group__title flex">
+                        <div class="title">공정 설정</div>
+                    </div>
+                    <div class="form-group__input">
+                        <input type="text" name="process" class="data-input" value="{{ object.process }}" disabled>
+                    </div>
+                </div>
+            </div>
+            <div class="data-form">
+                <div class="form-group" style="width:100%;">
+                    <div class="form-group__title flex">
+                        <div class="title">설비 설정</div>
+                    </div>
+                    <div class="form-group__input">
+                        <select name="equipment" class="select2_form">
+                            <!-- 스크립트 -->
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="data-form">
+                <div class="form-group" style="width:100%;">
+                    <div class="form-group__title flex">
+                        <div class="title">작업자 설정</div>
+                    </div>
+                    <div class="form-group__input">
+                        <select name="worker" class="select2_form">
+                            <option value="" title="choice">선택</option>
+                            {% for obj in account %}
+                            <option value="{{ obj.id }}">{{ obj.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modalBtnWrap flex-between">
+            <div class="left"></div>
+            <div class="right">
+                <span class="modalBtn modalBtn--setting" onclick="setWorkProcess();">등록</span>
+                <span class="modalBtn modalBtn--close" onclick="closeModal(this);">닫기</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 작업 중지 모달창 -->
+<div id="cancelModal" class="common-modal pauseWorkProcessModal">
+    <input type="hidden" name="ids">
+    <div class="common-modal__inner">
+        <div class="cancelCont">
+            <p class="cancelMessage">아래의 항목 중 <span>정지사유</span>를 선택해주세요.</p>
+        </div>
+        <div class="reasonBox">
+            <div class="radioBox">
+                <input type="radio" name="reason" id="reason_1" class="hidden" checked>
+                <label class="reason" for="reason_1"><i class="fa-solid fa-check"></i> <span>우선 작업 발생</span></label>
+            </div>
+            <div class="radioBox">
+                <input type="radio" name="reason" id="reason_2" class="hidden">
+                <label class="reason" for="reason_2"><i class="fa-solid fa-check"></i> <span>불량</span></label>
+            </div>
+            <div class="radioBox">
+                <input type="radio" name="reason" id="reason_3" class="hidden">
+                <label class="reason" for="reason_3"><i class="fa-solid fa-check"></i> <span>기타</span></label>
+            </div>
+        </div>
+        <div class="modalBtnWrap flex-center">
+            <span class="modalBtn modalBtn--yes" onclick="pauseWorkProcess();">선택</span>
+            <span class="modalBtn modalBtn--no" onclick="closeModal(this);">닫기</span>
+        </div>
+    </div>
+</div>
+
+<!-- 작업 완료 모달창 -->
+<div id="delModal" class="common-modal compltWorkProcessModal">
+    <input type="hidden" name="ids">
+    <div class="common-modal__inner">
+        <div class="imgBox">
+            <i class="fa-solid fa-check-double"></i>
+        </div>
+        <div class="deleteCont">
+            <p class="delMessage">완료 처리하시겠습니까 ?</p>
+            <p class="delSubMessage">이전 상태로 복원이 불가능합니다.</p>
+        </div>
+        <div class="modalBtnWrap">
+            <span class="modalBtn modalBtn--yes" onclick="compltWorkProcess();">예</span>
+            <span class="modalBtn modalBtn--no" onclick="closeModal(this);">아니오</span>
+        </div>
+    </div>
+</div>
+{% endblock %}

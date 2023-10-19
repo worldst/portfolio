@@ -1,0 +1,37 @@
+.form-control {
+    margin-top:7px;
+    font-weight: normal;
+}
+.errorlist {
+    margin:5px 0 15px 0;
+}
+
+#id_type {
+    align-items: center;
+    justify-content: flex-start;
+    margin:7px 0 0 0;
+    padding:0;
+}
+#id_type li {
+    list-style:none;
+}
+#id_type li label {
+    display:flex;
+    align-items: center;
+    cursor:pointer;
+    padding:10px 15px;
+    box-sizing: border-box;
+    border:1px solid #cecece;
+    border-radius: 4px;
+    font-weight: normal;
+    color:#8e8e8e;
+}
+#id_type li label.act {
+    border:2px solid #4956ff;
+    color:#4956ff;
+    font-weight: bold;
+}
+#id_type li label input {
+    margin:0 5px 0 0;
+    display:none;
+}

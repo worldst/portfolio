@@ -1,0 +1,16 @@
+#filterSearchModal .form-group__inner#status .radioBox label {
+    width:100px;
+}
+
+td .process_box {
+    width:100%;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+td .process_box .process {
+    background-color: #5b5a69;
+    color: white;
+    padding: 6px 15px;
+    border-radius: 3px;
+    font-size: 13px;
+}

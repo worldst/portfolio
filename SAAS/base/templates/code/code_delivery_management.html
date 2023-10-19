@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}
+<div class="title_box" data-cate="5,3,3">
+    <i class="far fa-edit"></i><span class="title">납품 방법 관리</span>
+    <div class="path_box"></div>
+</div>
+{% endblock %}
+{% load static %}
+{% load humanize %}
+{% load mathfilters %}
+{% block contents %}
+{% csrf_token %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/base/code/code_process_management.css' %}">
+<script type="text/javascript" src="{% static 'js/base/code/code_delivery_management.js' %}"></script>
+
+<div class="content code-form edit-form">
+    <div class="code-form__inner" id="base">
+        <div class="form-title flex-top-between">
+            <div class="title">납품 방법 입력</div>
+            <div class="req_txt">최대 10개까지 등록이 가능합니다.</div>
+        </div>
+        <div class="code_wrap data-form flex-between">
+            <!-- 스크립트 -->
+        </div>
+    </div>
+</div>
+{% endblock %}

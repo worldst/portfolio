@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/BOM_동적.css">
+    <link rel="stylesheet" href="css/jquery-ui.min.css">
+    <script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/jquery.ui.touch-punch.min.js"></script>
+    <script src="js/moment-with-locales.js"></script>
+    <script src="js/moment.min.js"></script>
+    <script src="js/base.js"></script>
+    <script src="js/BOM_동적.js"></script>
+</head>
+
+<body>
+    <input type="hidden" name="tr_length">
+    <input type="hidden" name="drag_id">
+    <input type="hidden" name="drag_level">
+    <input type="hidden" name="drop_id">
+    <input type="hidden" name="drop_level">
+
+    <!-- 변경 내역 아이콘 -->
+    <div class="fixed_button">
+        <div class="icon">
+            <img src="img/note.png" alt="메모">
+        </div>
+        <div class="title">변경 내역</div>
+    </div>
+
+    <!-- 변경 내역 리스트 -->
+    <div class="record_box">
+        <div class="record_title">
+            <p>변경 내역</p>
+            <span class="record_close"><img src="img/close.png" alt="닫기"></span>
+        </div>
+        <div class="record_body">
+            <div class="no_data">변경된 내역이 존재하지 않습니다.</div>
+        </div>
+    </div>
+
+    <!-- 수량 입력 알림 -->
+    <div class="modal_bg selectedInputModal">
+        <div class="modal_container">
+            <div class="modal_header">
+                <div class="modal_title">알림</div>
+                <div class="top_img"><img src="img/alert.png" alt="알림"></div>
+                <div class="modal_subtitle">수량을 변경하시겠습니까?</div>
+                <div class="modal_subtitle_cont">'예' 클릭 시 다음 단계로 이동합니다.</div>
+            </div>
+            <div class="modal_body">
+
+            </div>
+            <div class="btn_wrap">
+                <div class="modal_btn btn_cancel" onclick="selectedInput('cancel');">아니오</div>
+                <div class="modal_btn btn_success" onclick="selectedInput('success');">예</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 수량 입력 -->
+    <div class="modal_bg inputQuantityModal">
+        <div class="modal_container">
+            <div class="modal_header">
+                <div class="modal_title">수량 입력</div>
+            </div>
+            <div class="modal_body">
+                <table class="modal_table">
+                    <colgroup>
+                        <col width="14%">
+                        <col width="18%">
+                        <col width="32%">
+                        <col width="36%">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>수량</th>
+                            <th>도면번호</th>
+                            <th>품명</th>
+                            <th>규격</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- 스크립트 -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="btn_wrap">
+                <div class="modal_btn btn_cancel" onclick="selectedInput('cancel');">취소</div>
+                <div class="modal_btn btn_success" onclick="inputQuantity();">확인</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 변경 완료 안내 모달 -->
+    <div class="success_box">
+        <!-- 스크립트 -->
+    </div>
+
+    <!-- 경고창 모달 -->
+    <div class="modal_bg errorModal">
+        <div class="modal_container">
+            <div class="modal_header">
+                <div class="modal_title">경고</div>
+                <div class="top_img"><img src="img/warning.png" alt="경고"></div>
+                <div class="modal_subtitle">해당 품목의 하위품목으로는 이동이 불가합니다.</div>
+            </div>
+            <div class="modal_body">
+    
+            </div>
+            <div class="btn_wrap">
+                <div class="modal_btn btn_success" onclick="closeModal();">확인</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOM 등록 -->
+    <div class="modal_bg addDataModal">
+        <div class="modal_container">
+            <div class="modal_header">
+                <div class="modal_title">하위 품목 등록</div>
+            </div>
+            <div class="modal_body">
+                <div class="parent_info">
+                    <input type="hidden" name="p_id">
+                    <input type="hidden" name="p_level">
+                    <div class="title">상위 품목 정보</div>
+                    <div class="body">
+                        <div class="flex">
+                            <span class="p_title">수량</span>
+                            <span class="quantity">-</span>
+                        </div>
+                        <div class="flex">
+                            <span class="p_title">도면번호</span>
+                            <span class="drawing_number">-</span>
+                        </div>
+                        <div class="flex">
+                            <span class="p_title">품명</span>
+                            <span class="name">-</span>
+                        </div>
+                        <div class="flex">
+                            <span class="p_title">규격</span>
+                            <span class="spec">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="child_info">
+                    <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                        <div class="form_box" style="width:36%;">
+                            <p class="title">수량</p>
+                            <input type="text" name="quantity" class="form-control fixed_num alignRight">
+                        </div>
+                        <div class="form_box" style="width:60%;">
+                            <p class="title">도면번호</p>
+                            <input type="text" name="drawing_number" class="form-control alignLeft">
+                        </div>
+                    </div>
+                    <div class="form_box">
+                        <p class="title">품명</p>
+                        <input type="text" name="name" class="form-control alignLeft">
+                    </div>
+                    <div class="form_box">
+                        <p class="title">규격</p>
+                        <input type="text" name="spec" class="form-control alignLeft">
+                    </div>
+                </div>
+            </div>
+
+            <div class="btn_wrap">
+                <div class="modal_btn btn_cancel" onclick="closeModal();">취소</div>
+                <div class="modal_btn btn_success" onclick="addData();">확인</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOM 삭제 알림 -->
+    <div class="modal_bg delDataModal">
+        <input type="hidden" name="p_id">
+        <input type="hidden" name="p_level">
+        <input type="hidden" name="p_drawing_number">
+        <input type="hidden" name="p_name">
+        <div class="modal_container">
+            <div class="modal_header">
+                <div class="modal_title">알림</div>
+                <div class="top_img"><img src="img/alert.png" alt="알림"></div>
+                <div class="modal_subtitle">품목을 삭제하시겠습니까?</div>
+                <div class="modal_subtitle_cont">해당 품목의 하위 품목이 모두 삭제됩니다.</div>
+            </div>
+            <div class="modal_body">
+    
+            </div>
+            <div class="btn_wrap">
+                <div class="modal_btn btn_cancel" onclick="closeModal();">아니오</div>
+                <div class="modal_btn btn_success" onclick="delData();">예</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 본문 시작 -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col col-lg-12 text-center">
+                <h1>P000502 상세정보</h1>
+            </div>
+        </div>
+
+        <input type="hidden" name="drawing_number" value="{{ object.id }}">
+
+        <div class="row">
+            <div class="col col-lg-12 col-lg-offset-0 col-md-12 col-md-offset-0 col-sm-12 col-sm-offset-0">
+                <div class="wrap">
+                    <div class="version-2">
+                        <div class="row-scroll top">
+                            <div class="scroll"></div>
+                        </div>
+                        <div class="row-scroll bot">
+                            <div class="detail-wrap">
+                                <!-- Script 제어 -->
+                            </div>
+                        </div>
+                    </div> <!-- // version-2 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <table class="hidden">
+        <thead>
+            <tr>
+                <th>수량</th>
+                <th>도면번호</th>
+                <th>품명</th>
+                <th>규격</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <tr data-level="0" data-id="1560">
+                <td>1</td>
+                <td>P000502</td>
+                <td class="alignLeft">VIBRATOR</td>
+                <td class="alignLeft">CVM-75</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1563">
+                <td>1</td>
+                <td>C003506</td>
+                <td class="alignLeft">Gear Cover</td>
+                <td class="alignLeft">CVM35(Black)</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1564">
+                <td>1</td>
+                <td>C003619</td>
+                <td class="alignLeft">Inner Cover</td>
+                <td class="alignLeft">CVM75(Black)</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1566">
+                <td>1</td>
+                <td>C003701</td>
+                <td class="alignLeft">Housing</td>
+                <td class="alignLeft">6A(적색)</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1567">
+                <td>1</td>
+                <td>C004803</td>
+                <td class="alignLeft">Inner Housing</td>
+                <td class="alignLeft">CSN-N6+GF30(신형)</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1565">
+                <td>1</td>
+                <td>C004904</td>
+                <td class="alignLeft">Fan Guide</td>
+                <td class="alignLeft">12A,CM(N6+GF30)</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1568">
+                <td>1</td>
+                <td>C005402</td>
+                <td class="alignLeft">Switch Cover</td>
+                <td class="alignLeft">CSN,CM(신형)</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1569">
+                <td>1</td>
+                <td>C006201</td>
+                <td class="alignLeft">Cable Gland</td>
+                <td class="alignLeft">6A-Φ11xΦ26x68</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1570">
+                <td>1</td>
+                <td>C006723</td>
+                <td class="alignLeft">Spindle</td>
+                <td class="alignLeft">CVM75-Φ24x79.5</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1571">
+                <td>1</td>
+                <td>C006723</td>
+                <td class="alignLeft">Spindle(A)</td>
+                <td class="alignLeft">35-Φ22xL20xM16xP1.5</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1572">
+                <td>1</td>
+                <td>C006905</td>
+                <td class="alignLeft">First Gear</td>
+                <td class="alignLeft">75-Φ46.03xΦ15x12.5</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1573">
+                <td>1</td>
+                <td>C011601</td>
+                <td class="alignLeft">Change Lever</td>
+                <td class="alignLeft">35-Φ11x109x45C</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1574">
+                <td>1</td>
+                <td>C012402</td>
+                <td class="alignLeft">Leg Assy</td>
+                <td class="alignLeft">75-Ø16x300x255</td>
+            </tr>
+
+
+            <tr data-level="2" data-id="1633">
+                <td>2</td>
+                <td>C003306</td>
+                <td class="alignLeft">Leg Bending Bar</td>
+                <td class="alignLeft">75-Ø16x300x255</td>
+            </tr>
+
+
+            <tr data-level="2" data-id="1634">
+                <td>1</td>
+                <td>C003306</td>
+                <td class="alignLeft">Leg Plate</td>
+                <td class="alignLeft">75-110x22xT5</td>
+            </tr>
+
+
+
+
+            <tr data-level="1" data-id="1575">
+                <td>2</td>
+                <td>C012502</td>
+                <td class="alignLeft">Brush Holder</td>
+                <td class="alignLeft">6A-7x17</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1576">
+                <td>2</td>
+                <td>C012602</td>
+                <td class="alignLeft">Brush Cap</td>
+                <td class="alignLeft">CSN-6A</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1577">
+                <td>4</td>
+                <td>C012701</td>
+                <td class="alignLeft">Rubber Cap</td>
+                <td class="alignLeft">CVM35-Φ13</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1578">
+                <td>1</td>
+                <td>C013402</td>
+                <td class="alignLeft">Switch Cover(A)</td>
+                <td class="alignLeft">CSN-6A(Sylicon)</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1579">
+                <td>2</td>
+                <td>C013402</td>
+                <td class="alignLeft">Stop Plate</td>
+                <td class="alignLeft">CSN-6A</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1580">
+                <td>1</td>
+                <td>C013601</td>
+                <td class="alignLeft">Insulation Paper</td>
+                <td class="alignLeft">68x63.5xT0.25</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1581">
+                <td>1</td>
+                <td>C014134</td>
+                <td class="alignLeft">Packing Box</td>
+                <td class="alignLeft">75-370x190x250</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1582">
+                <td>1</td>
+                <td>C014207</td>
+                <td class="alignLeft">Ball Bearing</td>
+                <td class="alignLeft">6201 ZZ (KBC)</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1583">
+                <td>1</td>
+                <td>C014208</td>
+                <td class="alignLeft">Ball Bearing</td>
+                <td class="alignLeft">6202 ZZ (KBC)</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1584">
+                <td>1</td>
+                <td>C014210</td>
+                <td class="alignLeft">Ball Bearing</td>
+                <td class="alignLeft">6300 ZZ (KBC)</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1585">
+                <td>1</td>
+                <td>C014231</td>
+                <td class="alignLeft">Ball Bearing</td>
+                <td class="alignLeft">6304 DDCM (KBC)</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1586">
+                <td>1</td>
+                <td>C014811</td>
+                <td class="alignLeft">Feather Key</td>
+                <td class="alignLeft">5x5x10x2R</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1587">
+                <td>1</td>
+                <td>C014904</td>
+                <td class="alignLeft">Spring</td>
+                <td class="alignLeft">35-Ø1xØ10x14</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1588">
+                <td>2</td>
+                <td>C015401</td>
+                <td class="alignLeft">Hook Spring(A)</td>
+                <td class="alignLeft">35-Ø2xØ5.1xØ8.2x18.5</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1589">
+                <td>2</td>
+                <td>C015901</td>
+                <td class="alignLeft">+Pan HD MC Screw</td>
+                <td class="alignLeft">M3x8(STS샘스)</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1590">
+                <td>2</td>
+                <td>C015903</td>
+                <td class="alignLeft">+Pan HD MC Screw</td>
+                <td class="alignLeft">M4x16 (P/M)</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1591">
+                <td>1</td>
+                <td>C015905</td>
+                <td class="alignLeft">+Pan HD MC Screw</td>
+                <td class="alignLeft">M5x8 (P/M)</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1592">
+                <td>4</td>
+                <td>C015909</td>
+                <td class="alignLeft">+Pan HD MC Screw</td>
+                <td class="alignLeft">M5x70 천연색</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1593">
+                <td>2</td>
+                <td>C015912</td>
+                <td class="alignLeft">+Pan HD MC Screw</td>
+                <td class="alignLeft">M5x85 천연색</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1594">
+                <td>2</td>
+                <td>C016101</td>
+                <td class="alignLeft">+Pan HD Tapping Screw</td>
+                <td class="alignLeft">M4x12-천연색</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1595">
+                <td>5</td>
+                <td>C016302</td>
+                <td class="alignLeft">Spring Washer</td>
+                <td class="alignLeft">Ø5-천연색</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1596">
+                <td>6</td>
+                <td>C016307</td>
+                <td class="alignLeft">Spring Washer</td>
+                <td class="alignLeft">Ø6-흙착색</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1597">
+                <td>4</td>
+                <td>C016401</td>
+                <td class="alignLeft">Plain Washer</td>
+                <td class="alignLeft">Ø5-천연색</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1598">
+                <td>4</td>
+                <td>C016411</td>
+                <td class="alignLeft">Plain Washer</td>
+                <td class="alignLeft">Ø6-흙착색</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1599">
+                <td>2</td>
+                <td>C016731</td>
+                <td class="alignLeft">Wrench Bolt</td>
+                <td class="alignLeft">M5x12-흙착색</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1600">
+                <td>2</td>
+                <td>C016737</td>
+                <td class="alignLeft">Wrench Bolt</td>
+                <td class="alignLeft">M6x35-흙착색</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1601">
+                <td>4</td>
+                <td>C016737</td>
+                <td class="alignLeft">Wrench Bolt</td>
+                <td class="alignLeft">M6x50-흙착색</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1602">
+                <td>2</td>
+                <td>C016737</td>
+                <td class="alignLeft">Wrench Bolt</td>
+                <td class="alignLeft">M8x20-흙착색</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1603">
+                <td>2</td>
+                <td>C016802</td>
+                <td class="alignLeft">Set Screw</td>
+                <td class="alignLeft">M5x8-흙착색</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1604">
+                <td>2</td>
+                <td>C017705</td>
+                <td class="alignLeft">Carbon Brush</td>
+                <td class="alignLeft">6A-7x17x17-220V</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1605">
+                <td>1</td>
+                <td>C018105</td>
+                <td class="alignLeft">Cord Assy</td>
+                <td class="alignLeft">1.5mm²x3Cx2.6Mx250V</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1607">
+                <td>1</td>
+                <td>C018401</td>
+                <td class="alignLeft">Controller Assy (Noise Filter)</td>
+                <td class="alignLeft">6A-51x62</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1606">
+                <td>1</td>
+                <td>C018502</td>
+                <td class="alignLeft">Switch Assy</td>
+                <td class="alignLeft">10Amper Circuit Breaker-6A</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1608">
+                <td>1</td>
+                <td>C018756</td>
+                <td class="alignLeft">Name Plate</td>
+                <td class="alignLeft">CVM75-220V</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1609">
+                <td>1</td>
+                <td>C018811</td>
+                <td class="alignLeft">Logo</td>
+                <td class="alignLeft">CABEL-80x31</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1610">
+                <td>1</td>
+                <td>C019410</td>
+                <td class="alignLeft">취급설명서</td>
+                <td class="alignLeft">CVM75</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1611">
+                <td>1</td>
+                <td>C019601</td>
+                <td class="alignLeft">어깨끈</td>
+                <td class="alignLeft">CVM-75</td>
+            </tr>
+
+
+            <tr data-level="1" data-id="1561">
+                <td>1</td>
+                <td>SP100101</td>
+                <td class="alignLeft">Armature Assy</td>
+                <td class="alignLeft">CVM75-220V, 50/60Hz</td>
+            </tr>
+
+
+            <tr data-level="2" data-id="1612">
+                <td>1</td>
+                <td>C000106</td>
+                <td class="alignLeft">ARMATURE SHAFT</td>
+                <td class="alignLeft">CVM75</td>
+            </tr>
+
+
+            <tr data-level="2" data-id="1613">
+                <td>1</td>
+                <td>C000202</td>
+                <td class="alignLeft">ARMATURE CORE</td>
+                <td class="alignLeft">75-Φ53.5x16x0.5x50</td>
+            </tr>
+
+
+            <tr data-level="2" data-id="1614">
+                <td>1</td>
+                <td>C001402</td>
+                <td class="alignLeft">COMMUTATOR</td>
+                <td class="alignLeft">6A-32Slot-Φ0.85</td>
+            </tr>
+
+
+            <tr data-level="2" data-id="1615">
+                <td>2</td>
+                <td>C001502</td>
+                <td class="alignLeft">END PLATE</td>
+                <td class="alignLeft">6A-Ø52.5xØ16xT2.4</td>
+            </tr>
+
+
+            <tr data-level="2" data-id="1616">
+                <td>1</td>
+                <td>C001901</td>
+                <td class="alignLeft">SHAFT INSULATOR20</td>
+                <td class="alignLeft">6A-Φ16xΦ18xL20</td>
+            </tr>
+
+
+            <tr data-level="2" data-id="1617">
+                <td>1</td>
+                <td>C002001</td>
+                <td class="alignLeft">SHAFT INSULATOR23</td>
+                <td class="alignLeft">6A-Ø16xØ18xL23</td>
+            </tr>
+
+
+            <tr data-level="2" data-id="1621">
+                <td>1</td>
+                <td>C002302</td>
+                <td class="alignLeft">FAN ASS'Y</td>
+                <td class="alignLeft">6A-Φ95</td>
+            </tr>
+
+
+            <tr data-level="3" data-id="1632">
+                <td>1</td>
+                <td>C002802</td>
+                <td class="alignLeft">FAN BUSH</td>
+                <td class="alignLeft">6A-Φ24xΦ17x14 Bs</td>
+            </tr>
+
+
+
+
+            <tr data-level="2" data-id="1620">
+                <td>1</td>
+                <td>C002401</td>
+                <td class="alignLeft">WEDGE</td>
+                <td class="alignLeft">전기종-1Tx5.9</td>
+            </tr>
+
+
+            <tr data-level="2" data-id="1618">
+                <td>1</td>
+                <td>C002502</td>
+                <td class="alignLeft">SLOT INSULATOR</td>
+                <td class="alignLeft">TK5018 6A-W25xT0.23</td>
+            </tr>
+
+
+            <tr data-level="2" data-id="1619">
+                <td>1</td>
+                <td>C002704</td>
+                <td class="alignLeft">ENAMEL WIRE</td>
+                <td class="alignLeft">Ø0.70 AIEIW</td>
+            </tr>
+
+
+
+
+            <tr data-level="1" data-id="1562">
+                <td>1</td>
+                <td>SP100207</td>
+                <td class="alignLeft">Stator Assy</td>
+                <td class="alignLeft">75-220~230V,50/60㎐</td>
+            </tr>
+
+
+            <tr data-level="2" data-id="1622">
+                <td>1</td>
+                <td>C000303</td>
+                <td class="alignLeft">STATOR CORE</td>
+                <td class="alignLeft">6A-Φ94x54xT0.5xL65</td>
+            </tr>
+
+
+            <tr data-level="2" data-id="1627">
+                <td>1</td>
+                <td>C000502</td>
+                <td class="alignLeft">SILICON TUBE</td>
+                <td class="alignLeft">Φ4</td>
+            </tr>
+
+
+            <tr data-level="2" data-id="1628">
+                <td>4</td>
+                <td>C000601</td>
+                <td class="alignLeft">SPLICE TERMINAL</td>
+                <td class="alignLeft">M2</td>
+            </tr>
+
+
+            <tr data-level="2" data-id="1631">
+                <td>2</td>
+                <td>C000803</td>
+                <td class="alignLeft">SPRING TERMINAL</td>
+                <td class="alignLeft">Φ0.9xΦ4.5xL57</td>
+            </tr>
+
+
+            <tr data-level="2" data-id="1629">
+                <td>2</td>
+                <td>C001101</td>
+                <td class="alignLeft">면TAPE</td>
+                <td class="alignLeft">6A-W19</td>
+            </tr>
+
+
+            <tr data-level="2" data-id="1630">
+                <td>2</td>
+                <td>C001202</td>
+                <td class="alignLeft">CABEL TIES</td>
+                <td class="alignLeft">6A-W3.6xL148</td>
+            </tr>
+
+
+            <tr data-level="2" data-id="1623">
+                <td>1</td>
+                <td>C002506</td>
+                <td class="alignLeft">SLOT INSULATOR</td>
+                <td class="alignLeft">6A-TK5018 T0.24xW100</td>
+            </tr>
+
+
+            <tr data-level="2" data-id="1624">
+                <td>1</td>
+                <td>C002705</td>
+                <td class="alignLeft">ENAMEL WIRE</td>
+                <td class="alignLeft">Ø0.75 AIEIW</td>
+            </tr>
+
+
+            <tr data-level="2" data-id="1625">
+                <td>1</td>
+                <td>C003002</td>
+                <td class="alignLeft">LEAD WIRE(적)</td>
+                <td class="alignLeft">FEB,2.0mm적</td>
+            </tr>
+
+
+            <tr data-level="2" data-id="1626">
+                <td>1</td>
+                <td>C003004</td>
+                <td class="alignLeft">LEAD WIRE(흑)</td>
+                <td class="alignLeft">FEB,2.0mm흑</td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+
+</html>

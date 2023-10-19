@@ -1,0 +1,6 @@
+.contents__inner {
+    width:100%;
+}
+#filterSearchModal .form-group__inner#status .radioBox label {
+    width:100px;
+}

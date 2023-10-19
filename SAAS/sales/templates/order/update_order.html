@@ -1,0 +1,597 @@
+{% extends "base.html" %}
+{% block title %}
+<div class="title_box" data-cate="1,2,2">
+    <i class="far fa-edit"></i><span class="title">[{{object.num}}] 수주 수정</span>
+    <div class="path_box"></div>
+</div>
+{% endblock %}
+{% load static %}
+{% load humanize %}
+{% load mathfilters %}
+{% block contents %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/sales/order/add_order.css' %}">
+<script type="text/javascript" src="{% static 'js/sales/order/get_order.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/sales/order/update_order.js' %}"></script>
+<!-- <script type="text/javascript" src="{% static 'js/tablesorter.js' %}"></script> -->
+
+<input type="hidden" name="object_id" value="{{ object.id }}">
+<input type="hidden" name="object_status" value="{{ object.status }}">
+
+<div class="company_data hidden">
+    {% for obj in company %}
+    <div 
+        data-id="{{ obj.id }}" 
+        data-manager_name="{{ obj.manager_name | default:'' }}" 
+        data-manager_phone="{{ obj.manager_phone | default:'' }}">
+    </div>
+    {% endfor %}
+</div>
+
+<div class="material_data hidden">
+    {% for obj in material %}
+    <div 
+        data-id="{{ obj.id }}"
+        data-unit_price="{{ obj.unit_price | default:0 }}"
+        data-unit="{{ obj.unit | default:'' }}">
+    </div>
+    {% endfor %}
+</div>
+
+<select class="material_option_data hidden">
+    <option value="" title="choice">선택</option>
+    {% for obj in material %}
+    <option value="{{ obj.id }}">{{ obj.name }}</option>
+    {% endfor %}
+</select>
+
+{% csrf_token %}
+<div class="contents__info flex">
+    {% if object.status == 'WAIT' %}
+    <div class="status wait"><i class="fa-solid fa-share-nodes"></i> 수주 · 생산대기</div>
+    {% elif object.status == 'START' %}
+    <div class="status start"><i class="fa-solid fa-share-nodes"></i> 수주 · 생산시작</div>
+    {% elif object.status == 'PART' %}
+    <div class="status part"><i class="fa-solid fa-share-nodes"></i> 수주 · 부분완료</div>
+    {% elif object.status == 'PAUSE' %}
+    <div class="status pause"><i class="fa-solid fa-share-nodes"></i> 수주 · 일시정지</div>
+    {% elif object.status == 'CANCEL' %}
+    <div class="status cancel"><i class="fa-solid fa-share-nodes"></i> 수주 · 수주취소</div>
+    {% elif object.status == 'COMPLT' %}
+    <div class="status complt"><i class="fa-solid fa-share-nodes"></i> 수주 · 수주완료</div>
+    {% endif %}
+
+    {% if object.shipment_status == 'WAIT' %}
+    <div class="status wait"><i class="fa-solid fa-share-nodes"></i> 출하 · 출하대기</div>
+    {% elif object.shipment_status == 'START' %}
+    <div class="status part"><i class="fa-solid fa-share-nodes"></i> 출하 · 부분출하</div>
+    {% elif object.shipment_status == 'COMPLT' %}
+    <div class="status complt"><i class="fa-solid fa-share-nodes"></i> 출하 · 출하완료</div>
+    {% endif %}
+</div>
+
+<div class="content edit-form">
+    <div class="edit-form__inner" id="base">
+        <div class="form-title flex-top-between">
+            <div class="title">기본 정보</div>
+            <div class="req_txt">* 표시된 정보는 필수 사항 입니다.</div>
+        </div>
+        <div class="data-form">
+            <div class="form-group" style="width:10%;">
+                <div class="form-group__title flex">
+                    <div class="title">수출여부 <span class="required-item">*</span></div>
+                </div>
+                <div class="form-group__input">
+                    {% if object.is_export %}
+                    <div class="radio_box">
+                        <div class="radio_inner">
+                            <input type="radio" name="is_export" value="True" id="radio_1" checked>
+                            <label for="radio_1">O</label>
+                        </div>
+                        <div class="radio_inner">
+                            <input type="radio" name="is_export" value="False" id="radio_2">
+                            <label for="radio_2">X</label>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="radio_box">
+                        <div class="radio_inner">
+                            <input type="radio" name="is_export" value="True" id="radio_1">
+                            <label for="radio_1">O</label>
+                        </div>
+                        <div class="radio_inner">
+                            <input type="radio" name="is_export" value="False" id="radio_2" checked>
+                            <label for="radio_2">X</label>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="form-group" style="width:25%;">
+                <div class="form-group__title">
+                    <div class="title">업체명 <span class="required-item">*</span></div>
+                    <div class="label_checkbox">
+                        <input type="checkbox" name="toggle" id="toggle">
+                        <label for="toggle" class="flex">
+                            <i class="fa-solid fa-rotate"></i>
+                            <span class="l_txt">직접입력</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group__input" id="form_company">
+                    <select name="company" class="select2_form select_tag" data-before="{{ object.company.id }}">
+                        <option value="" title="choice">선택</option>
+                        {% for obj in company %}
+                        <option value="{{ obj.id }}">{{ obj.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group__input hidden" id="form_company_txt">
+                    <input type="text" name="company_name" class="data-input">
+                </div>
+            </div>
+            <div class="form-group" style="width:43%;">
+                <div class="form-group__title flex">
+                    <div class="title">프로젝트명 <span class="required-item">*</span></div>
+                </div>
+                <div class="form-group__input">
+                    <input type="text" name="pjt_name" class="data-input" value="{{ object.pjt_name }}">
+                </div>
+            </div>
+            <div class="form-group" style="width:20%;">
+                <div class="form-group__title flex">
+                    <div class="title">수주 일자</div>
+                </div>
+                <div class="form-group__input">
+                    <div class="input-group">
+                        <input type="text" name="registration_date" class="data-input datetimepicker_update" value="{{ object.registration_date | date:'Y-m-d' }}">
+                        <div class="input-group-addon input-group-append">
+                            <div class="input-group-text"><i class="glyphicon glyphicon-calendar"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="data-form">
+            <div class="form-group" style="width:20%;">
+                <div class="form-group__title flex">
+                    <div class="title">접수 담당자</div>
+                </div>
+                <div class="form-group__input">
+                    <select name="account" class="select2_form select_tag" data-before="{{ object.account.id }}">
+                        <option value="" title="choice">선택</option>
+                        {% for obj in account %}
+                        <option value="{{ obj.id }}">{{ obj.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="form-group" style="width:37%;">
+                <div class="form-group__title flex">
+                    <div class="title">주문 특이사항</div>
+                </div>
+                <div class="form-group__input">
+                    <select name="special_note" class="select2_form" multiple="multiple" data-before="{{ object.special_note }}">
+                        {% for obj in code %}
+                        {% if obj.sort == 'special_note' and obj.is_active == True %}
+                        <option value="{{ obj.name }}">{{ obj.name }}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="form-group" style="width:20%;">
+                <div class="form-group__title flex">
+                    <div class="title">납품 방법</div>
+                </div>
+                <div class="form-group__input">
+                    <select name="delivery_method" class="select2_form select_tag" data-before="{{ object.delivery_method }}">
+                        <option value="" title="choice">선택</option>
+                        {% for obj in code %}
+                        {% if obj.sort == 'delivery' and obj.is_active == True %}
+                        <option value="{{ obj.name }}">{{ obj.name }}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="form-group" style="width:20%;">
+                <div class="form-group__title flex">
+                    <div class="title">납기 예정 일자</div>
+                </div>
+                <div class="form-group__input">
+                    <div class="input-group">
+                        <input type="text" name="due_date" class="data-input datetimepicker_update" value="{{ object.due_date | date:'Y-m-d' }}">
+                        <div class="input-group-addon input-group-append">
+                            <div class="input-group-text"><i class="glyphicon glyphicon-calendar"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="data-form">
+            <div class="form-group" style="width:68%;">
+                <div class="form-group__title flex">
+                    <div class="title">메모</div>
+                </div>
+                <div class="form-group__input">
+                    <input type="text" name="memo" class="data-input" value="{{ object.memo }}">
+                </div>
+            </div>
+            <div class="form-group" style="width:15%;">
+                <div class="form-group__title flex">
+                    <div class="title">업체 담당자</div>
+                </div>
+                <div class="form-group__input">
+                    <input type="text" name="manager_name" class="data-input" value="{{ object.manager_name }}" disabled>
+                </div>
+            </div>
+            <div class="form-group" style="width:15%;">
+                <div class="form-group__title flex">
+                    <div class="title">업체 담당자 연락처</div>
+                </div>
+                <div class="form-group__input">
+                    <input type="text" name="manager_phone" class="data-input" value="{{ object.manager_phone }}" disabled>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="edit-form__inner" id="cost">
+        <div class="form-title">
+            <div class="title">매출/원가</div>
+        </div>
+        <div class="data-form">
+            <div class="form-group" style="width:20%;">
+                <div class="form-group__title flex">
+                    <div class="title">매출 총액</div>
+                </div>
+                <div class="form-group__input">
+                    <input type="text" name="total_price" class="data-input txt_right" value="{{ object.total_sales_price | intcomma }}" disabled>
+                </div>
+            </div>
+            <div class="form-group" style="width:19%;">
+                <div class="form-group__title flex">
+                    <div class="title">가공비</div>
+                </div>
+                <div class="form-group__input">
+                    <input type="text" name="process_price" class="data-input txt_right fixed_num control_price" value="{{ object.process_price | default:'' | intcomma }}">
+                </div>
+            </div>
+            <div class="form-group" style="width:19%;">
+                <div class="form-group__title flex">
+                    <div class="title">자재비</div>
+                </div>
+                <div class="form-group__input">
+                    <input type="text" name="material_price" class="data-input txt_right fixed_num control_price" value="{{ object.material_price | default:'' | intcomma }}">
+                </div>
+            </div>
+            <div class="form-group" style="width:19%;">
+                <div class="form-group__title flex">
+                    <div class="title">외주비</div>
+                </div>
+                <div class="form-group__input">
+                    <input type="text" name="outsourcing_price" class="data-input txt_right fixed_num control_price" value="{{ object.outsourcing_price | default:'' | intcomma }}">
+                </div>
+            </div>
+            <div class="form-group" style="width:19%;">
+                <div class="form-group__title flex">
+                    <div class="title">기타 비용</div>
+                </div>
+                <div class="form-group__input">
+                    <input type="text" name="etc_price" class="data-input txt_right fixed_num control_price" value="{{ object.etc_price | default:'' | intcomma }}">
+                </div>
+            </div>
+        </div>
+        <div class="data-form">
+            <div class="form-group" style="width:20%;">
+                <div class="form-group__title flex">
+                    <div class="title">원가 총액</div>
+                </div>
+                <div class="form-group__input">
+                    <input type="text" name="total_cost" class="data-input txt_right" value="{{ object.total_cost | intcomma }}" disabled>
+                </div>
+            </div>
+            <div class="form-group" style="width:19%;">
+                <div class="form-group__title flex">
+                    <div class="title">가공비</div>
+                </div>
+                <div class="form-group__input">
+                    <input type="text" name="process_cost" class="data-input txt_right control_cost" value="{{ object.process_cost | intcomma }}" disabled>
+                </div>
+            </div>
+            <div class="form-group" style="width:19%;">
+                <div class="form-group__title flex">
+                    <div class="title">자재비</div>
+                </div>
+                <div class="form-group__input">
+                    <input type="text" name="material_cost" class="data-input txt_right control_cost" value="{{ object.material_cost | intcomma }}" disabled>
+                </div>
+            </div>
+            <div class="form-group" style="width:19%;">
+                <div class="form-group__title flex">
+                    <div class="title">외주비</div>
+                </div>
+                <div class="form-group__input">
+                    <input type="text" name="outsourcing_cost" class="data-input txt_right control_cost" value="{{ object.outsourcing_cost | intcomma }}" disabled>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="edit-form__inner" id="process">
+        <div class="form-title">
+            <div class="title">공정</div>
+        </div>
+        <div class="process_wrap flex-top">
+            {% for obj in order_process %}
+            <div class="process_inner" data-ordering="{{ obj.ordering }}" data-id="{{ obj.id }}">
+                <div class="active_mark flex-center hidden"><i class="fa-solid fa-check"></i></div>
+                {% if obj.is_active == True %}
+                <input type="checkbox" name="process" id="process_{{ forloop.counter }}" class="hidden" checked>
+                {% else %}
+                <input type="checkbox" name="process" id="process_{{ forloop.counter }}" class="hidden">
+                {% endif %}
+                <label class="process_box" for="process_{{ forloop.counter }}">
+                    <p class="process flex-center">{{ obj.process }}</p>
+                    <input type="text" name="price" class="data-input txt_right fixed_num" placeholder="비용입력" value="{{ obj.price | default:'' | intcomma }}" disabled>
+                </label>
+            </div>
+            {% endfor %}
+
+            {% with loop=10|sub:order_process.count %}
+            {% if loop > 0 %}
+            {% for _ in "x"|rjust:loop %}
+            <div class="process_inner notExist">
+                <label class="process_box">
+                    <p class="process flex-center">미등록</p>
+                </label>
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+        </div>
+    </div>
+
+    <div class="edit-form__inner" id="material">
+        <div class="form-title">
+            <div class="title">자재 및 외주 정보</div>
+        </div>
+        {% if object.status != 'COMPLT' %}
+        <table class="table edit" id="t_material" style="width:97%;">
+        {% else %}
+        <table class="table edit" id="t_material" style="width:100%;">
+        {% endif %}
+            <colgroup>
+                <col width="8%"> <!-- 타입 -->
+                <col width="25%"> <!-- 자재/외주명 -->
+                <col width="12%"> <!-- 단가 -->
+                <col width="9%"> <!-- 단위 -->
+                <col width="10%"> <!-- 수량 -->
+                <col width="14%"> <!-- 금액 -->
+                <col width="22%"> <!-- 파일 -->
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>타입</th>
+                    <th>자재/외주명</th>
+                    <th>단가</th>
+                    <th>단위</th>
+                    <th>수량</th>
+                    <th>금액</th>
+                    <th>파일</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if not order_material_outsourcing %}
+                {% if object.status != 'COMPLT' %}
+                <tr>
+                    <td>
+                        <select name="type" class="select2_form">
+                            <option value="material">자재</option>
+                            <option value="out">외주</option>
+                        </select>
+                    </td>
+                    <td>
+                        <div class="material">
+                            <select name="name" class="select2_form">
+                                <option value="" title="choice">선택</option>
+                                {% for obj in material %}
+                                <option value="{{ obj.id }}">{{ obj.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <input type="text" name="name" class="data-input out hidden">
+                    </td>
+                    <td>
+                        <input type="text" name="unit_price" class="data-input txt_right input_control material" disabled>
+                        <input type="text" name="unit_price" class="data-input txt_right input_control fixed_num out hidden">
+                    </td>
+                    <td>
+                        <input type="text" name="unit" class="data-input txt_right material" disabled>
+                        <input type="text" name="unit" class="data-input txt_right out hidden">
+                    </td>
+                    <td>
+                        <input type="text" name="quantity" class="data-input txt_right input_control fixed_num material">
+                        <input type="text" name="quantity" class="data-input txt_right input_control fixed_num out hidden">
+                    </td>
+                    <td>
+                        <input type="text" name="amount" class="data-input txt_right material" disabled>
+                        <input type="text" name="amount" class="data-input txt_right out hidden" disabled>
+                    </td>
+                    <td>
+                        <div class="file_box flex-around">
+                            <input type="file" id="material_upload_file_1" class="file_upload etc data" name="material_upload_file">
+                            <input type="text" class="data-input file_url" disabled>
+                            <label class="common-btn common-btn--upload" for="material_upload_file_1">찾기</label>
+                        </div>
+                        <span class="dynamic-btn plus" onclick="addRow();">+</span>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="7" class="no-data">현재 등록된 데이터가 없습니다.</td>
+                </tr>
+                {% endif %}
+                {% endif %}
+
+                {% for obj in order_material_outsourcing %}
+                {% if object.status != 'COMPLT' %}
+                <tr>
+                    <td>
+                        <select name="type" class="select2_form select_tag" data-before="{{ obj.sort }}">
+                            <option value="material">자재</option>
+                            <option value="out">외주</option>
+                        </select>
+                    </td>
+                    <td>
+                        {% if obj.sort == 'material' %}
+                        <div class="material">
+                            <select name="name" class="select2_form select_tag" data-before="{{ obj.material.id }}">
+                                <option value="" title="choice">선택</option>
+                                {% for obj in material %}
+                                <option value="{{ obj.id }}">{{ obj.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <input type="text" name="name" class="data-input out hidden">
+                        {% else %}
+                        <div class="material hidden">
+                            <select name="name" class="select2_form select_tag">
+                                <option value="" title="choice">선택</option>
+                                {% for obj in material %}
+                                <option value="{{ obj.id }}">{{ obj.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <input type="text" name="name" class="data-input out" value="{{ obj.name }}">
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if obj.sort == 'material' %}
+                        <input type="text" name="unit_price" class="data-input txt_right input_control material" value="{{ obj.unit_price | intcomma }}" disabled>
+                        <input type="text" name="unit_price" class="data-input txt_right input_control fixed_num out hidden">
+                        {% else %}
+                        <input type="text" name="unit_price" class="data-input txt_right input_control material hidden" disabled>
+                        <input type="text" name="unit_price" class="data-input txt_right input_control fixed_num out" value="{{ obj.unit_price | intcomma }}">
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if obj.sort == 'material' %}
+                        <input type="text" name="unit" class="data-input txt_right input_control material" value="{{ obj.unit }}" disabled>
+                        <input type="text" name="unit" class="data-input txt_right input_control out hidden">
+                        {% else %}
+                        <input type="text" name="unit" class="data-input txt_right input_control material hidden" disabled>
+                        <input type="text" name="unit" class="data-input txt_right input_control out" value="{{ obj.unit }}">
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if obj.sort == 'material' %}
+                        <input type="text" name="quantity" class="data-input txt_right input_control fixed_num material" value="{{ obj.cnt | intcomma }}">
+                        <input type="text" name="quantity" class="data-input txt_right input_control fixed_num out hidden">
+                        {% else %}
+                        <input type="text" name="quantity" class="data-input txt_right input_control fixed_num material hidden">
+                        <input type="text" name="quantity" class="data-input txt_right input_control fixed_num out" value="{{ obj.cnt | intcomma }}">
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if obj.sort == 'material' %}
+                        <input type="text" name="amount" class="data-input txt_right input_control material" value="{{ obj.price | intcomma }}" disabled>
+                        <input type="text" name="amount" class="data-input txt_right input_control fixed_num out hidden" disabled>
+                        {% else %}
+                        <input type="text" name="amount" class="data-input txt_right input_control material hidden" disabled>
+                        <input type="text" name="amount" class="data-input txt_right input_control fixed_num out" value="{{ obj.price | intcomma }}" disabled>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="file_box flex-around">
+                            <input type="file" id="material_upload_file_{{ forloop.counter }}" class="file_upload etc data" name="material_upload_file">
+                            <input type="text" class="data-input file_url" value="{{ obj.upload_file }}" disabled>
+                            <label class="common-btn common-btn--upload" for="material_upload_file_{{ forloop.counter }}">찾기</label>
+                        </div>
+                        {% if forloop.first %}
+                        <span class="dynamic-btn plus" onclick="addRow();">+</span>
+                        {% else %}
+                        <span class="dynamic-btn minus" onclick="deleteRow(this);">-</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td>
+                        {% if obj.sort == 'material' %}
+                        <input type="text" name="type" class="data-input" value="자재" disabled>
+                        {% else %}
+                        <input type="text" name="type" class="data-input" value="외주" disabled>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <input type="text" name="name" class="data-input" value="{{ obj.name }}" disabled>
+                    </td>
+                    <td>
+                        <input type="text" name="unit_price" class="data-input txt_right" value="{{ obj.unit_price | intcomma }}" disabled>
+                    </td>
+                    <td>
+                        <input type="text" name="unit" class="data-input txt_right" value="{{ obj.unit }}" disabled>
+                    </td>
+                    <td>
+                        <input type="text" name="quantity" class="data-input txt_right" value="{{ obj.cnt | intcomma }}" disabled>
+                    </td>
+                    <td>
+                        <input type="text" name="amount" class="data-input txt_right" value="{{ obj.price | intcomma }}" disabled>
+                    </td>
+                    <td>
+                        <div class="file_box flex-around">
+                            <input type="file" id="material_upload_file_1" class="file_upload etc data" name="material_upload_file">
+                            <input type="text" class="data-input file_url" value="{{ obj.upload_file }}" disabled style="width:100%;">
+                            <!-- <label class="common-btn common-btn--upload" for="material_upload_file_1">찾기</label> -->
+                        </div>
+                    </td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="edit-form__inner upload_file" id="file">
+        <div class="form-title">
+            <div class="title">수주 파일</div>
+        </div>
+        {% if not order_file %}
+        <div class="data-form">
+            <div class="row_title">업로드 파일</div>
+            <div class="file_box flex-around">
+                <input type="file" id="upload_file_1" class="file_upload etc data" name="upload_file">
+                <input type="text" class="data-input file_url" disabled>
+                <label class="common-btn common-btn--upload" for="upload_file_1">찾기</label>
+            </div>
+            <span class="dynamic-btn plus" onclick="addRowFile();">+</span>
+        </div>
+        {% endif %}
+        {% for obj in order_file %}
+        <div class="data-form">
+            <div class="row_title">업로드 파일</div>
+            <div class="file_box flex-around">
+                <input type="file" id="upload_file_{{ forloop.counter }}" class="file_upload etc data" name="upload_file">
+                <input type="text" class="data-input file_url" value="{{ obj.upload_file }}" disabled>
+                <label class="common-btn common-btn--upload" for="upload_file_{{ forloop.counter }}">찾기</label>
+            </div>
+            {% if forloop.first %}
+            <span class="dynamic-btn plus" onclick="addRowFile();">+</span>
+            {% else %}
+            <span class="dynamic-btn minus" onclick="deleteRowFile(this);">-</span>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+<div class="edit-form__button_box">
+    <!-- <div class="edit-form__button cancel">목록으로</div> -->
+    <div class="edit-form__button save" onclick="updateData();">저장</div>
+</div>
+
+{% endblock %}
