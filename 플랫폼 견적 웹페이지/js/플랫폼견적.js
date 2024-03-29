@@ -9,6 +9,7 @@ $(function() {
             $(this).closest("label.list__menu").css("border","1px solid #b1b1ff");
 
             total_price += price;
+
         } else {
             $(this).closest("label.list__menu").css("border","1px solid #d6d5d5");
 
@@ -21,14 +22,6 @@ $(function() {
             time : 80
         });
     });
-
-    $(window).scroll(function() {
-        if($(window).scrollTop() > 100) {
-            $(".header_bot").addClass("top_fixed");
-        } else {
-            $(".header_bot").removeClass("top_fixed");
-        }
-    })
 });
 
 /* 3자리 단위마다 콤마 생성 */

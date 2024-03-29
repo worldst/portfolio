@@ -117,6 +117,7 @@ function drawingBOM() {
                 }
             }
         }
+
         if($tr.prev().data('level') == level && $tr.next().data('level') <= level) {
             // 이전 노드와 부모가 같으면서 자식이 없는 경우
             $temp.closest('.detail-wrap').find('.detail-view').not(`:eq(${level})`).find('tbody').append(empty);
@@ -366,7 +367,7 @@ function changeBOM(tr_length, drag_id, drag_level, drop_id, drop_level, quantity
     console.log(obj);
 
     // 변경 내역 데이터 저장
-    const current_time = moment().format("YYYY-MM-DD hh:mm:ss");
+    const current_time = moment().format("YYYY-MM-DD HH:mm:ss");
     let dataHTML = '';
 
     dataHTML += `<div class="record_list" style="border:1px solid #fbc87b">`;
@@ -593,7 +594,7 @@ function addData() {
     drawingBOM();
 
     // 변경 내역 데이터 저장
-    const current_time = moment().format("YYYY-MM-DD hh:mm:ss");
+    const current_time = moment().format("YYYY-MM-DD HH:mm:ss");
     let dataHTML = '';
 
     dataHTML += `<div class="record_list" style="border:1px solid #9be3ff">`;
@@ -710,7 +711,7 @@ function delData() {
     drawingBOM();
 
     // 변경 내역 데이터 저장
-    const current_time = moment().format("YYYY-MM-DD hh:mm:ss");
+    const current_time = moment().format("YYYY-MM-DD HH:mm:ss");
     let dataHTML = '';
 
     dataHTML += `<div class="record_list" style="border:1px solid #ff9bc0">`;

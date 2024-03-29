@@ -11,6 +11,7 @@
     font-weight: normal;
     font-style: normal;
 }
+
 * {
     margin:0;
     padding:0;
@@ -46,6 +47,11 @@ html, body, .container {
 .header {
     background:#3976d0;
     color:white;
+    position: fixed;
+    top:0;
+    left:0;
+    width:100%;
+    z-index: 99;
 }
 .header .inner {
     width:1200px;
@@ -114,6 +120,7 @@ html, body, .container {
     width:100%;
     background:#edeff3;
     padding:20px;
+    margin-top:150px;
 }
 .content .inner_box {
     border-radius: 4px;
